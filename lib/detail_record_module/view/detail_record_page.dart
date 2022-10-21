@@ -70,22 +70,21 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         appBar: AppBar(
           flexibleSpace: Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  colors: <Color>[
-                    Color(AppColor.pink),
-                    Color(AppColor.yellow)
-                  ]),
-            ),
+                // gradient: LinearGradient(
+                //     begin: Alignment.bottomLeft,
+                //     end: Alignment.topRight,
+                //     colors: <Color>[
+                //       Color(AppColor.pink),
+                //       Color(AppColor.yellow)
+                //     ]),
+                ),
           ),
           title: const Text(
             "Quản lý chi tiêu",
-            style: TextStyle(color: Colors.black),
           ),
           bottom: TabBar(
-              indicatorColor: Colors.black,
-              labelColor: Colors.black,
+              // indicatorColor: Colors.black,
+              // labelColor: Colors.black,
               controller: _tabController,
               tabs: const [
                 Tab(
@@ -118,11 +117,8 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                   style: const TextStyle(fontWeight: FontWeight.bold),
                   initialValue: dateTime,
                   decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
                       icon: Icon(
                         Icons.date_range,
-                        color: Color(AppColor.yellow),
                       ),
                       hintText: 'Nhập ngày và giờ',
                       labelText: 'Ngày và giờ',
@@ -159,11 +155,8 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                   readOnly: true,
                   controller: expenseTypeC,
                   decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
                       icon: Icon(
-                        Icons.category,
-                        color: Color(AppColor.yellow),
+                        Icons.local_atm,
                       ),
                       hintText: 'Chọn loại tài khoản bên dưới',
                       labelText: 'Loại tài khoản',
@@ -200,11 +193,8 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                   readOnly: true,
                   controller: genreC,
                   decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
                       icon: Icon(
                         Icons.category,
-                        color: Color(AppColor.yellow),
                       ),
                       hintText: 'Chọn thể loại bên dưới',
                       labelText: 'Thể loại',
@@ -251,9 +241,9 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
-                      icon: Icon(Icons.money, color: Color(AppColor.yellow)),
+                      icon: Icon(
+                        Icons.money,
+                      ),
                       hintText: 'Nhập số tiền',
                       labelText: 'Số tiền',
                       border: InputBorder.none),
@@ -269,11 +259,8 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                   },
                   controller: contentC,
                   decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
                       icon: Icon(
-                        Icons.add_box,
-                        color: Color(AppColor.yellow),
+                        Icons.edit_note,
                       ),
                       hintText: 'Nhập nội dung',
                       labelText: 'Nội dung',
@@ -288,17 +275,39 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                     children: [
                       Expanded(
                           child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(AppColor.pink)),
                         onPressed: () async {
-                          if (formKeyExpense.currentState!.validate()) {
-                            homeController.deleteRecordById(widget.record.id!);
-                            Navigator.pop(context);
-                          }
+                          Get.defaultDialog(
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 20),
+                            content: Text(
+                                "Dữ liêu bị xóa sẽ không thể khôi phục êu bị xóa sẽ không thể khôi p"),
+                            title: "Xóa bản ghi?",
+                            confirm: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  if (formKeyIncome.currentState!.validate()) {
+                                    homeController
+                                        .deleteRecordById(widget.record.id!);
+                                    Get.back();
+                                  }
+                                },
+                                child: Text("Xóa")),
+                            cancel: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.background,
+                                ),
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: Text("Hủy")),
+                          );
                         },
                         child: const Text(
                           'Xóa',
-                          style: TextStyle(color: Colors.black),
                         ),
                       )),
                       const SizedBox(
@@ -306,8 +315,6 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                       ),
                       Expanded(
                           child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(AppColor.yellow)),
                         onPressed: () async {
                           if (formKeyExpense.currentState!.validate()) {
                             final record = Record(
@@ -319,12 +326,15 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                                 money: -int.parse(moneyC.text));
                             homeController.deleteRecordById(widget.record.id!);
                             homeController.addRecordToPrefs(record);
-                            Navigator.pop(context);
+                            Get.back();
+                            Get.snackbar(
+                                "Thành công", "Bạn đã cập nhật thành công",
+                                backgroundColor:
+                                    Theme.of(context).backgroundColor);
                           }
                         },
                         child: const Text(
                           'Lưu',
-                          style: TextStyle(color: Colors.black),
                         ),
                       )),
                     ],
@@ -339,197 +349,203 @@ class _DetailRecordPageState extends State<DetailRecordPage>
   Widget buildTabIncome() {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Form(
-                  key: formKeyIncome,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      DateTimeField(
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        initialValue: dateTime,
-                        decoration: const InputDecoration(
-                            labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal),
-                            icon: Icon(
-                              Icons.date_range,
-                              color: Color(AppColor.yellow),
-                            ),
-                            hintText: 'Nhập ngày và giờ',
-                            labelText: 'Ngày và giờ',
-                            border: InputBorder.none),
-                        format: DateFormat("yyyy-MM-dd h:mm a"),
-                        onShowPicker: (context, currentValue) async {
-                          final date = await showDatePicker(
-                              context: context,
-                              firstDate: DateTime(2000),
-                              initialDate: currentValue ?? DateTime.now(),
-                              lastDate: DateTime(2100));
-                          if (date != null) {
-                            final time = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.fromDateTime(
-                                  currentValue ?? DateTime.now()),
-                            );
-                            dateTime = DateTimeField.combine(date, time);
-                            return dateTime;
-                          } else {
-                            return currentValue;
-                          }
-                        },
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Form(
+            key: formKeyIncome,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                DateTimeField(
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  initialValue: dateTime,
+                  decoration: const InputDecoration(
+                      icon: Icon(
+                        Icons.date_range,
                       ),
-                      TextFormField(
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        autofocus: true,
-                        onTap: () {
-                          setState(() {
-                            showExpenseType = !showExpenseType;
-                            showGenre = false;
-                          });
-                        },
-                        readOnly: true,
-                        controller: expenseTypeC,
-                        decoration: const InputDecoration(
-                            labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal),
-                            icon: Icon(
-                              Icons.category,
-                              color: Color(AppColor.yellow),
-                            ),
-                            hintText: 'Chọn loại tài khoản bên dưới',
-                            labelText: 'Loại tài khoản',
-                            border: InputBorder.none),
+                      hintText: 'Nhập ngày và giờ',
+                      labelText: 'Ngày và giờ',
+                      border: InputBorder.none),
+                  format: DateFormat("yyyy-MM-dd h:mm a"),
+                  onShowPicker: (context, currentValue) async {
+                    final date = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime(2000),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime(2100));
+                    if (date != null) {
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(
+                            currentValue ?? DateTime.now()),
+                      );
+                      dateTime = DateTimeField.combine(date, time);
+                      return dateTime;
+                    } else {
+                      return currentValue;
+                    }
+                  },
+                ),
+                TextFormField(
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  autofocus: true,
+                  onTap: () {
+                    setState(() {
+                      showExpenseType = !showExpenseType;
+                      showGenre = false;
+                    });
+                  },
+                  readOnly: true,
+                  controller: expenseTypeC,
+                  decoration: const InputDecoration(
+                      icon: Icon(
+                        Icons.local_atm,
                       ),
-                      showExpenseType
-                          ? GridView.count(
-                              crossAxisCount: 3,
-                              shrinkWrap: true,
-                              mainAxisSpacing: 5,
-                              crossAxisSpacing: 5,
-                              childAspectRatio: 3 / 1,
-                              children: [
-                                for (var item
-                                    in AppConstantList.listExpenseType)
-                                  ItemSelect(
-                                      item,
-                                      expenseTypeC,
-                                      () => {
-                                            setState(() {
-                                              showExpenseType = false;
-                                            })
-                                          })
-                              ],
-                            )
-                          : const SizedBox(),
-                      TextFormField(
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        onTap: () {
-                          setState(() {
-                            moneyC.text = "";
-                            showExpenseType = false;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Số tiền không được bỏ trống';
-                          }
-                          return null;
-                        },
-                        controller: moneyC,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
+                      hintText: 'Chọn loại tài khoản bên dưới',
+                      labelText: 'Loại tài khoản',
+                      border: InputBorder.none),
+                ),
+                showExpenseType
+                    ? GridView.count(
+                        crossAxisCount: 3,
+                        shrinkWrap: true,
+                        mainAxisSpacing: 5,
+                        crossAxisSpacing: 5,
+                        childAspectRatio: 3 / 1,
+                        children: [
+                          for (var item in AppConstantList.listExpenseType)
+                            ItemSelect(
+                                item,
+                                expenseTypeC,
+                                () => {
+                                      setState(() {
+                                        showExpenseType = false;
+                                      })
+                                    })
                         ],
-                        decoration: const InputDecoration(
-                            labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal),
-                            icon: Icon(Icons.money,
-                                color: Color(AppColor.yellow)),
-                            hintText: 'Nhập số tiền',
-                            labelText: 'Số tiền',
-                            border: InputBorder.none),
+                      )
+                    : const SizedBox(),
+                TextFormField(
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  onTap: () {
+                    setState(() {
+                      moneyC.text = "";
+                      showExpenseType = false;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Số tiền không được bỏ trống';
+                    }
+                    return null;
+                  },
+                  controller: moneyC,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  decoration: const InputDecoration(
+                      icon: Icon(
+                        Icons.money,
                       ),
-                      TextFormField(
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        textInputAction: TextInputAction.next,
-                        onTap: () {
-                          setState(() {
-                            showExpenseType = false;
-                          });
-                        },
-                        controller: contentC,
-                        decoration: const InputDecoration(
-                            labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal),
-                            icon: Icon(
-                              Icons.add_box,
-                              color: Color(AppColor.yellow),
-                            ),
-                            hintText: 'Nhập nội dung',
-                            labelText: 'Nội dung',
-                            border: InputBorder.none),
+                      hintText: 'Nhập số tiền',
+                      labelText: 'Số tiền',
+                      border: InputBorder.none),
+                ),
+                TextFormField(
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  textInputAction: TextInputAction.next,
+                  onTap: () {
+                    setState(() {
+                      showExpenseType = false;
+                    });
+                  },
+                  controller: contentC,
+                  decoration: const InputDecoration(
+                      icon: Icon(
+                        Icons.edit_note,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Expanded(
-                                child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(AppColor.pink)),
-                              onPressed: () async {
-                                if (formKeyIncome.currentState!.validate()) {
-                                  homeController
-                                      .deleteRecordById(widget.record.id!);
-                                  Navigator.pop(context);
-                                }
-                              },
-                              child: const Text(
-                                'Xóa',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                                child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
+                      hintText: 'Nhập nội dung',
+                      labelText: 'Nội dung',
+                      border: InputBorder.none),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                          child: ElevatedButton(
+                        onPressed: () async {
+                          Get.defaultDialog(
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 20),
+                            content: Text(
+                                "Dữ liêu bị xóa sẽ không thể khôi phục êu bị xóa sẽ không thể khôi p"),
+                            title: "Xóa bản ghi?",
+                            confirm: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      const Color(AppColor.yellow)),
-                              onPressed: () async {
-                                if (formKeyIncome.currentState!.validate()) {
-                                  final record = Record(
-                                      id: widget.record.id,
-                                      type: expenseTypeC.text,
-                                      datetime: dateTime.millisecondsSinceEpoch,
-                                      genre: genreC.text,
-                                      content: contentC.text,
-                                      money: int.parse(moneyC.text));
-                                  homeController
-                                      .deleteRecordById(widget.record.id ?? "");
-                                  homeController.addRecordToPrefs(record);
-                                  Navigator.pop(context);
-                                }
-                              },
-                              child: const Text(
-                                'Lưu',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ))
-                          ],
+                                      Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  if (formKeyIncome.currentState!.validate()) {
+                                    homeController
+                                        .deleteRecordById(widget.record.id!);
+                                    Get.back();
+                                  }
+                                },
+                                child: Text("Xóa")),
+                            cancel: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.background,
+                                ),
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: Text("Hủy")),
+                          );
+                        },
+                        child: const Text(
+                          'Xóa',
                         ),
+                      )),
+                      const SizedBox(
+                        width: 20,
                       ),
+                      Expanded(
+                          child: ElevatedButton(
+                        onPressed: () async {
+                          if (formKeyIncome.currentState!.validate()) {
+                            final record = Record(
+                                id: widget.record.id,
+                                type: expenseTypeC.text,
+                                datetime: dateTime.millisecondsSinceEpoch,
+                                genre: genreC.text,
+                                content: contentC.text,
+                                money: int.parse(moneyC.text));
+                            homeController
+                                .deleteRecordById(widget.record.id ?? "");
+                            homeController.addRecordToPrefs(record);
+                            Get.back();
+                            Get.snackbar(
+                                "Thành công", "Bạn đã cập nhật thành công",
+                                backgroundColor:
+                                    Theme.of(context).backgroundColor);
+                          }
+                        },
+                        child: const Text(
+                          'Lưu',
+                        ),
+                      ))
                     ],
                   ),
-                )),
+                ),
+              ],
+            ),
+          )),
     );
   }
 }

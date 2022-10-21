@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_helper_getx_mvc/app_page_view.dart';
+import 'package:money_helper_getx_mvc/app_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,9 +15,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blueGrey),
       home: AppPage(),
     );
   }

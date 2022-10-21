@@ -2,15 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:get/get.dart';
-
 import '../../detail_record_module/view/detail_record_page.dart';
 import '../../home_module/model/record.dart';
-import '../constants/constant.dart';
 
 Widget NoteTile({required Record record}) {
   return InkWell(
     onTap: () {
-      Get.to(DetailRecordPage(record: record));
+      Get.to(()=>DetailRecordPage(record: record));
     },
     child: Container(
       margin: const EdgeInsets.only(bottom: 5),
@@ -30,8 +28,8 @@ Widget NoteTile({required Record record}) {
                 width: 12,
                 padding: const EdgeInsets.all(10),
                 color: record.money! >= 0
-                    ? const Color(AppColor.pink)
-                    : const Color(AppColor.yellow),
+                    ? Get.theme.colorScheme.background
+                    : Get.theme.colorScheme.secondary,
               ),
               Expanded(
                   child: Column(

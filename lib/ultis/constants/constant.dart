@@ -1,9 +1,7 @@
-class AppColor {
-  // static const int pink = 0xFFCDCFBF;
-  // static const int yellow = 0xFFCDCFBF;
-  static const int yellow = 0xffB38867;
-  static const int pink = 0xffDDBC95;
-}
+// class AppColor {
+//   static const int yellow = 0xffB38867;
+//   static const int pink = 0xffDDBC95;
+// }
 
 class AppConstantList {
   static const List<String> listExpenseType = [

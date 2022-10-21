@@ -13,9 +13,9 @@ Widget ItemSelect(
       child: Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          border: Border.all(color: const Color(AppColor.yellow), width: 2),
+          border: Border.all(width: 2),
           borderRadius: BorderRadius.circular(5),
-          color: const Color(AppColor.pink),
+          // color: const Color(AppColor.pink),
         ),
         alignment: Alignment.center,
         child: Text(genreName),

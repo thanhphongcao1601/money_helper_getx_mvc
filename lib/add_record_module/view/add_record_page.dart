@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
 import 'package:uuid/uuid.dart';
-
 import '../../home_module/model/record.dart';
 import '../../ultis/constants/constant.dart';
 import '../../ultis/widgets/item_select.dart';
@@ -58,23 +57,12 @@ class _AddRecordPageState extends State<AddRecordPage>
     return Scaffold(
         appBar: AppBar(
           flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  colors: <Color>[
-                    Color(AppColor.pink),
-                    Color(AppColor.yellow)
-                  ]),
-            ),
+            decoration: const BoxDecoration(),
           ),
-          title: const Text(
-            "Quản lý chi tiêu",
-            style: TextStyle(color: Colors.black),
-          ),
+          title: const Text("Quản lý chi tiêu"),
           bottom: TabBar(
-              indicatorColor: Colors.black,
-              labelColor: Colors.black,
+              // indicatorColor: Colors.black,
+              // labelColor: Colors.black,
               controller: _tabController,
               tabs: const [
                 Tab(
@@ -107,11 +95,8 @@ class _AddRecordPageState extends State<AddRecordPage>
                   initialValue: dateTime,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                   decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
                       icon: Icon(
                         Icons.date_range,
-                        color: Color(AppColor.yellow),
                       ),
                       hintText: 'Chọn ngày và giờ',
                       labelText: 'Ngày và giờ',
@@ -148,12 +133,10 @@ class _AddRecordPageState extends State<AddRecordPage>
                   readOnly: true,
                   controller: expenseTypeC,
                   decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
                       icon: Icon(
-                        Icons.category,
-                        color: Color(AppColor.yellow),
+                        Icons.local_atm,
                       ),
+                      hintText: 'Chọn loại tài khoản bên dưới',
                       labelText: 'Loại tài khoản',
                       border: InputBorder.none),
                 ),
@@ -188,11 +171,8 @@ class _AddRecordPageState extends State<AddRecordPage>
                   readOnly: true,
                   controller: genreC,
                   decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
                       icon: Icon(
                         Icons.category,
-                        color: Color(AppColor.yellow),
                       ),
                       hintText: 'Chọn thể loại bên dưới',
                       labelText: 'Thể loại',
@@ -239,9 +219,7 @@ class _AddRecordPageState extends State<AddRecordPage>
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
-                      icon: Icon(Icons.money, color: Color(AppColor.yellow)),
+                      icon: Icon(Icons.money),
                       hintText: 'Nhập số tiền',
                       labelText: 'Số tiền',
                       border: InputBorder.none),
@@ -257,11 +235,8 @@ class _AddRecordPageState extends State<AddRecordPage>
                   },
                   controller: contentC,
                   decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
                       icon: Icon(
-                        Icons.add_box,
-                        color: Color(AppColor.yellow),
+                        Icons.edit_note,
                       ),
                       hintText: 'Nhập nội dung',
                       labelText: 'Nội dung',
@@ -276,8 +251,6 @@ class _AddRecordPageState extends State<AddRecordPage>
                     children: [
                       Expanded(
                           child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(AppColor.pink)),
                         onPressed: () async {
                           if (formKeyExpense.currentState!.validate()) {
                             final record = Record(
@@ -288,13 +261,13 @@ class _AddRecordPageState extends State<AddRecordPage>
                                 content: contentC.text,
                                 money: -int.parse(moneyC.text));
 
-                            Navigator.pop(context);
                             homeController.addRecordToPrefs(record);
+                            Get.back();
+                            Get.snackbar("Thành công", "Bạn đã thêm thành công",backgroundColor: Theme.of(context).backgroundColor);
                           }
                         },
                         child: const Text(
                           'Lưu',
-                          style: TextStyle(color: Colors.black),
                         ),
                       ))
                     ],
@@ -309,175 +282,156 @@ class _AddRecordPageState extends State<AddRecordPage>
   Widget buildTabIncome() {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Form(
-                  key: formKeyIncome,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      DateTimeField(
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        initialValue: dateTime,
-                        decoration: const InputDecoration(
-                            labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal),
-                            icon: Icon(
-                              Icons.date_range,
-                              color: Color(AppColor.yellow),
-                            ),
-                            hintText: 'Nhập ngày và giờ',
-                            labelText: 'Ngày và giờ',
-                            border: InputBorder.none),
-                        format: DateFormat("yyyy-MM-dd h:mm a"),
-                        onShowPicker: (context, currentValue) async {
-                          final date = await showDatePicker(
-                              context: context,
-                              firstDate: DateTime(2000),
-                              initialDate: currentValue ?? DateTime.now(),
-                              lastDate: DateTime(2100));
-                          if (date != null) {
-                            final time = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.fromDateTime(
-                                  currentValue ?? DateTime.now()),
-                            );
-                            dateTime = DateTimeField.combine(date, time);
-                            return dateTime;
-                          } else {
-                            return currentValue;
-                          }
-                        },
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Form(
+            key: formKeyIncome,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                DateTimeField(
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  initialValue: dateTime,
+                  decoration: const InputDecoration(
+                      icon: Icon(
+                        Icons.date_range,
                       ),
-                      TextFormField(
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        autofocus: true,
-                        onTap: () {
-                          setState(() {
-                            showType = !showType;
-                            showGenre = false;
-                          });
-                        },
-                        readOnly: true,
-                        controller: expenseTypeC,
-                        decoration: const InputDecoration(
-                            labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal),
-                            icon: Icon(
-                              Icons.category,
-                              color: Color(AppColor.yellow),
-                            ),
-                            hintText: 'Chọn thể loại',
-                            labelText: 'Thể loại',
-                            border: InputBorder.none),
+                      hintText: 'Nhập ngày và giờ',
+                      labelText: 'Ngày và giờ',
+                      border: InputBorder.none),
+                  format: DateFormat("yyyy-MM-dd h:mm a"),
+                  onShowPicker: (context, currentValue) async {
+                    final date = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime(2000),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime(2100));
+                    if (date != null) {
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(
+                            currentValue ?? DateTime.now()),
+                      );
+                      dateTime = DateTimeField.combine(date, time);
+                      return dateTime;
+                    } else {
+                      return currentValue;
+                    }
+                  },
+                ),
+                TextFormField(
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  autofocus: true,
+                  onTap: () {
+                    setState(() {
+                      showType = !showType;
+                      showGenre = false;
+                    });
+                  },
+                  readOnly: true,
+                  controller: expenseTypeC,
+                  decoration: const InputDecoration(
+                      icon: Icon(
+                        Icons.category,
                       ),
-                      showType
-                          ? GridView.count(
-                              crossAxisCount: 3,
-                              shrinkWrap: true,
-                              mainAxisSpacing: 5,
-                              crossAxisSpacing: 5,
-                              childAspectRatio: 3 / 1,
-                              children: [
-                                for (var item
-                                    in AppConstantList.listExpenseType)
-                                  ItemSelect(
-                                      item,
-                                      expenseTypeC,
-                                      () => {
-                                            setState(() {
-                                              showType = false;
-                                            })
-                                          })
-                              ],
-                            )
-                          : const SizedBox(),
-                      TextFormField(
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        onTap: () {
-                          setState(() {
-                            moneyC.text = "";
-                            showType = false;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Số tiền không được để trống';
-                          }
-                          return null;
-                        },
-                        controller: moneyC,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
+                      hintText: 'Chọn thể loại',
+                      labelText: 'Thể loại',
+                      border: InputBorder.none),
+                ),
+                showType
+                    ? GridView.count(
+                        crossAxisCount: 3,
+                        shrinkWrap: true,
+                        mainAxisSpacing: 5,
+                        crossAxisSpacing: 5,
+                        childAspectRatio: 3 / 1,
+                        children: [
+                          for (var item in AppConstantList.listExpenseType)
+                            ItemSelect(
+                                item,
+                                expenseTypeC,
+                                () => {
+                                      setState(() {
+                                        showType = false;
+                                      })
+                                    })
                         ],
-                        decoration: const InputDecoration(
-                            labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal),
-                            icon: Icon(Icons.money,
-                                color: Color(AppColor.yellow)),
-                            hintText: 'Nhập số tiền',
-                            labelText: 'Số tiền',
-                            border: InputBorder.none),
+                      )
+                    : const SizedBox(),
+                TextFormField(
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  onTap: () {
+                    setState(() {
+                      moneyC.text = "";
+                      showType = false;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Số tiền không được để trống';
+                    }
+                    return null;
+                  },
+                  controller: moneyC,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  decoration: const InputDecoration(
+                      icon: Icon(Icons.money),
+                      hintText: 'Nhập số tiền',
+                      labelText: 'Số tiền',
+                      border: InputBorder.none),
+                ),
+                TextFormField(
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  textInputAction: TextInputAction.next,
+                  onTap: () {
+                    setState(() {
+                      showType = false;
+                    });
+                  },
+                  controller: contentC,
+                  decoration: const InputDecoration(
+                      icon: Icon(
+                        Icons.edit_note,
                       ),
-                      TextFormField(
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        textInputAction: TextInputAction.next,
-                        onTap: () {
-                          setState(() {
-                            showType = false;
-                          });
-                        },
-                        controller: contentC,
-                        decoration: const InputDecoration(
-                            labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal),
-                            icon: Icon(
-                              Icons.add_box,
-                              color: Color(AppColor.yellow),
-                            ),
-                            hintText: 'Nhập nội dung',
-                            labelText: 'Nội dung',
-                            border: InputBorder.none),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Expanded(
-                                child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(AppColor.pink)),
-                              onPressed: () async {
-                                if (formKeyIncome.currentState!.validate()) {
-                                  final record = Record(
-                                      id: const Uuid().v4(),
-                                      type: expenseTypeC.text,
-                                      datetime: dateTime.millisecondsSinceEpoch,
-                                      content: contentC.text,
-                                      money: int.parse(moneyC.text));
+                      hintText: 'Nhập nội dung',
+                      labelText: 'Nội dung',
+                      border: InputBorder.none),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                          child: ElevatedButton(
+                        onPressed: () async {
+                          if (formKeyIncome.currentState!.validate()) {
+                            final record = Record(
+                                id: const Uuid().v4(),
+                                type: expenseTypeC.text,
+                                datetime: dateTime.millisecondsSinceEpoch,
+                                content: contentC.text,
+                                money: int.parse(moneyC.text));
 
-                                  homeController.addRecordToPrefs(record);
-                                  Navigator.pop(context);
-                                }
-                              },
-                              child: const Text(
-                                'Lưu',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ))
-                          ],
+                            homeController.addRecordToPrefs(record);
+                            Get.back();
+                            Get.snackbar("Thành công", "Bạn đã thêm thành công");
+                          }
+                        },
+                        child: const Text(
+                          'Lưu',
                         ),
-                      ),
+                      ))
                     ],
                   ),
-                )),
+                ),
+              ],
+            ),
+          )),
     );
   }
 }

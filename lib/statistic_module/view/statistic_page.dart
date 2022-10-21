@@ -16,7 +16,8 @@ class StatisticPage extends StatefulWidget {
   State<StatisticPage> createState() => _StatisticPageState();
 }
 
-class _StatisticPageState extends State<StatisticPage> with TickerProviderStateMixin {
+class _StatisticPageState extends State<StatisticPage>
+    with TickerProviderStateMixin {
   final homeController = Get.find<HomeController>();
   late TabController _tabController;
   late List<Map<String, dynamic>> dataExpenseToChart;
@@ -71,19 +72,20 @@ class _StatisticPageState extends State<StatisticPage> with TickerProviderStateM
       }
     }
 
-    if (totalIncome != 0) {
-      for (var item in homeController.listRecordGroupByType.value.entries) {
-        for (var record in item.value) {
-          if (record.money! > 0) {
-            Map<String, dynamic> obj = {
-              'domain': item.key,
-              'measure': roundDouble(
-                  (item.value.sumBy<int>((e) => e.money! > 0 ? e.money! : 0) /
-                      totalIncome *
-                      100),
-                  2),
-              'money': item.value.sumBy<int>((e) => e.money! > 0 ? e.money! : 0)
-            };
+    for (var item in homeController.listRecordGroupByType.value.entries) {
+      for (var record in item.value) {
+        if (record.money! > 0) {
+          Map<String, dynamic> obj = {
+            'domain': item.key,
+            'measure': roundDouble(
+                (item.value.sumBy<int>((e) => e.money! > 0 ? e.money! : 0) /
+                    totalIncome *
+                    100),
+                2),
+            'money': item.value.sumBy<int>((e) => e.money! > 0 ? e.money! : 0)
+          };
+          if (!dataIncomeToChart
+              .any((element) => element['domain'] == obj['domain'])) {
             dataIncomeToChart.add(obj);
           }
         }
@@ -95,8 +97,8 @@ class _StatisticPageState extends State<StatisticPage> with TickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: TabBar(
-            indicatorColor: Colors.black,
-            labelColor: Colors.black,
+            // indicatorColor: Colors.black,
+            labelColor: Theme.of(context).colorScheme.onSurface,
             controller: _tabController,
             tabs: [
               Tab(
@@ -125,6 +127,8 @@ class _StatisticPageState extends State<StatisticPage> with TickerProviderStateM
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
                     child: DChartPie(
+                      labelColor: Theme.of(context).colorScheme.onSurface,
+                      labelLineColor: Theme.of(context).colorScheme.onSurface,
                       data: dataExpenseToChart,
                       fillColor: (pieData, index) => colors[index!],
                       pieLabel: (pieData, index) {
@@ -187,8 +191,13 @@ class _StatisticPageState extends State<StatisticPage> with TickerProviderStateM
                             'data': [...dataIncomeToChart]
                           }
                         ],
+                        domainLabelColor:
+                            Theme.of(context).colorScheme.onSurface,
+                        axisLineColor: Theme.of(context).colorScheme.onSurface,
+                        barValueColor: Theme.of(context).colorScheme.onSurface,
+                        measureLabelColor:
+                            Theme.of(context).colorScheme.onSurface,
                         domainLabelPaddingToAxisLine: 16,
-                        axisLineColor: const Color(AppColor.pink),
                         measureLabelPaddingToAxisLine: 16,
                         barColor: (barData, index, id) => colors[index!],
                         verticalDirection: false,

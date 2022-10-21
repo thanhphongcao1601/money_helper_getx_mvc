@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/record.dart';
@@ -14,12 +15,6 @@ class HomeController extends GetxController {
 
   RxInt totalIncome = 0.obs;
   RxInt totalExpense = 0.obs;
-  RxInt currentIndex = 0.obs;
-
-  dynamic changePage(int? newIndex) {
-    currentIndex.value = newIndex!;
-    print(newIndex);
-  }
 
   groupRecordByDate(List<Record> record) {
     var groups = groupBy(record, (Record e) {

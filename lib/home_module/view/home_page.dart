@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
-import '../../ultis/constants/constant.dart';
 import '../../ultis/widgets/record_tile.dart';
 
-// ignore: must_be_immutable
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
@@ -17,22 +15,18 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        buildDashBoard(),
+        buildDashBoard(context),
         Expanded(
-          child: listNote(),
+          child: listNote(context),
         )
       ],
     );
   }
 
-  Widget buildDashBoard() {
+  Widget buildDashBoard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage("assets/images/dashboardbg.jpg"),
-            fit: BoxFit.cover),
-      ),
+      color: Theme.of(context).primaryColor,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -109,7 +103,7 @@ class HomePage extends StatelessWidget {
                                 .toString()
                                 .toVND(),
                             style: const TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
+                                fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),
                           ))),
                 ),
               )
@@ -120,7 +114,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget listNote() {
+  Widget listNote(BuildContext context) {
     return Obx(() => ListView(
           children: [
             for (var item in homeController.listRecordGroupByDate.value.entries)
@@ -128,14 +122,14 @@ class HomePage extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(5),
-                    color: const Color(AppColor.pink),
+                    color: Theme.of(context).colorScheme.background,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           item.key,
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
                         ),
                         Text(
                           item.value
@@ -143,7 +137,7 @@ class HomePage extends StatelessWidget {
                               .toString()
                               .toVND(),
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                              fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
                         ),
                       ],
                     ),
