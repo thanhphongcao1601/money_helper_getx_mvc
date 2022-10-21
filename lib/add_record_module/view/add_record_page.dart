@@ -59,7 +59,9 @@ class _AddRecordPageState extends State<AddRecordPage>
           flexibleSpace: Container(
             decoration: const BoxDecoration(),
           ),
-          title: const Text("Quản lý chi tiêu"),
+          title: Text(
+            'appName'.tr,
+          ),
           bottom: TabBar(
               // indicatorColor: Colors.black,
               // labelColor: Colors.black,

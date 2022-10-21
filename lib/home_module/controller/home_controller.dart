@@ -39,7 +39,7 @@ class HomeController extends GetxController {
 
   groupRecordByType(List<Record> record) {
     Map<String, List<Record>> groups = groupBy(record, (Record e) {
-      return e.type == "" ? "Không tiêu đề" : e.type!;
+      return e.type ?? "Không tiêu đề";
     });
     var rxgroups = RxMap<String, List<Record>>({});
     rxgroups.value = groups;

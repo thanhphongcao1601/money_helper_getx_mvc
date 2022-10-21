@@ -15,7 +15,7 @@ class SettingPage extends StatelessWidget {
       () => Column(
         children: [
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           ListTile(
             leading: CircleAvatar(
@@ -44,6 +44,13 @@ class SettingPage extends StatelessWidget {
             thickness: 1,
           ),
           const ListTile(
+            title: Text('Ngôn ngữ'),
+            trailing: Icon(Icons.arrow_right),
+          ),
+          const Divider(
+            thickness: 1,
+          ),
+          const ListTile(
             title: Text('Cập nhật tài khoản'),
             trailing: Icon(Icons.arrow_right),
           ),
@@ -54,7 +61,9 @@ class SettingPage extends StatelessWidget {
             title: Text('Đăng xuất'),
             trailing: Icon(Icons.arrow_right),
           ),
-          const Divider(thickness: 1,),
+          const Divider(
+            thickness: 1,
+          ),
         ],
       ),
     ));

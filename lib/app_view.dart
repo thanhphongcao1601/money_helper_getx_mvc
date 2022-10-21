@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:money_helper_getx_mvc/add_record_module/view/add_record_page.dart';
 import 'package:money_helper_getx_mvc/app_controller.dart';
 import 'package:money_helper_getx_mvc/backup_module/view/backup_page.dart';
 import 'package:money_helper_getx_mvc/setting_module/view/setting_page.dart';
 import 'package:money_helper_getx_mvc/statistic_module/view/statistic_page.dart';
+import 'add_record_module/view/add_record_page.dart';
 import 'home_module/controller/home_controller.dart';
 import 'home_module/view/home_page.dart';
 import 'ultis/widgets/bottom_nav_bar.dart';
@@ -23,6 +23,7 @@ class AppPage extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Get.to(() => const AddRecordPage());
+            //Get.updateLocale(const Locale('vi', 'VN'));
           },
           backgroundColor: Theme.of(context).colorScheme.secondary,
           child: const Icon(Icons.add),
@@ -47,8 +48,8 @@ class AppPage extends StatelessWidget {
                     : const FaIcon(FontAwesomeIcons.moon))),
           ],
           centerTitle: true,
-          title: const Text(
-            'Money Helper',
+          title: Text(
+            'appName'.tr,
           ),
           flexibleSpace: Container(
             decoration: const BoxDecoration(),

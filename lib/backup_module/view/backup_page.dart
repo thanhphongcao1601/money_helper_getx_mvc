@@ -15,9 +15,6 @@ class BackUpPage extends StatelessWidget {
             List<String> listStringRecord =
                 prefs.getStringList('listRecord') ?? [];
             print(listStringRecord.length);
-            listStringRecord.forEach((element) {
-              print(element);
-            });
           },
           child: const ListTile(
             title: Text('Sao luu'),
