@@ -2,8 +2,6 @@ import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app_controller.dart';
-import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
-import '../constants/constant.dart';
 
 Widget buildBottomBar(
     int currentIndex, BuildContext context) {

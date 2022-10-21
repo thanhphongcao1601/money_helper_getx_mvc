@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app_controller.dart';
 
+// ignore: must_be_immutable
 class SettingPage extends StatelessWidget {
   SettingPage({super.key});
 
@@ -24,7 +23,7 @@ class SettingPage extends StatelessWidget {
               backgroundColor: Colors.brown.shade800,
               child: const Text('AH'),
             ),
-            title: Text('Hi, Thanh Phong'),
+            title: const Text('Hi, Thanh Phong'),
           ),
           const Divider(
             thickness: 1,

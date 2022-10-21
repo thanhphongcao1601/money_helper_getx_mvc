@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
 import '../../ultis/widgets/record_tile.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 

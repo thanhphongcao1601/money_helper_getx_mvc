@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
 
-import '../../ultis/constants/constant.dart';
-
 // ignore: must_be_immutable
 class StatisticPage extends StatefulWidget {
   const StatisticPage({Key? key}) : super(key: key);
