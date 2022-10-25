@@ -2,12 +2,13 @@ import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app_controller.dart';
+import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 
 Widget buildBottomBar(
     int currentIndex, BuildContext context) {
   AppController appController = Get.find<AppController>();
   return BubbleBottomBar(
-    backgroundColor: Theme.of(context).primaryColor,
+    backgroundColor: AppColor.darkPurple,
     opacity: .2,
     currentIndex: currentIndex,
     onTap: appController.changePage,
@@ -16,44 +17,45 @@ Widget buildBottomBar(
     fabLocation: BubbleBottomBarFabLocation.end,
     hasNotch: true,
     hasInk: true,
-    inkColor: Colors.black12,
+    inkColor: AppColor.gold,
     items: <BubbleBottomBarItem>[
       BubbleBottomBarItem(
-          backgroundColor: Theme.of(context).colorScheme.onSurface,
+          backgroundColor: AppColor.gold,
           icon: const Icon(
             Icons.access_time,
+            color: AppColor.gold,
           ),
           activeIcon: const Icon(
             Icons.access_time,
           ),
-          title: const Text("Nhật ký")),
+          title: Text("bottomNav.daily".tr)),
       BubbleBottomBarItem(
-          backgroundColor: Theme.of(context).colorScheme.onSurface,
+          backgroundColor: AppColor.gold,
           icon: const Icon(
-            Icons.dashboard,
+            Icons.dashboard,            color: AppColor.gold,
           ),
           activeIcon: const Icon(
             Icons.dashboard,
           ),
-          title: const Text("Thống kê")),
+          title: Text("bottomNav.statistic".tr)),
       BubbleBottomBarItem(
-          backgroundColor: Theme.of(context).colorScheme.onSurface,
+          backgroundColor: AppColor.gold,
           icon: const Icon(
-            Icons.folder_open,
+            Icons.folder_open,            color: AppColor.gold,
           ),
           activeIcon: const Icon(
             Icons.folder_open,
           ),
-          title: const Text("Sao lưu")),
+          title: Text("bottomNav.backup".tr)),
       BubbleBottomBarItem(
-          backgroundColor: Theme.of(context).colorScheme.onSurface,
+          backgroundColor: AppColor.gold,
           icon: const Icon(
-            Icons.settings,
+            Icons.settings,            color: AppColor.gold,
           ),
           activeIcon: const Icon(
             Icons.settings,
           ),
-          title: const Text("Cài đặt"))
+          title: Text("bottomNav.setting".tr)),
     ],
   );
 }

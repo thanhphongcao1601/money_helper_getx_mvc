@@ -70,6 +70,7 @@ class _StatisticPageState extends State<StatisticPage>
       }
     }
 
+    //add income item to incomeChart
     for (var item in homeController.listRecordGroupByType.value.entries) {
       for (var record in item.value) {
         if (record.money! > 0) {

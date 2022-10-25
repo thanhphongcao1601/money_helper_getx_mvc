@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app_controller.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 // ignore: must_be_immutable
-class SettingPage extends StatelessWidget {
-  SettingPage({super.key});
+class SettingPage extends StatefulWidget {
+  const SettingPage({super.key});
 
+  @override
+  State<SettingPage> createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
   AppController appController = Get.find<AppController>();
+  List<String> items = [];
+
+  @override
+  void initState() {
+    super.initState();
+    items = appController.listLangue;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +42,7 @@ class SettingPage extends StatelessWidget {
             thickness: 1,
           ),
           ListTile(
-              title: const Text('Giao diện tối'),
+              title: Text('setting.darkMode'.tr),
               trailing: Switch(
                 value: appController.isDarkMode.value,
                 activeColor: Theme.of(context).colorScheme.secondary,
@@ -43,23 +56,39 @@ class SettingPage extends StatelessWidget {
           const Divider(
             thickness: 1,
           ),
-          const ListTile(
-            title: Text('Ngôn ngữ'),
-            trailing: Icon(Icons.arrow_right),
+          ListTile(
+            title: Text('setting.language'.tr),
+            trailing: DropdownButtonHideUnderline(
+              child: DropdownButton2(
+                items: items
+                    .map((item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        ))
+                    .toList(),
+                value: appController.currentLanguageCode.value,
+                onChanged: (value) {
+                  appController.changeLanguage(value.toString());
+                },
+                buttonHeight: 40,
+                buttonWidth: 140,
+                itemHeight: 40,
+              ),
+            ),
           ),
           const Divider(
             thickness: 1,
           ),
-          const ListTile(
-            title: Text('Cập nhật tài khoản'),
-            trailing: Icon(Icons.arrow_right),
+          ListTile(
+            title: Text('setting.updateProfile'.tr),
+            trailing: const Icon(Icons.arrow_right),
           ),
           const Divider(
             thickness: 1,
           ),
-          const ListTile(
-            title: Text('Đăng xuất'),
-            trailing: Icon(Icons.arrow_right),
+          ListTile(
+            title: Text('setting.updateProfile'.tr),
+            trailing: const Icon(Icons.arrow_right),
           ),
           const Divider(
             thickness: 1,

@@ -1,26 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
 
 class BackUpPage extends StatelessWidget {
-  const BackUpPage({super.key});
+  BackUpPage({super.key});
+  final homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: Column(
-      children: [
-        InkWell(
-          onTap: () async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            List<String> listStringRecord =
-                prefs.getStringList('listRecord') ?? [];
-            print(listStringRecord.length);
-          },
-          child: const ListTile(
-            title: Text('Sao luu'),
-          ),
-        )
-      ],
-    ));
+    return Container(
+      color: Theme.of(context).colorScheme.primary,
+    );
   }
 }

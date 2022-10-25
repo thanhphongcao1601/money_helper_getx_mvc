@@ -172,7 +172,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 children: [
                   for (var item in AppConstantList.listExpenseType)
                     ItemSelect(
-                        item,
+                        item.tr,
                         expenseTypeC,
                         () => {
                               setState(() {
@@ -217,7 +217,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 children: [
                   for (var item in AppConstantList.listGenre)
                     ItemSelect(
-                        item,
+                        item.tr,
                         genreC,
                         () => {
                               setState(() {
