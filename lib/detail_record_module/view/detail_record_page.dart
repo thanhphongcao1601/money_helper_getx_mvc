@@ -1,14 +1,18 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
+import 'package:toggle_switch/toggle_switch.dart';
+import '../../app_view.dart';
 import '../../home_module/model/record.dart';
+import '../../ultis/constants/constant.dart';
 
 class DetailRecordPage extends StatefulWidget {
-  const DetailRecordPage({Key? key, required this.record}) : super(key: key);
-  final Record record;
+  const DetailRecordPage({Key? key, required this.currentRecord})
+      : super(key: key);
+  final Record currentRecord;
 
   @override
   State<DetailRecordPage> createState() => _DetailRecordPageState();
@@ -16,14 +20,13 @@ class DetailRecordPage extends StatefulWidget {
 
 class _DetailRecordPageState extends State<DetailRecordPage>
     with TickerProviderStateMixin {
-  final homeController = Get.find<HomeController>();
+  final HomeController homeController = Get.find<HomeController>();
 
   final formKeyExpense = GlobalKey<FormState>();
   final formKeyIncome = GlobalKey<FormState>();
 
   late bool isExpense;
-  late bool showGenre;
-  late bool showExpenseType;
+  late String currentItemGenre;
 
   late TextEditingController datetimeC;
   late TextEditingController expenseTypeC;
@@ -32,328 +35,430 @@ class _DetailRecordPageState extends State<DetailRecordPage>
   late TextEditingController moneyC;
 
   late DateTime dateTime;
-  late TabController _tabController;
+  late String errorMessage;
+  late Record currentRecord;
 
   @override
   void initState() {
     super.initState();
-    isExpense = true;
-    showGenre = false;
-    showExpenseType = true;
-
     datetimeC = TextEditingController();
-    expenseTypeC = TextEditingController();
     genreC = TextEditingController();
     contentC = TextEditingController();
     moneyC = TextEditingController();
 
-    moneyC.text = (widget.record.money!).abs().toString();
-    datetimeC.text =
-        DateTime.fromMillisecondsSinceEpoch(widget.record.datetime ?? 0)
-            .toString();
-    expenseTypeC.text = widget.record.type ?? "";
-    genreC.text = widget.record.genre ?? "";
-    contentC.text = widget.record.content ?? "";
-    dateTime = DateTime.fromMillisecondsSinceEpoch(widget.record.datetime ?? 0);
+    currentRecord = widget.currentRecord;
+    isExpense = currentRecord.money! < 0;
 
-    _tabController = TabController(length: 2, vsync: this);
-    widget.record.money! >= 0
-        ? _tabController.index = 1
-        : _tabController.index = 0;
+    dateTime = DateTime.fromMillisecondsSinceEpoch(currentRecord.datetime!);
+    datetimeC.text = dateTime.millisecondsSinceEpoch.toString();
+    currentItemGenre = currentRecord.money! < 0
+        ? currentRecord.genre.toString()
+        : currentRecord.type.toString();
+    genreC.text = currentItemGenre.tr;
+    errorMessage = '';
+    moneyC.text = currentRecord.money!.abs().toString();
+    contentC.text = currentRecord.content.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(),
-          ),
-          title: const Text(
-            "Quản lý chi tiêu",
-          ),
-          bottom: TabBar(
-              controller: _tabController,
-              tabs: const [Tab(text: "Chi"), Tab(text: "Thu")]),
-        ),
-        body: TabBarView(
-          controller: _tabController,
-          children: [buildTabExpense(), buildTabIncome()],
-        ));
-  }
-
-  Widget buildTabExpense() {
-    return SingleChildScrollView(
-      child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Form(
-            key: formKeyExpense,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                buildDateTimeField(),
-                buildMoneyTypeField(),
-                buildGenreField(),
-                buildMoneyValueField(),
-                buildContentField(),
-                const SizedBox(
-                  height: 20,
+      body: Container(
+        height: Get.height,
+        color: AppColor.purple,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 50,
+              ),
+              buildToggleButton(),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildDateTimeField(),
+                    buildGenreField(),
+                    buildMoneyField(),
+                    buildContentField()
+                  ],
                 ),
-                buildActionButton()
-              ],
-            ),
-          )),
+              ),
+              buildErrorMessage(),
+              buildSaveButton(),
+              buildDeleteButton(),
+              buildCancelButton()
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  Widget buildDateTimeField() {
-    return DateTimeField(
-      style: const TextStyle(fontWeight: FontWeight.bold),
-      initialValue: dateTime,
-      decoration: const InputDecoration(
-          icon: Icon(
-            Icons.date_range,
-          ),
-          hintText: 'Nhập ngày và giờ',
-          labelText: 'Ngày và giờ',
-          border: InputBorder.none),
-      format: DateFormat("yyyy-MM-dd h:mm a"),
-      onShowPicker: (context, currentValue) async {
-        final date = await showDatePicker(
-            context: context,
-            firstDate: DateTime(2000),
-            initialDate: currentValue ?? DateTime.now(),
-            lastDate: DateTime(2100));
-        if (date != null) {
-          final time = await showTimePicker(
-            context: context,
-            initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-          );
-          dateTime = DateTimeField.combine(date, time);
-          return dateTime;
-        } else {
-          return currentValue;
-        }
+  Widget buildToggleButton() {
+    return ToggleSwitch(
+      minWidth: Get.width,
+      initialLabelIndex: isExpense ? 0 : 1,
+      cornerRadius: 20.0,
+      activeFgColor: AppColor.darkPurple,
+      inactiveBgColor: Colors.grey,
+      inactiveFgColor: Colors.white,
+      totalSwitches: 2,
+      labels: const ['Expense', 'Income'],
+      icons: const [FontAwesomeIcons.minus, FontAwesomeIcons.plus],
+      activeBgColors: const [
+        [AppColor.gold],
+        [AppColor.gold],
+      ],
+      onToggle: (index) {
+        setState(() {
+          genreC.text = '';
+          isExpense = (index == 0);
+        });
       },
     );
   }
 
-  Widget buildMoneyTypeField() {
+  Widget buildDateTimeField() {
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextFormField(
-          style: const TextStyle(fontWeight: FontWeight.bold),
-          autofocus: true,
-          onTap: () {
-            setState(() {
-              showExpenseType = !showExpenseType;
-              showGenre = false;
-            });
-          },
-          readOnly: true,
-          controller: expenseTypeC,
-          decoration: const InputDecoration(
-              icon: Icon(
-                Icons.local_atm,
-              ),
-              hintText: 'Chọn loại tài khoản bên dưới',
-              labelText: 'Loại tài khoản',
-              border: InputBorder.none),
+        Text(
+          'form.dateAndTime'.tr,
+          style: const TextStyle(color: AppColor.gold),
         ),
+        Container(
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: DateTimeField(
+                style: const TextStyle(color: Colors.black),
+                initialValue: dateTime,
+                decoration: InputDecoration(
+                    hintText: 'form.dateAndTimeHint'.tr,
+                    hintStyle: const TextStyle(color: Colors.grey)),
+                format: DateFormat("yyyy-MM-dd h:mm a"),
+                onShowPicker: (context, currentValue) async {
+                  final date = await showDatePicker(
+                      context: context,
+                      firstDate: DateTime(2000),
+                      initialDate: currentValue ?? DateTime.now(),
+                      lastDate: DateTime(2100));
+                  if (date != null) {
+                    final time = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.fromDateTime(
+                          currentValue ?? DateTime.now()),
+                    );
+                    dateTime = DateTimeField.combine(date, time);
+                    return dateTime;
+                  } else {
+                    return currentValue;
+                  }
+                },
+              ),
+            )),
       ],
     );
   }
 
   Widget buildGenreField() {
     if (!isExpense) {
-      return const SizedBox();
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'form.type'.tr,
+            style: const TextStyle(color: AppColor.gold),
+          ),
+          Container(
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TextField(
+                  style: const TextStyle(color: Colors.black),
+                  controller: genreC,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                      hintText: 'form.typeHint'.tr,
+                      hintStyle: const TextStyle(color: Colors.grey)),
+                ),
+              )),
+          GridView.count(
+            padding: const EdgeInsets.all(5),
+            crossAxisCount: 3,
+            shrinkWrap: true,
+            mainAxisSpacing: 5,
+            crossAxisSpacing: 5,
+            childAspectRatio: 3 / 1,
+            children: [
+              for (var item in AppConstantList.listIncomeType)
+                buildItemGenre(item, currentItemGenre == item)
+            ],
+          ),
+        ],
+      );
     }
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextFormField(
-          style: const TextStyle(fontWeight: FontWeight.bold),
-          onTap: () {
-            setState(() {
-              showGenre = !showGenre;
-              showExpenseType = false;
-            });
-          },
-          readOnly: true,
-          controller: genreC,
-          decoration: const InputDecoration(
-              icon: Icon(
-                Icons.category,
+        Text(
+          'form.type'.tr,
+          style: const TextStyle(color: AppColor.gold),
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                controller: genreC,
+                readOnly: true,
+                decoration: InputDecoration(
+                    hintText: 'form.typeHint'.tr,
+                    hintStyle: const TextStyle(color: Colors.grey)),
               ),
-              hintText: 'Chọn thể loại bên dưới',
-              labelText: 'Thể loại',
-              border: InputBorder.none),
+            )),
+        GridView.count(
+          padding: const EdgeInsets.all(5),
+          crossAxisCount: 3,
+          shrinkWrap: true,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 5,
+          childAspectRatio: 3 / 1,
+          children: [
+            for (var item in AppConstantList.listExpenseGenre)
+              buildItemGenre(item, currentItemGenre == item)
+          ],
         ),
       ],
     );
   }
 
-  Widget buildMoneyValueField() {
-    return TextFormField(
-      style: const TextStyle(fontWeight: FontWeight.bold),
-      onTap: () {
-        setState(() {
-          moneyC.text = "";
-          showGenre = false;
-          showExpenseType = false;
-        });
-      },
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Số tiền không được để trống';
-        }
-        return null;
-      },
-      controller: moneyC,
-      keyboardType: TextInputType.number,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.digitsOnly
+  Widget buildMoneyField() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'form.money'.tr,
+          style: const TextStyle(color: AppColor.gold),
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                controller: moneyC,
+                keyboardType: const TextInputType.numberWithOptions(),
+                decoration: InputDecoration(
+                    hintText: 'form.moneyHint'.tr,
+                    hintStyle: const TextStyle(color: Colors.grey)),
+              ),
+            )),
       ],
-      decoration: const InputDecoration(
-          icon: Icon(
-            Icons.money,
-          ),
-          hintText: 'Nhập số tiền',
-          labelText: 'Số tiền',
-          border: InputBorder.none),
     );
   }
 
   Widget buildContentField() {
-    return TextFormField(
-      style: const TextStyle(fontWeight: FontWeight.bold),
-      textInputAction: TextInputAction.next,
-      onTap: () {
-        setState(() {
-          showGenre = false;
-          showExpenseType = false;
-        });
-      },
-      controller: contentC,
-      decoration: const InputDecoration(
-          icon: Icon(
-            Icons.edit_note,
-          ),
-          hintText: 'Nhập nội dung',
-          labelText: 'Nội dung',
-          border: InputBorder.none),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'form.content'.tr,
+          style: const TextStyle(color: AppColor.gold),
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                controller: contentC,
+                decoration: InputDecoration(
+                    hintText: 'form.contentHint'.tr,
+                    hintStyle: const TextStyle(color: Colors.grey)),
+              ),
+            )),
+      ],
     );
   }
 
-  Widget buildActionButton() {
-    return Center(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-              child: ElevatedButton(
-            onPressed: () async {
-              handleConfirmAndDelete();
-            },
-            child: const Text(
-              'Xóa',
-            ),
-          )),
-          const SizedBox(
-            width: 20,
-          ),
-          Expanded(
-              child: ElevatedButton(
-            onPressed: () async {
-              handleUpdateRecord();
-            },
-            child: const Text(
-              'Lưu',
-            ),
-          )),
-        ],
+  Widget buildErrorMessage() {
+    if (errorMessage != '') {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Text(
+          errorMessage,
+          style: const TextStyle(color: Colors.redAccent),
+        ),
+      );
+    }
+    return const SizedBox();
+  }
+
+  Widget buildSaveButton() {
+    return SizedBox(
+      width: Get.width / 2,
+      child: ElevatedButton(
+        onPressed: () {
+          handleUpdateRecord();
+        },
+        style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
+        child: Text(
+          'form.button.save'.tr,
+          style: const TextStyle(color: AppColor.darkPurple),
+        ),
       ),
     );
   }
 
-  void handleUpdateRecord() {
-    homeController.deleteRecordById(widget.record.id!);
-    if (_tabController.index == 0) {
-      final recordExpense = Record(
-          id: widget.record.id,
-          type: expenseTypeC.text,
-          datetime: dateTime.millisecondsSinceEpoch,
-          genre: genreC.text,
-          content: contentC.text,
-          money: -int.parse(moneyC.text));
-
-      homeController.addRecordToPrefs(recordExpense);
-    } else {
-      final recordIncome = Record(
-          id: widget.record.id,
-          type: expenseTypeC.text,
-          datetime: dateTime.millisecondsSinceEpoch,
-          content: contentC.text,
-          money: int.parse(moneyC.text));
-      homeController.addRecordToPrefs(recordIncome);
-    }
-    Get.back();
-    Get.snackbar("Thành công", "Bạn đã cập nhật thành công",
-        backgroundColor: Theme.of(context).backgroundColor);
-  }
-
-  void handleConfirmAndDelete() {
-    Get.defaultDialog(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-      content: const Text(
-          "Dữ liêu bị xóa sẽ không thể khôi phục êu bị xóa sẽ không thể khôi p"),
-      title: "Xóa bản ghi?",
-      confirm: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).primaryColor),
-          onPressed: () {
-            if (_tabController.index == 0) {
-              if (formKeyExpense.currentState!.validate()) {
-                homeController.deleteRecordById(widget.record.id!);
-              }
-            } else {
-              if (formKeyIncome.currentState!.validate()) {
-                homeController.deleteRecordById(widget.record.id!);
-              }
-            }
-            Get.back();
-            Get.back();
-          },
-          child: const Text("Xóa")),
-      cancel: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.background),
-          onPressed: () {
-            Get.back();
-          },
-          child: const Text("Hủy")),
+  Widget buildDeleteButton() {
+    return SizedBox(
+      width: Get.width / 2,
+      child: OutlinedButton(
+        onPressed: () {
+          handleDeleteRecord();
+        },
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Colors.red),
+        ),
+        child: Text('form.button.delete'.tr,
+            style: const TextStyle(color: Colors.red)),
+      ),
     );
   }
 
-  Widget buildTabIncome() {
-    return SingleChildScrollView(
-      child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Form(
-            key: formKeyIncome,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                buildDateTimeField(),
-                buildMoneyTypeField(),
-                buildMoneyValueField(),
-                buildContentField(),
-                const SizedBox(
-                  height: 20,
-                ),
-                buildActionButton()
-              ],
-            ),
+  Widget buildCancelButton() {
+    return SizedBox(
+      width: Get.width / 2,
+      child: OutlinedButton(
+        onPressed: () {
+          Get.back();
+        },
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: AppColor.gold),
+        ),
+        child: Text('form.button.cancel'.tr,
+            style: const TextStyle(color: AppColor.gold)),
+      ),
+    );
+  }
+
+  Widget buildItemGenre(String item, bool isSelected) {
+    return InkWell(
+      onTap: () => chooseItem(item),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: isSelected ? AppColor.gold : Colors.grey,
+            borderRadius: BorderRadius.circular(10)),
+        child: Text(
+          item.tr,
+          style:
+              TextStyle(color: isSelected ? AppColor.darkPurple : Colors.white),
+        ),
+      ),
+    );
+  }
+
+  void chooseItem(String item) {
+    setState(() {
+      currentItemGenre = item;
+      genreC.text = item.tr;
+    });
+  }
+
+  void handleDeleteRecord() {
+    Get.defaultDialog(
+      backgroundColor: AppColor.purple,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+      content: Text(
+        "form.dialog.delete.content".tr,
+        style: const TextStyle(color: Colors.white),
+      ),
+      title: "form.dialog.delete.title".tr,
+      titleStyle: const TextStyle(color: AppColor.gold),
+      confirm: ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
+          onPressed: () {
+            homeController.deleteRecordById(currentRecord.id!);
+            Get.to(AppPage());
+            Get.snackbar("snackbar.delete.success.title".tr,
+                "snackbar.delete.success.message".tr,
+                backgroundColor: Theme.of(context).backgroundColor);
+          },
+          child: Text(
+            "form.button.delete".tr,
+            style: const TextStyle(color: AppColor.darkPurple),
+          )),
+      cancel: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(color: AppColor.gold),
+          ),
+          onPressed: () {
+            Get.back();
+          },
+          child: Text(
+            "form.button.cancel".tr,
+            style: const TextStyle(color: AppColor.gold),
           )),
     );
+  }
+
+  void handleUpdateRecord() {
+    setState(() {
+      errorMessage = '';
+    });
+
+    if (datetimeC.text.isEmpty) {
+      errorMessage += 'Date & Time can not null\n';
+    }
+    if (genreC.text.isEmpty) {
+      errorMessage += 'Type can not null\n';
+    }
+    if (moneyC.text.isEmpty) {
+      errorMessage += 'Money can not null\n';
+    }
+    if (contentC.text.isEmpty) {
+      errorMessage += 'Content can not null\n';
+    }
+
+    if (errorMessage != '') {
+      setState(() {
+        errorMessage;
+      });
+    } else {
+      final recordExpense = Record(
+          id: currentRecord.id,
+          datetime: dateTime.millisecondsSinceEpoch,
+          genre: isExpense ? currentItemGenre : null,
+          type: !isExpense ? currentItemGenre : null,
+          content: contentC.text,
+          money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
+
+      homeController.updateRecord(recordExpense);
+      Get.to(AppPage());
+      Get.snackbar("snackbar.update.success.title".tr,
+          "snackbar.update.success.message".tr,
+          backgroundColor: Theme.of(context).backgroundColor);
+    }
   }
 }

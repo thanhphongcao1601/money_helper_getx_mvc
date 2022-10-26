@@ -41,6 +41,9 @@ class Languages extends Translations {
           'form.button.save': 'Save',
           'form.button.cancel': 'Cancel',
           'form.button.delete': 'Delete',
+          'form.dialog.delete.title': 'Delete record?',
+          'form.dialog.delete.content':
+              'After delete record, you can not restore the record!',
           //setting
           'setting.darkMode': 'Dark mode',
           'setting.language': 'Language',
@@ -51,6 +54,15 @@ class Languages extends Translations {
           'snackbar.add.success.message': 'You add a record completely',
           'snackbar.add.fail.title': 'Fail',
           'snackbar.add.fail.message': 'Fail to add a record',
+
+          'snackbar.update.success.title': 'Success',
+          'snackbar.update.success.message': 'You update record completely',
+          'snackbar.update.fail.title': 'Fail',
+          'snackbar.update.fail.message': 'Fail to update record',
+          'snackbar.delete.success.title': 'Success',
+          'snackbar.delete.success.message': 'You delete a record completely',
+          'snackbar.delete.fail.title': 'Fail',
+          'snackbar.delete.fail.message': 'Fail to delete record',
         },
         'vi_VN': {
           //app
@@ -90,6 +102,9 @@ class Languages extends Translations {
           'form.button.save': 'Lưu',
           'form.button.cancel': 'Hủy',
           'form.button.delete': 'Xóa',
+          'form.dialog.delete.title': 'Xóa bản ghi?',
+          'form.dialog.delete.content':
+              'Sau khi xóa, dữ liệu sẽ không thể khôi phục!',
           //setting
           'setting.darkMode': 'Chủ đề tối',
           'setting.language': 'Ngôn ngữ',
@@ -100,6 +115,16 @@ class Languages extends Translations {
           'snackbar.add.success.message': 'Bạn đã thêm thành công',
           'snackbar.add.fail.title': 'Thất bại',
           'snackbar.add.fail.message': 'Không thể thực hiện thêm bản ghi',
+
+          'snackbar.update.success.title': 'Thành công',
+          'snackbar.update.success.message': 'Cập nhật bản ghi thành công',
+          'snackbar.update.fail.title': 'Thất bại',
+          'snackbar.update.fail.message': 'Cập nhật bản ghi thất bại',
+
+          'snackbar.delete.success.title': 'Thành công',
+          'snackbar.delete.success.message': 'Xóa bản ghi thành công',
+          'snackbar.delete.fail.title': 'Thất bại',
+          'snackbar.delete.fail.message': 'Xóa bản ghi thất bại',
         },
       };
 }

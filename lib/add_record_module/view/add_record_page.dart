@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:money_helper_getx_mvc/app_view.dart';
 import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:uuid/uuid.dart';
@@ -127,9 +128,10 @@ class _AddRecordPageState extends State<AddRecordPage>
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: DateTimeField(
                 initialValue: dateTime,
+                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
-                  hintText: 'form.dateAndTimeHint'.tr,
-                ),
+                    hintText: 'form.dateAndTimeHint'.tr,
+                    hintStyle: const TextStyle(color: Colors.grey)),
                 format: DateFormat("yyyy-MM-dd h:mm a"),
                 onShowPicker: (context, currentValue) async {
                   final date = await showDatePicker(
@@ -173,10 +175,11 @@ class _AddRecordPageState extends State<AddRecordPage>
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: TextField(
                   controller: genreC,
+                  style: const TextStyle(color: Colors.black),
                   readOnly: true,
                   decoration: InputDecoration(
-                    hintText: 'form.typeHint'.tr,
-                  ),
+                      hintText: 'form.typeHint'.tr,
+                      hintStyle: const TextStyle(color: Colors.grey)),
                 ),
               )),
           GridView.count(
@@ -210,10 +213,11 @@ class _AddRecordPageState extends State<AddRecordPage>
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
                 controller: genreC,
+                style: const TextStyle(color: Colors.black),
                 readOnly: true,
                 decoration: InputDecoration(
-                  hintText: 'form.typeHint'.tr,
-                ),
+                    hintText: 'form.typeHint'.tr,
+                    hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
         GridView.count(
@@ -249,10 +253,11 @@ class _AddRecordPageState extends State<AddRecordPage>
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
                 controller: moneyC,
+                style: const TextStyle(color: Colors.black),
                 keyboardType: const TextInputType.numberWithOptions(),
                 decoration: InputDecoration(
-                  hintText: 'form.moneyHint'.tr,
-                ),
+                    hintText: 'form.moneyHint'.tr,
+                    hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
       ],
@@ -276,9 +281,10 @@ class _AddRecordPageState extends State<AddRecordPage>
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
                 controller: contentC,
+                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
-                  hintText: 'form.contentHint'.tr,
-                ),
+                    hintText: 'form.contentHint'.tr,
+                    hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
       ],
@@ -386,7 +392,7 @@ class _AddRecordPageState extends State<AddRecordPage>
           money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
 
       homeController.addRecordToPrefs(recordExpense);
-      Get.back();
+      Get.to(AppPage());
       Get.snackbar(
           "snackbar.add.success.title".tr, "snackbar.add.success.message".tr,
           backgroundColor: Theme.of(context).backgroundColor);

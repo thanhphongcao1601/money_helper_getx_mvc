@@ -79,7 +79,6 @@ class HomeController extends GetxController {
     listStringRecord.add(recordJson);
 
     await prefs.setStringList('listRecord', listStringRecord);
-
     loadListRecord();
   }
 
@@ -87,10 +86,25 @@ class HomeController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
-    String stringRecord = listStringRecord
+    String deletedRecord = listStringRecord
         .firstWhere((element) => Record.fromJson(jsonDecode(element)).id == id);
+    listStringRecord.remove(deletedRecord);
 
-    listStringRecord.remove(stringRecord);
+    await prefs.setStringList('listRecord', listStringRecord);
+    loadListRecord();
+  }
+
+  updateRecord(Record record) async {
+    String recordJson = jsonEncode(record.toJson());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
+
+    String deletedRecord = listStringRecord.firstWhere(
+        (element) => Record.fromJson(jsonDecode(element)).id == record.id);
+
+    listStringRecord.remove(deletedRecord);
+    listStringRecord.add(recordJson);
+
     await prefs.setStringList('listRecord', listStringRecord);
     loadListRecord();
   }

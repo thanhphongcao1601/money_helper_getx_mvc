@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_helper_getx_mvc/detail_record_module/view/detail_record_page.dart';
 import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import '../../home_module/model/record.dart';
+import '../../ultis/helper/helper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,26 +28,10 @@ class _HomePageState extends State<HomePage> {
     dateTime = DateTime.now();
   }
 
-  Color getItemTypeColor(String type) {
-    var color = AppColor.gold;
-    switch (type) {
-      case 'form.genre.mustHave':
-        color = AppColor.mustHave;
-        break;
-      case 'form.genre.niceToHave':
-        color = AppColor.niceToHave;
-        break;
-      case 'form.genre.wasted':
-        color = AppColor.wasted;
-        break;
-    }
-    return color;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Obx(() => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(children: [
           buildHeader(context),
           buildDashboard(false),
@@ -54,9 +40,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildHeader(BuildContext context) {
-    return SizedBox(
-      // color: Theme.of(context).primaryColor,
-      height: 80,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
           Row(
@@ -230,67 +215,74 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildRecord({required Record record, required BuildContext context}) {
-    return Container(
-      height: 50,
-      margin: const EdgeInsets.fromLTRB(10, 5, 0, 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: AppColor.darkPurple,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Text(
-                    DateTime.fromMillisecondsSinceEpoch(record.datetime ?? 0)
-                        .toString()
-                        .substring(11, 19),
-                    style: const TextStyle(color: Colors.white),
-                  )),
-              const Expanded(child: SizedBox()),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(10)),
-                    color: getItemTypeColor(record.genre!)),
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Text(
-                    record.money! < 0
-                        ? (record.genre ?? "").tr
-                        : (record.type ?? "").tr,
-                    style: const TextStyle(
-                        color: AppColor.darkPurple,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+    return InkWell(
+      onTap: () => Get.to(DetailRecordPage(currentRecord: record,)),
+      child: Container(
+        height: 50,
+        margin: const EdgeInsets.fromLTRB(10, 5, 0, 5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: AppColor.darkPurple,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(record.content.toString(),
-                    style: const TextStyle(color: Colors.white)),
+                Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Text(
+                      DateTime.fromMillisecondsSinceEpoch(record.datetime ?? 0)
+                          .toString()
+                          .substring(11, 19),
+                      style: const TextStyle(color: Colors.white),
+                    )),
                 const Expanded(child: SizedBox()),
-                Text(
-                  record.money.toString(),
-                  style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.gold),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(10)),
+                      color: Helper().getItemTypeColor(
+                          record.money! < 0 ? record.genre! : record.type!)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Text(
+                      record.money! < 0
+                          ? (record.genre ?? "").tr
+                          : (record.type ?? "").tr,
+                      style: const TextStyle(
+                          color: AppColor.darkPurple,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 )
               ],
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(record.content.toString(),
+                      style: const TextStyle(color: Colors.white)),
+                  const Expanded(child: SizedBox()),
+                  Text(
+                    record.money.toString(),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: record.money! > 0
+                            ? AppColor.mustHave
+                            : AppColor.wasted),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
