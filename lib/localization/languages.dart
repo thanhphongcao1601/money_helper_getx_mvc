@@ -6,6 +6,9 @@ class Languages extends Translations {
         'en_US': {
           //app
           'appName': 'Money Helper',
+          'total': 'Total',
+          'income': 'Income',
+          'expense': 'Expense',
           //bottom nav bar
           'bottomNav.daily': 'Daily',
           'bottomNav.statistic': 'Statistic',
@@ -20,15 +23,15 @@ class Languages extends Translations {
           'form.type': 'Type',
           'form.typeHint': 'Choose money type',
           //form-type-value
-          'form.type.type1': 'cash',
-          'form.type.type2': 'bank',
-          'form.type.type3': 'e-wallet',
+          'form.type.cash': 'Cash',
+          'form.type.bank': 'Bank',
+          'form.type.eWallet': 'E-wallet',
           'form.genre': 'Genre',
           'form.genreHint': 'Choose your genre',
           //form-genre-value
-          'form.genre.genre1': 'Must have',
-          'form.genre.genre2': 'Nice to have',
-          'form.genre.genre3': 'Wasted',
+          'form.genre.mustHave': 'Must have',
+          'form.genre.niceToHave': 'Nice to have',
+          'form.genre.wasted': 'Wasted',
 
           'form.money': 'Money',
           'form.moneyHint': 'Enter your money',
@@ -36,6 +39,7 @@ class Languages extends Translations {
           'form.content': 'Content',
           'form.contentHint': 'Enter your content',
           'form.button.save': 'Save',
+          'form.button.cancel': 'Cancel',
           'form.button.delete': 'Delete',
           //setting
           'setting.darkMode': 'Dark mode',
@@ -51,6 +55,9 @@ class Languages extends Translations {
         'vi_VN': {
           //app
           'appName': 'Quản lý chi tiêu',
+          'total': 'Tổng',
+          'income': 'Thu',
+          'expense': 'Chi',
           //bottom nav bar
           'bottomNav.daily': 'Nhật ký',
           'bottomNav.statistic': 'Thống kê',
@@ -65,15 +72,15 @@ class Languages extends Translations {
           'form.type': 'Loại tài khoản',
           //form-type-value
           'form.typeHint': 'Chọn loại tài khoản',
-          'form.type.type1': 'Tiền mặt',
-          'form.type.type2': 'Ngân hàng',
-          'form.type.type3': 'Ví điện tử',
+          'form.type.cash': 'Tiền mặt',
+          'form.type.bank': 'Ngân hàng',
+          'form.type.eWallet': 'Ví điện tử',
           'form.genre': 'Thể loại',
           'form.genreHint': 'Chọn thể loại',
           //form-genre-value
-          'form.genre.genre1': 'Bắt buộc',
-          'form.genre.genre2': 'Nên',
-          'form.genre.genre3': 'Lãng phí',
+          'form.genre.mustHave': 'Cần thiết',
+          'form.genre.niceToHave': 'Nên',
+          'form.genre.wasted': 'Lãng phí',
 
           'form.money': 'Số tiền',
           'form.moneyHint': 'Nhập số tiền',
@@ -81,6 +88,7 @@ class Languages extends Translations {
           'form.content': 'Nội dung',
           'form.contentHint': 'Nhập nội dung',
           'form.button.save': 'Lưu',
+          'form.button.cancel': 'Hủy',
           'form.button.delete': 'Xóa',
           //setting
           'setting.darkMode': 'Chủ đề tối',

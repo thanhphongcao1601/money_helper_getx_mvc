@@ -23,7 +23,6 @@ class AppController extends GetxController {
 
   changeLanguage(String language){
     var code = listMapLanguageAndCode[language]!;
-    print(code);
     currentLanguageCode.value = language;
     Get.updateLocale(Locale(code));
   }

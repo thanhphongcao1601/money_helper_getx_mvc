@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
 import '../../home_module/model/record.dart';
-import '../../ultis/constants/constant.dart';
-import '../../ultis/widgets/item_select.dart';
 
 class DetailRecordPage extends StatefulWidget {
   const DetailRecordPage({Key? key, required this.record}) : super(key: key);
@@ -162,31 +160,14 @@ class _DetailRecordPageState extends State<DetailRecordPage>
               labelText: 'Loại tài khoản',
               border: InputBorder.none),
         ),
-        showExpenseType
-            ? GridView.count(
-                crossAxisCount: 3,
-                shrinkWrap: true,
-                mainAxisSpacing: 5,
-                crossAxisSpacing: 5,
-                childAspectRatio: 3 / 1,
-                children: [
-                  for (var item in AppConstantList.listExpenseType)
-                    ItemSelect(
-                        item.tr,
-                        expenseTypeC,
-                        () => {
-                              setState(() {
-                                showExpenseType = false;
-                              })
-                            })
-                ],
-              )
-            : const SizedBox(),
       ],
     );
   }
 
   Widget buildGenreField() {
+    if (!isExpense) {
+      return const SizedBox();
+    }
     return Column(
       children: [
         TextFormField(
@@ -207,26 +188,6 @@ class _DetailRecordPageState extends State<DetailRecordPage>
               labelText: 'Thể loại',
               border: InputBorder.none),
         ),
-        showGenre
-            ? GridView.count(
-                crossAxisCount: 3,
-                shrinkWrap: true,
-                mainAxisSpacing: 5,
-                crossAxisSpacing: 5,
-                childAspectRatio: 3 / 1,
-                children: [
-                  for (var item in AppConstantList.listGenre)
-                    ItemSelect(
-                        item.tr,
-                        genreC,
-                        () => {
-                              setState(() {
-                                showGenre = false;
-                              })
-                            })
-                ],
-              )
-            : const SizedBox(),
       ],
     );
   }

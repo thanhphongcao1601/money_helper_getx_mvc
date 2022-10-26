@@ -1,11 +1,9 @@
 // ignore_for_file: unnecessary_string_escapes
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 import '../../home_module/model/record.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,6 +25,23 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     dateTime = DateTime.now();
   }
+
+  Color getItemTypeColor(String type) {
+    var color = AppColor.gold;
+    switch (type) {
+      case 'form.genre.mustHave':
+        color = AppColor.mustHave;
+        break;
+      case 'form.genre.niceToHave':
+        color = AppColor.niceToHave;
+        break;
+      case 'form.genre.wasted':
+        color = AppColor.wasted;
+        break;
+    }
+    return color;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() => Padding(
@@ -54,10 +69,10 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
                   Text(
-                    'Hi',
+                    'Hi,',
                     style: TextStyle(fontSize: 20, color: AppColor.gold),
                   ),
-                  Text('Phong Cao',
+                  Text('Human',
                       style: TextStyle(fontSize: 28, color: AppColor.gold)),
                 ],
               ),
@@ -87,9 +102,10 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Total:',
-                  style: TextStyle(fontSize: 20, color: AppColor.darkPurple),
+                Text(
+                  '${'total'.tr}:',
+                  style:
+                      const TextStyle(fontSize: 20, color: AppColor.darkPurple),
                 ),
                 Text(
                   (homeController.totalExpense.value +
@@ -117,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      isExpense ? 'Expense' : 'Income',
+                      isExpense ? 'expense'.tr : 'income'.tr,
                       style: const TextStyle(color: AppColor.gold),
                     ),
                     const SizedBox(
@@ -147,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      !isExpense ? 'Expense' : 'Income',
+                      !isExpense ? 'expense'.tr : 'income'.tr,
                       style: const TextStyle(color: AppColor.gold),
                     ),
                     const SizedBox(
@@ -237,16 +253,17 @@ class _HomePageState extends State<HomePage> {
                   )),
               const Expanded(child: SizedBox()),
               Container(
-                decoration: const BoxDecoration(
-                  borderRadius:
-                      BorderRadius.only(bottomLeft: Radius.circular(10)),
-                  color: Colors.green,
-                ),
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(10)),
+                    color: getItemTypeColor(record.genre!)),
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: Text(
-                    record.genre ?? "",
+                    record.money! < 0
+                        ? (record.genre ?? "").tr
+                        : (record.type ?? "").tr,
                     style: const TextStyle(
                         color: AppColor.darkPurple,
                         fontWeight: FontWeight.bold),

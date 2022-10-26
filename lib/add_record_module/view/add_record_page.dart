@@ -33,12 +33,14 @@ class _AddRecordPageState extends State<AddRecordPage>
   late TextEditingController moneyC;
 
   late DateTime dateTime;
+  late String errorMessage;
 
   @override
   void initState() {
     super.initState();
     isExpense = true;
-    currentItemGenre='';
+    currentItemGenre = '';
+    errorMessage = '';
 
     datetimeC = TextEditingController();
     genreC = TextEditingController();
@@ -46,6 +48,7 @@ class _AddRecordPageState extends State<AddRecordPage>
     moneyC = TextEditingController();
 
     dateTime = DateTime.now();
+    datetimeC.text = dateTime.millisecondsSinceEpoch.toString();
   }
 
   @override
@@ -74,6 +77,7 @@ class _AddRecordPageState extends State<AddRecordPage>
                   ],
                 ),
               ),
+              buildErrorMessage(),
               buildSaveButton(),
               buildCancelButton()
             ],
@@ -111,9 +115,9 @@ class _AddRecordPageState extends State<AddRecordPage>
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Date & Time',
-          style: TextStyle(color: AppColor.gold),
+        Text(
+          'form.dateAndTime'.tr,
+          style: const TextStyle(color: AppColor.gold),
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -152,13 +156,51 @@ class _AddRecordPageState extends State<AddRecordPage>
   }
 
   Widget buildGenreField() {
+    if (!isExpense) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'form.type'.tr,
+            style: const TextStyle(color: AppColor.gold),
+          ),
+          Container(
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TextField(
+                  controller: genreC,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    hintText: 'form.typeHint'.tr,
+                  ),
+                ),
+              )),
+          GridView.count(
+            padding: const EdgeInsets.all(5),
+            crossAxisCount: 3,
+            shrinkWrap: true,
+            mainAxisSpacing: 5,
+            crossAxisSpacing: 5,
+            childAspectRatio: 3 / 1,
+            children: [
+              for (var item in AppConstantList.listIncomeType)
+                buildItemGenre(item, currentItemGenre == item)
+            ],
+          ),
+        ],
+      );
+    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Type',
-          style: TextStyle(color: AppColor.gold),
+        Text(
+          'form.type'.tr,
+          style: const TextStyle(color: AppColor.gold),
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -169,8 +211,8 @@ class _AddRecordPageState extends State<AddRecordPage>
               child: TextField(
                 controller: genreC,
                 readOnly: true,
-                decoration: const InputDecoration(
-                  hintText: 'Choose type below',
+                decoration: InputDecoration(
+                  hintText: 'form.typeHint'.tr,
                 ),
               ),
             )),
@@ -182,8 +224,8 @@ class _AddRecordPageState extends State<AddRecordPage>
           crossAxisSpacing: 5,
           childAspectRatio: 3 / 1,
           children: [
-            for (var item in AppConstantList.listGenre)
-              buildItemGenre(item, currentItemGenre == item)  
+            for (var item in AppConstantList.listExpenseGenre)
+              buildItemGenre(item, currentItemGenre == item)
           ],
         ),
       ],
@@ -195,9 +237,9 @@ class _AddRecordPageState extends State<AddRecordPage>
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Money',
-          style: TextStyle(color: AppColor.gold),
+        Text(
+          'form.money'.tr,
+          style: const TextStyle(color: AppColor.gold),
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -208,8 +250,8 @@ class _AddRecordPageState extends State<AddRecordPage>
               child: TextField(
                 controller: moneyC,
                 keyboardType: const TextInputType.numberWithOptions(),
-                decoration: const InputDecoration(
-                  hintText: 'Enter money',
+                decoration: InputDecoration(
+                  hintText: 'form.moneyHint'.tr,
                 ),
               ),
             )),
@@ -222,9 +264,9 @@ class _AddRecordPageState extends State<AddRecordPage>
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Content',
-          style: TextStyle(color: AppColor.gold),
+        Text(
+          'form.content'.tr,
+          style: const TextStyle(color: AppColor.gold),
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -234,13 +276,26 @@ class _AddRecordPageState extends State<AddRecordPage>
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
                 controller: contentC,
-                decoration: const InputDecoration(
-                  hintText: 'Enter content',
+                decoration: InputDecoration(
+                  hintText: 'form.contentHint'.tr,
                 ),
               ),
             )),
       ],
     );
+  }
+
+  Widget buildErrorMessage() {
+    if (errorMessage != '') {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Text(
+          errorMessage,
+          style: const TextStyle(color: Colors.redAccent),
+        ),
+      );
+    }
+    return const SizedBox();
   }
 
   Widget buildSaveButton() {
@@ -251,9 +306,9 @@ class _AddRecordPageState extends State<AddRecordPage>
           handleAddRecord();
         },
         style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
-        child: const Text(
-          'Save',
-          style: TextStyle(color: AppColor.darkPurple),
+        child: Text(
+          'form.button.save'.tr,
+          style: const TextStyle(color: AppColor.darkPurple),
         ),
       ),
     );
@@ -269,14 +324,15 @@ class _AddRecordPageState extends State<AddRecordPage>
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: AppColor.gold),
         ),
-        child: const Text('Cancel', style: TextStyle(color: AppColor.gold)),
+        child: Text('form.button.cancel'.tr,
+            style: const TextStyle(color: AppColor.gold)),
       ),
     );
   }
 
   Widget buildItemGenre(String item, bool isSelected) {
     return InkWell(
-      onTap: ()=>chooseItem(item),
+      onTap: () => chooseItem(item),
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -284,13 +340,14 @@ class _AddRecordPageState extends State<AddRecordPage>
             borderRadius: BorderRadius.circular(10)),
         child: Text(
           item.tr,
-          style: TextStyle(color: isSelected? AppColor.darkPurple:Colors.white),
+          style:
+              TextStyle(color: isSelected ? AppColor.darkPurple : Colors.white),
         ),
       ),
     );
   }
 
-  void chooseItem(String item){
+  void chooseItem(String item) {
     setState(() {
       currentItemGenre = item;
       genreC.text = item.tr;
@@ -298,25 +355,41 @@ class _AddRecordPageState extends State<AddRecordPage>
   }
 
   void handleAddRecord() {
-    final recordExpense = Record(
-        id: const Uuid().v4(),
-        datetime: dateTime.millisecondsSinceEpoch,
-        genre: genreC.text,
-        content: contentC.text,
-        money: -int.parse(moneyC.text));
+    setState(() {
+      errorMessage = '';
+    });
 
-    print(dateTime.toString() +
-        '--' +
-        genreC.text +
-        '--' +
-        contentC.text +
-        '--' +
-        moneyC.text);
-    //homeController.addRecordToPrefs(recordExpense);
+    if (datetimeC.text.isEmpty) {
+      errorMessage += 'Date & Time can not null\n';
+    }
+    if (genreC.text.isEmpty) {
+      errorMessage += 'Type can not null\n';
+    }
+    if (moneyC.text.isEmpty) {
+      errorMessage += 'Money can not null\n';
+    }
+    if (contentC.text.isEmpty) {
+      errorMessage += 'Content can not null\n';
+    }
 
-    // Get.back();
-    // Get.snackbar(
-    //     "snackbar.add.success.title".tr, "snackbar.add.success.message".tr,
-    //     backgroundColor: Theme.of(context).backgroundColor);
+    if (errorMessage != '') {
+      setState(() {
+        errorMessage;
+      });
+    } else {
+      final recordExpense = Record(
+          id: const Uuid().v4(),
+          datetime: dateTime.millisecondsSinceEpoch,
+          genre: isExpense ? currentItemGenre : null,
+          type: !isExpense ? currentItemGenre : null,
+          content: contentC.text,
+          money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
+
+      homeController.addRecordToPrefs(recordExpense);
+      Get.back();
+      Get.snackbar(
+          "snackbar.add.success.title".tr, "snackbar.add.success.message".tr,
+          backgroundColor: Theme.of(context).backgroundColor);
+    }
   }
 }

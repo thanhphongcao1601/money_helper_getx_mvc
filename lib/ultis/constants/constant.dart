@@ -9,18 +9,17 @@ class AppColor {
   static const Color mustHave = Colors.green;
   static const Color niceToHave = Colors.yellow;
   static const Color wasted = Colors.red;
-
 }
 
 class AppConstantList {
-  static const List<String> listExpenseType = [
-    "form.type.type1",
-    "form.type.type2",
-    "form.type.type3",
+  static const List<String> listIncomeType = [
+    "form.type.cash",
+    "form.type.bank",
+    "form.type.eWallet",
   ];
-  static const List<String> listGenre = [
-    'form.genre.genre1',
-    'form.genre.genre2',
-    'form.genre.genre3',
+  static const List<String> listExpenseGenre = [
+    'form.genre.mustHave',
+    'form.genre.niceToHave',
+    'form.genre.wasted',
   ];
 }

@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:d_chart/d_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
+import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 
 // ignore: must_be_immutable
 class StatisticPage extends StatefulWidget {
@@ -95,24 +95,28 @@ class _StatisticPageState extends State<StatisticPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppColor.darkPurple,
         appBar: TabBar(
-            // indicatorColor: Colors.black,
-            labelColor: Theme.of(context).colorScheme.onSurface,
+            indicatorColor: AppColor.gold,
+            labelColor: AppColor.gold,
             controller: _tabController,
             tabs: [
               Tab(
-                text: "Chi: ${totalExpense.toString().toVND()}",
+                text: "${"tab.expense".tr}: ${totalExpense.toString()}",
               ),
               Tab(
-                text: "Thu: ${totalIncome.toString().toVND()}",
+                text: "${"tab.income".tr}: ${totalIncome.toString()}",
               ),
             ]),
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            buildTabExpense(),
-            buildTabIncome(),
-          ],
+        body: Container(
+          color: AppColor.purple,
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              buildTabExpense(),
+              buildTabIncome(),
+            ],
+          ),
         ));
   }
 
@@ -163,10 +167,10 @@ class _StatisticPageState extends State<StatisticPage>
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: colors[dataExpenseToChart.indexOf(item)]),
-              child: Center(child: Text('${item['measure']}%')),
+              child: Center(child: Text('${'${item['measure']}'.tr}%')),
             ),
-            title: Text(item['domain']),
-            trailing: Text(item['money'].toString().toVND()),
+            title: Text('${item['domain']}'.tr),
+            trailing: Text(item['money'].toString()),
           )
       ],
     );
@@ -223,10 +227,10 @@ class _StatisticPageState extends State<StatisticPage>
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: colors[dataIncomeToChart.indexOf(item)]),
-              child: Center(child: Text('${item['measure']}%')),
+              child: Center(child: Text('${'${item['measure']}'.tr}%')),
             ),
-            title: Text(item['domain']),
-            trailing: Text(item['money'].toString().toVND()),
+            title: Text('${item['domain']}'.tr),
+            trailing: Text(item['money'].toString()),
           )
       ],
     );

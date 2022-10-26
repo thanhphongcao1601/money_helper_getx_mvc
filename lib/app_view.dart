@@ -20,19 +20,23 @@ class AppPage extends StatelessWidget {
   Widget build(BuildContext context) {
     homeController.loadListRecord();
     return Scaffold(
+        backgroundColor: AppColor.purple,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Get.to(() => const AddRecordPage());
           },
           backgroundColor: AppColor.gold,
-          child: const Icon(Icons.add, color: AppColor.darkPurple,),
+          child: const Icon(
+            Icons.add,
+            color: AppColor.darkPurple,
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: Obx(
             () => buildBottomBar(appController.currentIndex.value, context)),
         body: Obx(() => Container(
-          color: AppColor.purple,
-          child: SafeArea(child: buildPageSelected()))));
+            color: AppColor.purple,
+            child: SafeArea(child: buildPageSelected()))));
   }
 
   Widget buildPageSelected() {
