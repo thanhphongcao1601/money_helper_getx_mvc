@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class AppController extends GetxController {
   final isDarkMode = false.obs;
   RxInt currentIndex = 0.obs;
-  RxString currentLanguageCode = 'Tiếng Việt'.obs;
+  RxString currentLanguageCode = 'English'.obs;
 
   dynamic changePage(int? newIndex) {
     currentIndex.value = newIndex!;

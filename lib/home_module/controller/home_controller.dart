@@ -3,17 +3,68 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../ultis/helper/helper.dart';
 import '../model/record.dart';
 
 class HomeController extends GetxController {
   final listRecord = RxList<Record>([]).obs;
-
   final listRecordGroupByDate = RxMap<String, List<Record>>({}).obs;
   final listRecordGroupByGenre = RxMap<String, List<Record>>({}).obs;
   final listRecordGroupByType = RxMap<String, List<Record>>({}).obs;
+  final dataExpenseToChart = RxList<Map<String, dynamic>>([]).obs;
+  final dataIncomeToChart = RxList<Map<String, dynamic>>([]).obs;
 
   RxInt totalIncome = 0.obs;
   RxInt totalExpense = 0.obs;
+
+  addDataToChart() {
+    dataExpenseToChart.value.clear();
+    dataIncomeToChart.value.clear();
+
+    //add expense item to expenseChart
+    for (var item in listRecordGroupByGenre.value.entries) {
+      for (var record in item.value) {
+        if (record.money! < 0 && totalExpense.value != 0) {
+          Map<String, dynamic> obj = {
+            'domain': item.key.toString().tr,
+            'measure': Helper().roundDouble(
+                (item.value.sumBy<int>((e) => e.money! < 0 ? e.money! : 0) /
+                    totalExpense.value *
+                    100),
+                2),
+            'money': (item.value.sumBy<int>((e) => e.money! < 0 ? e.money! : 0))
+          };
+          if (!dataExpenseToChart.value
+              .any((element) => element['domain'] == obj['domain'])) {
+            dataExpenseToChart.value.add(obj);
+            dataExpenseToChart.value.refresh();
+          }
+        }
+      }
+    }
+
+    //add income item to incomeChart
+    for (var item in listRecordGroupByType.value.entries) {
+      for (var record in item.value) {
+        if (record.money! > 0 && totalIncome.value != 0) {
+          Map<String, dynamic> obj = {
+            'domain': item.key.toString().tr,
+            'measure': Helper().roundDouble(
+                (item.value.sumBy<int>((e) => e.money! > 0 ? e.money! : 0) /
+                    totalIncome.value *
+                    100),
+                2),
+            'money': item.value.sumBy<int>((e) => e.money! > 0 ? e.money! : 0)
+          };
+          if (!dataIncomeToChart.value
+              .any((element) => element['domain'] == obj['domain'])) {
+            dataIncomeToChart.value.add(obj);
+            dataIncomeToChart.value.refresh();
+          }
+        }
+      }
+    }
+  }
 
   groupRecordByDate(List<Record> record) {
     var groups = groupBy(record, (Record e) {
@@ -47,12 +98,12 @@ class HomeController extends GetxController {
   }
 
   loadListRecord() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
+
     listRecord.value.clear();
     totalExpense.value = 0;
     totalIncome.value = 0;
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
 
     for (var strRecord in listStringRecord) {
       Record record = Record.fromJson(jsonDecode(strRecord));
@@ -69,6 +120,7 @@ class HomeController extends GetxController {
     listRecordGroupByDate.value = groupRecordByDate(listRecord.value);
     listRecordGroupByGenre.value = groupRecordByGenre(listRecord.value);
     listRecordGroupByType.value = groupRecordByType(listRecord.value);
+    addDataToChart();
   }
 
   addRecordToPrefs(Record record) async {

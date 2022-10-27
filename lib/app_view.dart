@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app_controller.dart';
 import 'package:money_helper_getx_mvc/backup_module/view/backup_page.dart';
 import 'package:money_helper_getx_mvc/setting_module/view/setting_page.dart';
+import 'package:money_helper_getx_mvc/statistic_module/controller/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/statistic_module/view/statistic_page.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'add_record_module/view/add_record_page.dart';
@@ -13,8 +14,9 @@ import 'ultis/widgets/bottom_nav_bar.dart';
 // ignore: must_be_immutable
 class AppPage extends StatelessWidget {
   AppPage({super.key});
-  HomeController homeController = Get.put(HomeController());
-  AppController appController = Get.put(AppController());
+  final homeController = Get.put(HomeController());
+  final appController = Get.put(AppController());
+  final statisticController = Get.put(StatisticController());
 
   @override
   Widget build(BuildContext context) {

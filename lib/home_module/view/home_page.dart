@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_string_escapes
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/detail_record_module/view/detail_record_page.dart';
@@ -33,13 +31,13 @@ class _HomePageState extends State<HomePage> {
     return Obx(() => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(children: [
-          buildHeader(context),
+          buildHeader(),
           buildDashboard(false),
-          buildListRecord(context)
+          buildListRecord()
         ])));
   }
 
-  Widget buildHeader(BuildContext context) {
+  Widget buildHeader() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
@@ -173,7 +171,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildListRecord(BuildContext context) {
+  Widget buildListRecord() {
     return Expanded(
       child: SizedBox(
         width: Get.width,
@@ -206,7 +204,10 @@ class _HomePageState extends State<HomePage> {
                     for (var record in item.value)
                       buildRecord(record: record, context: context)
                   ],
-                )
+                ),
+              const SizedBox(
+                height: 25,
+              ),
             ],
           ),
         ),
@@ -216,7 +217,9 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildRecord({required Record record, required BuildContext context}) {
     return InkWell(
-      onTap: () => Get.to(DetailRecordPage(currentRecord: record,)),
+      onTap: () => Get.to(DetailRecordPage(
+        currentRecord: record,
+      )),
       child: Container(
         height: 50,
         margin: const EdgeInsets.fromLTRB(10, 5, 0, 5),

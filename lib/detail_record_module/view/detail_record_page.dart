@@ -400,7 +400,8 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
           onPressed: () {
             homeController.deleteRecordById(currentRecord.id!);
-            Get.to(AppPage());
+            Get.back();
+            Get.back();
             Get.snackbar("snackbar.delete.success.title".tr,
                 "snackbar.delete.success.message".tr,
                 backgroundColor: Theme.of(context).backgroundColor);
@@ -409,17 +410,20 @@ class _DetailRecordPageState extends State<DetailRecordPage>
             "form.button.delete".tr,
             style: const TextStyle(color: AppColor.darkPurple),
           )),
-      cancel: OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            side: const BorderSide(color: AppColor.gold),
-          ),
-          onPressed: () {
-            Get.back();
-          },
-          child: Text(
-            "form.button.cancel".tr,
-            style: const TextStyle(color: AppColor.gold),
-          )),
+      cancel: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: AppColor.gold),
+            ),
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              "form.button.cancel".tr,
+              style: const TextStyle(color: AppColor.gold),
+            )),
+      ),
     );
   }
 
@@ -455,7 +459,9 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
 
       homeController.updateRecord(recordExpense);
-      Get.to(AppPage());
+      // Get.back();
+      //bugzz
+      Get.to(()=>AppPage());
       Get.snackbar("snackbar.update.success.title".tr,
           "snackbar.update.success.message".tr,
           backgroundColor: Theme.of(context).backgroundColor);
