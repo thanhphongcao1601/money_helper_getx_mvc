@@ -12,6 +12,7 @@ class HomeController extends GetxController {
   final listRecordGroupByDate = RxMap<String, List<Record>>({}).obs;
   final listRecordGroupByGenre = RxMap<String, List<Record>>({}).obs;
   final listRecordGroupByType = RxMap<String, List<Record>>({}).obs;
+  
   final dataExpenseToChart = RxList<Map<String, dynamic>>([]).obs;
   final dataIncomeToChart = RxList<Map<String, dynamic>>([]).obs;
 
