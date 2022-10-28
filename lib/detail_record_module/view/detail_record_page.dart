@@ -459,9 +459,9 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
 
       homeController.updateRecord(recordExpense);
-      // Get.back();
+      Get.back();
       //bugzz
-      Get.to(()=>AppPage());
+      // Get.to(()=>AppPage());
       Get.snackbar("snackbar.update.success.title".tr,
           "snackbar.update.success.message".tr,
           backgroundColor: Theme.of(context).backgroundColor);

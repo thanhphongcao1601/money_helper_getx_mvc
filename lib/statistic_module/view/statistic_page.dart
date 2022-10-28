@@ -122,7 +122,7 @@ class _StatisticPageState extends State<StatisticPage>
                           color: Helper().getItemTypeColor(item['domain'])),
                       child: Center(
                           child: Text('${item['measure']}%',
-                              style: const TextStyle(color: Colors.white))),
+                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
                     ),
                     title: Text(item['domain'],
                         style: const TextStyle(color: Colors.white)),
@@ -232,7 +232,7 @@ class _StatisticPageState extends State<StatisticPage>
                       color: Helper().getItemTypeColor(item['domain'])),
                   child: Center(
                       child: Text('${item['measure'].toString().tr}%',
-                          style: const TextStyle(color: Colors.white))),
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
                 ),
                 title: Text(
                   item['domain'].toString().tr,

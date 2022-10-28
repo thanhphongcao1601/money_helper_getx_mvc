@@ -15,13 +15,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final homeController = Get.find<HomeController>();
-
   late DateTime dateTime;
 
   @override
   void initState() {
-    // ignore: todo
-    // TODO: implement initState
     super.initState();
     dateTime = DateTime.now();
   }
