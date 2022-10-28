@@ -7,8 +7,8 @@ class AppColor {
   static const Color pink = Color(0xffF1AA9B);
 
   static const Color mustHave = Colors.green;
-  static const Color niceToHave = Colors.yellow;
-  static const Color wasted = Colors.red;
+  static const Color niceToHave = Colors.orange;
+  static const Color wasted = Colors.redAccent;
 }
 
 class AppConstantList {

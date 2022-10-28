@@ -35,14 +35,14 @@ class AppPage extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: Obx(
-            () => buildBottomBar(appController.currentIndex.value, context)),
+            () => buildBottomBar(appController.currentPageIndex.value, context)),
         body: Obx(() => Container(
             color: AppColor.purple,
             child: SafeArea(child: buildPageSelected()))));
   }
 
   Widget buildPageSelected() {
-    switch (appController.currentIndex.value) {
+    switch (appController.currentPageIndex.value) {
       case 0:
         return const HomePage();
       case 1:

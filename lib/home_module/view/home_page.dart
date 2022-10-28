@@ -15,13 +15,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final homeController = Get.find<HomeController>();
-
   late DateTime dateTime;
 
   @override
   void initState() {
-    // ignore: todo
-    // TODO: implement initState
     super.initState();
     dateTime = DateTime.now();
   }
@@ -30,11 +27,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Obx(() => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(children: [
-          buildHeader(),
-          buildDashboard(false),
-          buildListRecord()
-        ])));
+        child: Column(
+            children: [
+              buildHeader(), 
+              buildDashboard(), 
+              buildListRecord()
+            ])));
   }
 
   Widget buildHeader() {
@@ -73,7 +71,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildDashboard(bool isExpense) {
+  Widget buildDashboard() {
     return Container(
       decoration: BoxDecoration(
           color: AppColor.gold, borderRadius: BorderRadius.circular(10)),
@@ -116,16 +114,14 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      isExpense ? 'expense'.tr : 'income'.tr,
+                      'income'.tr,
                       style: const TextStyle(color: AppColor.gold),
                     ),
                     const SizedBox(
                       height: 5,
                     ),
                     Text(
-                      isExpense
-                          ? (homeController.totalExpense.value).toString()
-                          : (homeController.totalIncome.value).toString(),
+                      (homeController.totalIncome.value).toString(),
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -146,16 +142,14 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      !isExpense ? 'expense'.tr : 'income'.tr,
+                      'expense'.tr,
                       style: const TextStyle(color: AppColor.gold),
                     ),
                     const SizedBox(
                       height: 5,
                     ),
                     Text(
-                      !isExpense
-                          ? (homeController.totalExpense.value).toString()
-                          : (homeController.totalIncome.value).toString(),
+                      (homeController.totalExpense.value).toString(),
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

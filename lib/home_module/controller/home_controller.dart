@@ -8,6 +8,7 @@ import '../model/record.dart';
 
 class HomeController extends GetxController {
   final listRecord = RxList<Record>([]).obs;
+
   final listRecordGroupByDate = RxMap<String, List<Record>>({}).obs;
   final listRecordGroupByGenre = RxMap<String, List<Record>>({}).obs;
   final listRecordGroupByType = RxMap<String, List<Record>>({}).obs;
@@ -37,7 +38,6 @@ class HomeController extends GetxController {
           if (!dataExpenseToChart.value
               .any((element) => element['domain'] == obj['domain'])) {
             dataExpenseToChart.value.add(obj);
-            dataExpenseToChart.value.refresh();
           }
         }
       }
@@ -46,7 +46,7 @@ class HomeController extends GetxController {
     //add income item to incomeChart
     for (var item in listRecordGroupByType.value.entries) {
       for (var record in item.value) {
-        if (record.money! > 0 && totalIncome.value != 0) {
+        if (record.money! > 0 && totalExpense.value != 0) {
           Map<String, dynamic> obj = {
             'domain': item.key.toString().tr,
             'measure': Helper().roundDouble(
@@ -59,7 +59,6 @@ class HomeController extends GetxController {
           if (!dataIncomeToChart.value
               .any((element) => element['domain'] == obj['domain'])) {
             dataIncomeToChart.value.add(obj);
-            dataIncomeToChart.value.refresh();
           }
         }
       }
@@ -116,11 +115,11 @@ class HomeController extends GetxController {
       listRecord.value.add(record);
     }
 
-    listRecord.value.sortReversed();
-    listRecordGroupByDate.value = groupRecordByDate(listRecord.value);
-    listRecordGroupByGenre.value = groupRecordByGenre(listRecord.value);
-    listRecordGroupByType.value = groupRecordByType(listRecord.value);
-    addDataToChart();
+      listRecord.value.sortReversed();
+      listRecordGroupByDate.value = groupRecordByDate(listRecord.value);
+      listRecordGroupByGenre.value = groupRecordByGenre(listRecord.value);
+      listRecordGroupByType.value = groupRecordByType(listRecord.value);
+      addDataToChart();
   }
 
   addRecordToPrefs(Record record) async {

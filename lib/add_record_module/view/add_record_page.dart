@@ -179,6 +179,7 @@ class _AddRecordPageState extends State<AddRecordPage>
                   readOnly: true,
                   decoration: InputDecoration(
                       hintText: 'form.typeHint'.tr,
+                      border: InputBorder.none,
                       hintStyle: const TextStyle(color: Colors.grey)),
                 ),
               )),
@@ -217,6 +218,7 @@ class _AddRecordPageState extends State<AddRecordPage>
                 readOnly: true,
                 decoration: InputDecoration(
                     hintText: 'form.typeHint'.tr,
+                    border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
@@ -257,6 +259,7 @@ class _AddRecordPageState extends State<AddRecordPage>
                 keyboardType: const TextInputType.numberWithOptions(),
                 decoration: InputDecoration(
                     hintText: 'form.moneyHint'.tr,
+                    border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
@@ -284,6 +287,7 @@ class _AddRecordPageState extends State<AddRecordPage>
                 style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                     hintText: 'form.contentHint'.tr,
+                    border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),

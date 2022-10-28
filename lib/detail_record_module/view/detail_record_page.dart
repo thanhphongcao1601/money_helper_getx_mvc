@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import '../../app_view.dart';
 import '../../home_module/model/record.dart';
 import '../../ultis/constants/constant.dart';
 
@@ -189,6 +188,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                   readOnly: true,
                   decoration: InputDecoration(
                       hintText: 'form.typeHint'.tr,
+                      border: InputBorder.none,
                       hintStyle: const TextStyle(color: Colors.grey)),
                 ),
               )),
@@ -226,7 +226,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 controller: genreC,
                 readOnly: true,
                 decoration: InputDecoration(
-                    hintText: 'form.typeHint'.tr,
+                    hintText: 'form.typeHint'.tr,border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
@@ -266,7 +266,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 controller: moneyC,
                 keyboardType: const TextInputType.numberWithOptions(),
                 decoration: InputDecoration(
-                    hintText: 'form.moneyHint'.tr,
+                    hintText: 'form.moneyHint'.tr,border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
@@ -293,7 +293,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 style: const TextStyle(color: Colors.black),
                 controller: contentC,
                 decoration: InputDecoration(
-                    hintText: 'form.contentHint'.tr,
+                    hintText: 'form.contentHint'.tr,border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
@@ -459,9 +459,9 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
 
       homeController.updateRecord(recordExpense);
-      // Get.back();
+      Get.back();
       //bugzz
-      Get.to(()=>AppPage());
+      // Get.to(()=>AppPage());
       Get.snackbar("snackbar.update.success.title".tr,
           "snackbar.update.success.message".tr,
           backgroundColor: Theme.of(context).backgroundColor);
