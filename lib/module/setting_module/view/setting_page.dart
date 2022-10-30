@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app_controller.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-
-import '../../ultis/constants/constant.dart';
+import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 
 // ignore: must_be_immutable
 class SettingPage extends StatefulWidget {

@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
+import 'package:money_helper_getx_mvc/app_view.dart';
+import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
+import 'package:money_helper_getx_mvc/module/home_module/model/record.dart';
+import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import '../../home_module/model/record.dart';
-import '../../ultis/constants/constant.dart';
+import 'package:uuid/uuid.dart';
 
-class DetailRecordPage extends StatefulWidget {
-  const DetailRecordPage({Key? key, required this.currentRecord})
-      : super(key: key);
-  final Record currentRecord;
+class AddRecordPage extends StatefulWidget {
+  const AddRecordPage({Key? key}) : super(key: key);
 
   @override
-  State<DetailRecordPage> createState() => _DetailRecordPageState();
+  State<AddRecordPage> createState() => _AddRecordPageState();
 }
 
-class _DetailRecordPageState extends State<DetailRecordPage>
+class _AddRecordPageState extends State<AddRecordPage>
     with TickerProviderStateMixin {
   final HomeController homeController = Get.find<HomeController>();
 
@@ -35,28 +35,21 @@ class _DetailRecordPageState extends State<DetailRecordPage>
 
   late DateTime dateTime;
   late String errorMessage;
-  late Record currentRecord;
 
   @override
   void initState() {
     super.initState();
+    isExpense = true;
+    currentItemGenre = '';
+    errorMessage = '';
+
     datetimeC = TextEditingController();
     genreC = TextEditingController();
     contentC = TextEditingController();
     moneyC = TextEditingController();
 
-    currentRecord = widget.currentRecord;
-    isExpense = currentRecord.money! < 0;
-
-    dateTime = DateTime.fromMillisecondsSinceEpoch(currentRecord.datetime!);
+    dateTime = DateTime.now();
     datetimeC.text = dateTime.millisecondsSinceEpoch.toString();
-    currentItemGenre = currentRecord.money! < 0
-        ? currentRecord.genre.toString()
-        : currentRecord.type.toString();
-    genreC.text = currentItemGenre.tr;
-    errorMessage = '';
-    moneyC.text = currentRecord.money!.abs().toString();
-    contentC.text = currentRecord.content.toString();
   }
 
   @override
@@ -87,7 +80,6 @@ class _DetailRecordPageState extends State<DetailRecordPage>
               ),
               buildErrorMessage(),
               buildSaveButton(),
-              buildDeleteButton(),
               buildCancelButton()
             ],
           ),
@@ -113,7 +105,6 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       ],
       onToggle: (index) {
         setState(() {
-          genreC.text = '';
           isExpense = (index == 0);
         });
       },
@@ -136,12 +127,12 @@ class _DetailRecordPageState extends State<DetailRecordPage>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: DateTimeField(
-                style: const TextStyle(color: Colors.black),
                 initialValue: dateTime,
+                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                     hintText: 'form.dateAndTimeHint'.tr,
                     hintStyle: const TextStyle(color: Colors.grey)),
-                format: DateFormat("yyyy-MM-dd h:mm a"),
+                format: DateFormat("yyyy-MM-dd  HH:mm"),
                 onShowPicker: (context, currentValue) async {
                   final date = await showDatePicker(
                       context: context,
@@ -183,8 +174,8 @@ class _DetailRecordPageState extends State<DetailRecordPage>
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: TextField(
-                  style: const TextStyle(color: Colors.black),
                   controller: genreC,
+                  style: const TextStyle(color: Colors.black),
                   readOnly: true,
                   decoration: InputDecoration(
                       hintText: 'form.typeHint'.tr,
@@ -222,11 +213,12 @@ class _DetailRecordPageState extends State<DetailRecordPage>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
-                style: const TextStyle(color: Colors.black),
                 controller: genreC,
+                style: const TextStyle(color: Colors.black),
                 readOnly: true,
                 decoration: InputDecoration(
-                    hintText: 'form.typeHint'.tr,border: InputBorder.none,
+                    hintText: 'form.typeHint'.tr,
+                    border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
@@ -262,11 +254,12 @@ class _DetailRecordPageState extends State<DetailRecordPage>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
-                style: const TextStyle(color: Colors.black),
                 controller: moneyC,
+                style: const TextStyle(color: Colors.black),
                 keyboardType: const TextInputType.numberWithOptions(),
                 decoration: InputDecoration(
-                    hintText: 'form.moneyHint'.tr,border: InputBorder.none,
+                    hintText: 'form.moneyHint'.tr,
+                    border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
@@ -290,10 +283,11 @@ class _DetailRecordPageState extends State<DetailRecordPage>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
-                style: const TextStyle(color: Colors.black),
                 controller: contentC,
+                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
-                    hintText: 'form.contentHint'.tr,border: InputBorder.none,
+                    hintText: 'form.contentHint'.tr,
+                    border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
@@ -319,29 +313,13 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       width: Get.width / 2,
       child: ElevatedButton(
         onPressed: () {
-          handleUpdateRecord();
+          handleAddRecord();
         },
         style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
         child: Text(
           'form.button.save'.tr,
           style: const TextStyle(color: AppColor.darkPurple),
         ),
-      ),
-    );
-  }
-
-  Widget buildDeleteButton() {
-    return SizedBox(
-      width: Get.width / 2,
-      child: OutlinedButton(
-        onPressed: () {
-          handleDeleteRecord();
-        },
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: Colors.red),
-        ),
-        child: Text('form.button.delete'.tr,
-            style: const TextStyle(color: Colors.red)),
       ),
     );
   }
@@ -386,48 +364,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
     });
   }
 
-  void handleDeleteRecord() {
-    Get.defaultDialog(
-      backgroundColor: AppColor.purple,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-      content: Text(
-        "form.dialog.delete.content".tr,
-        style: const TextStyle(color: Colors.white),
-      ),
-      title: "form.dialog.delete.title".tr,
-      titleStyle: const TextStyle(color: AppColor.gold),
-      confirm: ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
-          onPressed: () {
-            homeController.deleteRecordById(currentRecord.id!);
-            Get.back();
-            Get.back();
-            Get.snackbar("snackbar.delete.success.title".tr,
-                "snackbar.delete.success.message".tr,
-                backgroundColor: Theme.of(context).backgroundColor);
-          },
-          child: Text(
-            "form.button.delete".tr,
-            style: const TextStyle(color: AppColor.darkPurple),
-          )),
-      cancel: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: AppColor.gold),
-            ),
-            onPressed: () {
-              Get.back();
-            },
-            child: Text(
-              "form.button.cancel".tr,
-              style: const TextStyle(color: AppColor.gold),
-            )),
-      ),
-    );
-  }
-
-  void handleUpdateRecord() {
+  void handleAddRecord() {
     setState(() {
       errorMessage = '';
     });
@@ -451,19 +388,17 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       });
     } else {
       final recordExpense = Record(
-          id: currentRecord.id,
+          id: const Uuid().v4(),
           datetime: dateTime.millisecondsSinceEpoch,
           genre: isExpense ? currentItemGenre : null,
           type: !isExpense ? currentItemGenre : null,
           content: contentC.text,
           money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
 
-      homeController.updateRecord(recordExpense);
-      Get.back();
-      //bugzz
-      // Get.to(()=>AppPage());
-      Get.snackbar("snackbar.update.success.title".tr,
-          "snackbar.update.success.message".tr,
+      homeController.addRecordToPrefs(recordExpense);
+      Get.to(AppPage());
+      Get.snackbar(
+          "snackbar.add.success.title".tr, "snackbar.add.success.message".tr,
           backgroundColor: Theme.of(context).backgroundColor);
     }
   }

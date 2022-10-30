@@ -1,10 +1,14 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_helper_getx_mvc/detail_record_module/view/detail_record_page.dart';
-import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
+import 'package:intl/intl.dart';
+import 'package:money_helper_getx_mvc/module/detail_record_module/view/detail_record_page.dart';
+import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
+import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
+import 'package:money_helper_getx_mvc/ultis/widgets/button_month_year_picker.dart';
+import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
 import '../../home_module/model/record.dart';
-import '../../ultis/helper/helper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,12 +19,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final homeController = Get.find<HomeController>();
-  late DateTime dateTime;
 
   @override
   void initState() {
     super.initState();
-    dateTime = DateTime.now();
   }
 
   @override
@@ -28,11 +30,7 @@ class _HomePageState extends State<HomePage> {
     return Obx(() => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
-            children: [
-              buildHeader(), 
-              buildDashboard(), 
-              buildListRecord()
-            ])));
+            children: [buildHeader(), buildDashboard(), buildListRecord()])));
   }
 
   Widget buildHeader() {
@@ -41,29 +39,31 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'Hi,',
-                    style: TextStyle(fontSize: 20, color: AppColor.gold),
-                  ),
-                  Text('Human',
-                      style: TextStyle(fontSize: 28, color: AppColor.gold)),
-                ],
-              ),
-              const SizedBox(
-                width: 10,
-              ),
               const CircleAvatar(
                 backgroundImage: AssetImage('assets/images/dashboardbg.jpg'),
                 radius: 30,
               ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'Hi,',
+                      style: TextStyle(fontSize: 20, color: AppColor.gold),
+                    ),
+                    Text('Human',
+                        style: TextStyle(fontSize: 28, color: AppColor.gold)),
+                  ],
+                ),
+              ),
+              buildButtonMonthYearPicker()
             ],
           )
         ],
@@ -169,20 +169,19 @@ class _HomePageState extends State<HomePage> {
     return Expanded(
       child: SizedBox(
         width: Get.width,
-        child: SingleChildScrollView(
-          child: Column(
+        child: SingleChildScrollView(child: Obx(()=>Column(
             children: [
               const SizedBox(
                 height: 10,
               ),
               for (var item
-                  in homeController.listRecordGroupByDate.value.entries)
+                  in homeController.listRecordGroupByDate.value)
                 Column(
                   children: [
                     Row(
                       children: [
                         Text(
-                          item.key,
+                          item.date,
                           style: const TextStyle(
                               fontSize: 14,
                               color: AppColor.gold,
@@ -195,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                         ))
                       ],
                     ),
-                    for (var record in item.value)
+                    for (var record in item.listRecord)
                       buildRecord(record: record, context: context)
                   ],
                 ),
@@ -203,7 +202,8 @@ class _HomePageState extends State<HomePage> {
                 height: 25,
               ),
             ],
-          ),
+          )
+          )
         ),
       ),
     );

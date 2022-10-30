@@ -1,12 +1,12 @@
 import 'package:d_chart/d_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_helper_getx_mvc/detail_record_module/view/detail_record_page.dart';
-import 'package:money_helper_getx_mvc/home_module/controller/home_controller.dart';
-import 'package:money_helper_getx_mvc/statistic_module/controller/statistic_controller.dart';
+import 'package:money_helper_getx_mvc/module/detail_record_module/view/detail_record_page.dart';
+import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
+import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
+import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
 import '../../home_module/model/record.dart';
-import '../../ultis/helper/helper.dart';
 
 class StatisticPage extends StatefulWidget {
   const StatisticPage({Key? key}) : super(key: key);
@@ -71,6 +71,14 @@ class _StatisticPageState extends State<StatisticPage>
             child: Obx(
             () => Column(
               children: [
+                ElevatedButton(
+                    onPressed: () {
+                      homeController.mapGenreListRecord.value =
+                          homeController.getMapGenreListRecord(homeController
+                              .getListRecordByMonth(DateTime.now()));
+                      homeController.addDataToChart();
+                    },
+                    child: Text('click')),
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: AspectRatio(
@@ -130,12 +138,11 @@ class _StatisticPageState extends State<StatisticPage>
                         style:
                             const TextStyle(color: Colors.white, fontSize: 16)),
                   ),
-                  for (var record
-                      in homeController.listRecordGroupByDate.value.entries)
+                  for (var record in homeController.listRecordGroupByDate.value)
                     statisticController.tileSelected == item['domain']
                         ? Column(
                             children: [
-                              for (var recordFilter in record.value)
+                              for (var recordFilter in record.listRecord)
                                 item['domain'].toString().tr ==
                                         recordFilter.genre.toString().tr
                                     ? Padding(
@@ -245,12 +252,11 @@ class _StatisticPageState extends State<StatisticPage>
                         style:
                             const TextStyle(color: Colors.white, fontSize: 16)),
                   ),
-                  for (var record
-                      in homeController.listRecordGroupByDate.value.entries)
+                  for (var record in homeController.listRecordGroupByDate.value)
                     statisticController.tileSelected == item['domain']
                         ? Column(
                             children: [
-                              for (var recordFilter in record.value)
+                              for (var recordFilter in record.listRecord)
                                 item['domain'].toString().tr ==
                                         recordFilter.type.toString().tr
                                     ? Padding(

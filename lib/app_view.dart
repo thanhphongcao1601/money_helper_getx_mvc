@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app_controller.dart';
-import 'package:money_helper_getx_mvc/backup_module/view/backup_page.dart';
-import 'package:money_helper_getx_mvc/setting_module/view/setting_page.dart';
-import 'package:money_helper_getx_mvc/statistic_module/controller/statistic_controller.dart';
-import 'package:money_helper_getx_mvc/statistic_module/view/statistic_page.dart';
+import 'package:money_helper_getx_mvc/module/add_record_module/view/add_record_page.dart';
+import 'package:money_helper_getx_mvc/module/backup_module/view/backup_page.dart';
+import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
+import 'package:money_helper_getx_mvc/module/home_module/view/home_page.dart';
+import 'package:money_helper_getx_mvc/module/setting_module/view/setting_page.dart';
+import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
+import 'package:money_helper_getx_mvc/module/statistic_module/view/statistic_page.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
-import 'add_record_module/view/add_record_page.dart';
-import 'home_module/controller/home_controller.dart';
-import 'home_module/view/home_page.dart';
-import 'ultis/widgets/bottom_nav_bar.dart';
+import 'package:money_helper_getx_mvc/ultis/widgets/bottom_nav_bar.dart';
 
 // ignore: must_be_immutable
 class AppPage extends StatelessWidget {
@@ -20,7 +20,7 @@ class AppPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    homeController.loadListRecord();
+    homeController.loadAllData();
     return Scaffold(
         backgroundColor: AppColor.purple,
         floatingActionButton: FloatingActionButton(
@@ -34,8 +34,8 @@ class AppPage extends StatelessWidget {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        bottomNavigationBar: Obx(
-            () => buildBottomBar(appController.currentPageIndex.value, context)),
+        bottomNavigationBar: Obx(() =>
+            buildBottomBar(appController.currentPageIndex.value, context)),
         body: Obx(() => Container(
             color: AppColor.purple,
             child: SafeArea(child: buildPageSelected()))));
