@@ -1,10 +1,13 @@
 import 'package:d_chart/d_chart.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/module/detail_record_module/view/detail_record_page.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
+import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
 import '../../home_module/model/record.dart';
 
 class StatisticPage extends StatefulWidget {
@@ -16,14 +19,14 @@ class StatisticPage extends StatefulWidget {
 
 class _StatisticPageState extends State<StatisticPage>
     with TickerProviderStateMixin {
-  StatisticController statisticController = Get.find();
+  final statisticController = Get.put(StatisticController());
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    statisticController.loadAllData();
+    statisticController.init();
   }
 
   void handleGoToDetailRecord(Record record) {
@@ -48,7 +51,7 @@ class _StatisticPageState extends State<StatisticPage>
               Obx(
                 () => Tab(
                   text:
-                      "${"tab.income".tr}: ${statisticController.totalMonthIncome.toString()}",
+                      "${"tab.income".tr}: ${statisticController.totalMonthIncome.value.toString()}",
                 ),
               ),
             ]),
@@ -69,40 +72,73 @@ class _StatisticPageState extends State<StatisticPage>
         child: Obx(
       () => Column(
         children: [
-          ElevatedButton(
-              onPressed: () {
-                statisticController.currentDate.value = DateTime(2022, 11);
-                statisticController.loadAllData();
-              },
-              child: const Text('click')),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: DChartPie(
-                labelColor: Colors.white,
-                labelLineColor: Colors.white,
-                data: [...statisticController.dataExpenseToChart.value],
-                fillColor: (pieData, index) =>
-                    Helper().getItemTypeColor(pieData['domain']),
-                pieLabel: (pieData, index) {
-                  return '${pieData['domain']}:\n${pieData['measure']}%';
-                },
-                labelPosition: PieLabelPosition.outside,
-              ),
-            ),
-          ),
+          Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: buildButtonMonthYearPicker(),
+              )),
+          statisticController.totalMonthExpense.value != 0
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: DChartPie(
+                      labelColor: Colors.white,
+                      labelLineColor: Colors.white,
+                      data: statisticController.dataExpenseToChart.value,
+                      fillColor: (pieData, index) =>
+                          Helper().getItemTypeColor(pieData['domain']),
+                      pieLabel: (pieData, index) {
+                        return '${pieData['domain']}:\n${pieData['measure']}%';
+                      },
+                      labelPosition: PieLabelPosition.outside,
+                    ),
+                  ))
+              : const SizedBox(),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Divider(
-              height: 0,
-              thickness: 2,
-            ),
+            child: Divider(),
           ),
           buildListDetailExpense()
         ],
       ),
     ));
+  }
+
+  Widget buildButtonMonthYearPicker() {
+    return SizedBox(
+      width: 100,
+      child: DateTimeField(
+        textAlign: TextAlign.center,
+        resetIcon: null,
+        style: const TextStyle(color: AppColor.gold),
+        initialValue: DateTime.now(),
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(10),
+          isCollapsed: true,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide:
+                const BorderSide(width: 2, color: AppColor.gold), //<-- SEE HERE
+          ),
+        ),
+        format: DateFormat("MM/yyyy"),
+        onShowPicker: (context, currentValue) async {
+          final date = await showMonthPicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2100),
+          );
+          if (date != null) {
+            statisticController.handleHomeChangeMonthYear(date);
+            return date;
+          }
+          return null;
+        },
+      ),
+    );
   }
 
   Widget buildListDetailExpense() {
@@ -178,41 +214,46 @@ class _StatisticPageState extends State<StatisticPage>
 
   Widget buildTabIncome() {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Obx(() => Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: AspectRatio(
-                    aspectRatio: 2 / 1,
-                    child: DChartBar(
-                      data: [
-                        {
-                          'id': 'Bar',
-                          'data': [
-                            ...statisticController.dataIncomeToChart.value
-                          ]
-                        }
-                      ],
-                      domainLabelColor: Colors.white,
-                      // axisLineColor: Theme.of(context).colorScheme.onSurface,
-                      // barValueColor: Theme.of(context).colorScheme.onSurface,
-                      axisLineColor: Colors.white,
-                      barValueColor: Colors.white,
-                      measureLabelColor: Colors.white,
-                      domainLabelPaddingToAxisLine: 16,
-                      measureLabelPaddingToAxisLine: 16,
-                      barColor: (barData, index, id) =>
-                          Helper().getItemTypeColor(barData['domain']),
-                      verticalDirection: false,
-                    ),
-                  ),
-                ),
-                buildListDetailIncome()
-              ],
-            )),
-      ),
+      child: Obx(() => Column(
+            children: [
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: buildButtonMonthYearPicker(),
+                  )),
+              statisticController.totalMonthIncome.value != 0
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(10,0,10,10),
+                      child: AspectRatio(
+                        aspectRatio: 2 / 1,
+                        child: DChartBar(
+                          data: [
+                            {
+                              'id': 'Bar',
+                              'data': [
+                                ...statisticController.dataIncomeToChart.value
+                              ]
+                            }
+                          ],
+                          domainLabelColor: Colors.white,
+                          // axisLineColor: Theme.of(context).colorScheme.onSurface,
+                          // barValueColor: Theme.of(context).colorScheme.onSurface,
+                          axisLineColor: Colors.white,
+                          barValueColor: Colors.white,
+                          measureLabelColor: Colors.white,
+                          domainLabelPaddingToAxisLine: 16,
+                          measureLabelPaddingToAxisLine: 16,
+                          barColor: (barData, index, id) =>
+                              Helper().getItemTypeColor(barData['domain']),
+                          verticalDirection: false,
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+              buildListDetailIncome()
+            ],
+          )),
     );
   }
 

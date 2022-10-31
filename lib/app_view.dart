@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/add_record_module/view/add_record_page.dart';
 import 'package:money_helper_getx_mvc/module/backup_module/view/backup_page.dart';
-import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/view/home_page.dart';
 import 'package:money_helper_getx_mvc/module/setting_module/view/setting_page.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/view/statistic_page.dart';
@@ -14,7 +13,6 @@ import 'package:money_helper_getx_mvc/ultis/widgets/bottom_nav_bar.dart';
 class AppPage extends StatelessWidget {
   AppPage({super.key});
   AppController appController = Get.find();
-  HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +39,21 @@ class AppPage extends StatelessWidget {
   Widget buildPageSelected() {
     switch (appController.currentPageIndex.value) {
       case 0:
-        return const HomePage();
+        if (appController.listRecord.value.isNotEmpty) {
+          return const HomePage();
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
       case 1:
-        return const StatisticPage();
+        if (appController.listRecord.value.isNotEmpty) {
+          return const StatisticPage();
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
       case 2:
-        return BackUpPage();
+        return const BackUpPage();
       case 3:
         return const SettingPage();
       default:

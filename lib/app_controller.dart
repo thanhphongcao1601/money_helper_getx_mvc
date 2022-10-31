@@ -7,22 +7,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppController extends GetxController {
   final listRecord = RxList<Record>([]).obs;
+  List<String> listStringRecord = [];
   RxInt totalIncome = 0.obs;
   RxInt totalExpense = 0.obs;
   final isDarkMode = false.obs;
   RxInt currentPageIndex = 0.obs;
   RxString currentLanguageCode = 'English'.obs;
+  SharedPreferences? prefs;
 
-  getListRecordFromPrefs() async {
-    print('--------------AppController-------------');
+  init() async {
+    prefs = await SharedPreferences.getInstance();
+    await initListStringRecord();
+    await calculateRecord(listStringRecord);
+  }
 
+  initListStringRecord() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
+    listStringRecord = (prefs.getStringList('listRecord') ?? []);
+  }
 
+  calculateRecord(List<String> listStringRecord) {
     listRecord.value.clear();
     totalExpense.value = 0;
     totalIncome.value = 0;
-
     for (var strRecord in listStringRecord) {
       Record record = Record.fromJson(jsonDecode(strRecord));
       int money = record.money ?? 0;
@@ -36,42 +43,37 @@ class AppController extends GetxController {
     listRecord.value.sortReversed();
   }
 
-  addRecordToPrefs(Record record) async {
+  addRecord(Record record) async {
+    listRecord.value.add(record);
     String recordJson = jsonEncode(record.toJson());
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
     listStringRecord.add(recordJson);
-
-    await prefs.setStringList('listRecord', listStringRecord);
-    await getListRecordFromPrefs();
+    await prefs!.setStringList('listRecord', listStringRecord);
   }
 
-  deleteRecordById(String id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
-    String deletedRecord = listStringRecord
-        .firstWhere((element) => Record.fromJson(jsonDecode(element)).id == id);
+  deleteRecord(Record record) async {
+    listRecord.value.remove(record);
+    String deletedRecord = listStringRecord.firstWhere(
+        (element) => Record.fromJson(jsonDecode(element)).id == record.id);
     listStringRecord.remove(deletedRecord);
-
-    await prefs.setStringList('listRecord', listStringRecord);
-    await getListRecordFromPrefs();
+    await prefs!.setStringList('listRecord', listStringRecord);
   }
 
   updateRecord(Record record) async {
-    String recordJson = jsonEncode(record.toJson());
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
+    var deletedRecord =
+        listRecord.value.firstWhere((element) => element.id == record.id);
+    listRecord.value.remove(deletedRecord);
+    listRecord.value.add(record);
 
-    String deletedRecord = listStringRecord.firstWhere(
+    String recordJson = jsonEncode(record.toJson());
+
+    String deletedStringRecord = listStringRecord.firstWhere(
         (element) => Record.fromJson(jsonDecode(element)).id == record.id);
 
-    listStringRecord.remove(deletedRecord);
+    listStringRecord.remove(deletedStringRecord);
     listStringRecord.add(recordJson);
 
-    await prefs.setStringList('listRecord', listStringRecord);
-    await getListRecordFromPrefs();
+    await prefs!.setStringList('listRecord', listStringRecord);
   }
 
   dynamic changePage(int? newIndex) {

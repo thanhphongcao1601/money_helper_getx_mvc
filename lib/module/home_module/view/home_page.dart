@@ -1,10 +1,14 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:money_helper_getx_mvc/api/google_sign_in.dart';
 import 'package:money_helper_getx_mvc/module/detail_record_module/view/detail_record_page.dart';
 import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
+import 'package:money_helper_getx_mvc/service/auth/local_auth.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
-import 'package:money_helper_getx_mvc/ultis/widgets/button_month_year_picker.dart';
+import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
 import '../../home_module/model/record.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,12 +19,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  HomeController homeController = Get.find();
+  final homeController = Get.put(HomeController());
 
   @override
   void initState() {
     super.initState();
-    homeController.loadAllData();
+    homeController.init();
   }
 
   @override
@@ -39,9 +43,15 @@ class _HomePageState extends State<HomePage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CircleAvatar(
-                backgroundImage: AssetImage('assets/images/dashboardbg.jpg'),
-                radius: 30,
+              InkWell(
+                onTap: (){
+                  // GApi().handleSignIn();
+                  LocalAuth().doAuthenticate();
+                },
+                child: const CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/dashboardbg.jpg'),
+                  radius: 30,
+                ),
               ),
               const SizedBox(
                 width: 10,
@@ -69,6 +79,41 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget buildButtonMonthYearPicker() {
+  return SizedBox(
+    width: 100,
+    child: DateTimeField(
+      textAlign: TextAlign.center,
+      resetIcon: null,
+      style: const TextStyle(color: AppColor.gold),
+      initialValue: DateTime.now(),
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.all(10),
+        isCollapsed: true,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide:
+              const BorderSide(width: 2, color: AppColor.gold), //<-- SEE HERE
+        ),
+      ),
+      format: DateFormat("MM/yyyy"),
+      onShowPicker: (context, currentValue) async {
+        final date = await showMonthPicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
+        );
+        if (date != null) {
+          homeController.handleHomeChangeMonthYear(date);
+          return date;
+        }
+        return null;
+      },
+    ),
+  );
+}
+
   Widget buildDashboard() {
     return Container(
       decoration: BoxDecoration(
@@ -86,15 +131,15 @@ class _HomePageState extends State<HomePage> {
                   style:
                       const TextStyle(fontSize: 20, color: AppColor.darkPurple),
                 ),
-                Obx(()=>Text(
-                  (homeController.totalMonthExpense.value +
-                          homeController.totalMonthIncome.value)
-                      .toString(),
-                  style: const TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.darkPurple),
-                )),
+                Obx(() => Text(
+                      (homeController.totalMonthExpense.value +
+                              homeController.totalMonthIncome.value)
+                          .toString(),
+                      style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.darkPurple),
+                    )),
               ],
             ),
           ),

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
-import '../../home_module/controller/home_controller.dart';
 
 class BackUpPage extends StatelessWidget {
-  BackUpPage({super.key});
-  final homeController = Get.find<HomeController>();
+  const BackUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {

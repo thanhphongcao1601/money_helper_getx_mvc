@@ -124,7 +124,7 @@ class Languages extends Translations {
           'snackbar.delete.success.title': 'Thành công',
           'snackbar.delete.success.message': 'Xóa bản ghi thành công',
           'snackbar.delete.fail.title': 'Thất bại',
-          'snackbar.delete.fail.message': 'Xóa bản ghi thất bại',
+          'snackbar.delete.fail.message': 'Hello Xóa bản ghi thất bại',
         },
       };
 }

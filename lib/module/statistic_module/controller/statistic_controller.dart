@@ -10,6 +10,7 @@ class StatisticController extends GetxController {
   AppController appController = Get.find();
   final tileSelected = ''.obs;
   final currentDate = DateTime.now().obs;
+
   final totalMonthIncome = 0.obs;
   final totalMonthExpense = 0.obs;
   final listRecordByMonth = RxList<Record>([]).obs;
@@ -21,13 +22,16 @@ class StatisticController extends GetxController {
   final dataExpenseToChart = RxList<Map<String, dynamic>>([]).obs;
   final dataIncomeToChart = RxList<Map<String, dynamic>>([]).obs;
 
-  loadAllData() async {
-    await appController.getListRecordFromPrefs();
-    print('--------------Statictis-------------');
+  init(){
+    currentDate.value = DateTime.now();
+    loadAllData();
+  }
+
+  loadAllData() {
     totalMonthExpense.value = 0;
     totalMonthIncome.value = 0;
-
     listRecordByMonth.value = getListRecordByMonth(currentDate.value);
+
     for (var record in listRecordByMonth.value) {
       if (record.money! >= 0) {
         totalMonthIncome.value += record.money!;
@@ -36,33 +40,36 @@ class StatisticController extends GetxController {
         totalMonthExpense.value += record.money!;
       }
     }
+
     groupRecordByDate(listRecordByMonth.value);
     addDataToChart();
   }
 
-  void handleHomeChangeMonthYear(DateTime selectedMonthYear) {
-    groupRecordByDate(getListRecordByMonth(selectedMonthYear));
+  handleHomeChangeMonthYear(DateTime selectedMonthYear) {
+    currentDate.value = selectedMonthYear;
+    addDataToChart();
+    loadAllData();
   }
 
   getListRecordByMonth(DateTime selectedMonthYear) {
-    RxList<Record> listRecordByMonth = RxList<Record>([]);
+    RxList<Record> listByMonth = RxList<Record>([]);
     for (var record in appController.listRecord.value) {
       if (DateTime.fromMillisecondsSinceEpoch(record.datetime!).month ==
               selectedMonthYear.month &&
           DateTime.fromMillisecondsSinceEpoch(record.datetime!).year ==
               selectedMonthYear.year) {
-        listRecordByMonth.add(record);
+        listByMonth.add(record);
       }
     }
-    return listRecordByMonth;
+    return listByMonth;
   }
 
   addDataToChart() {
-    print('run addDAtaToChar');
-    mapGenreListRecord.value = getMapGenreListRecord(listRecordByMonth.value);
-    mapTypeListRecord.value = getMapTypeListRecord(listRecordByMonth.value);
     dataExpenseToChart.value.clear();
     dataIncomeToChart.value.clear();
+
+    mapGenreListRecord.value = getMapGenreListRecord(listRecordByMonth.value);
+    mapTypeListRecord.value = getMapTypeListRecord(listRecordByMonth.value);
 
     //add expense item to expenseChart
     for (var item in mapGenreListRecord.value.entries) {

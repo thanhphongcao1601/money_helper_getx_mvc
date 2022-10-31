@@ -21,9 +21,9 @@ class DetailRecordPage extends StatefulWidget {
 
 class _DetailRecordPageState extends State<DetailRecordPage>
     with TickerProviderStateMixin {
-  AppController appController = Get.find();
-  HomeController homeController = Get.find();
-  StatisticController statisticController = Get.find();
+  AppController appController = Get.put(AppController());
+  HomeController homeController = Get.put(HomeController());
+  StatisticController statisticController = Get.put(StatisticController());
 
   final formKeyExpense = GlobalKey<FormState>();
   final formKeyIncome = GlobalKey<FormState>();
@@ -406,12 +406,15 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       confirm: ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
           onPressed: () {
-            appController.deleteRecordById(currentRecord.id!);
+            appController.deleteRecord(currentRecord);
+            homeController.loadAllData();
+            statisticController.loadAllData();
+
             Get.back();
             Get.back();
             Get.snackbar("snackbar.delete.success.title".tr,
                 "snackbar.delete.success.message".tr,
-                backgroundColor: Theme.of(context).backgroundColor);
+                colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
           },
           child: Text(
             "form.button.delete".tr,
@@ -468,11 +471,11 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       appController.updateRecord(recordExpense);
       homeController.loadAllData();
       statisticController.loadAllData();
-      
+
       Get.back();
       Get.snackbar("snackbar.update.success.title".tr,
           "snackbar.update.success.message".tr,
-          backgroundColor: Theme.of(context).backgroundColor);
+          colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
     }
   }
 }

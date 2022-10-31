@@ -387,8 +387,10 @@ class _AddRecordPageState extends State<AddRecordPage>
       setState(() {
         errorMessage;
       });
-    } else {
-      final recordExpense = Record(
+    }
+
+    if (errorMessage == '') {
+      Record recordExpense = Record(
           id: const Uuid().v4(),
           datetime: dateTime.millisecondsSinceEpoch,
           genre: isExpense ? currentItemGenre : null,
@@ -396,14 +398,13 @@ class _AddRecordPageState extends State<AddRecordPage>
           content: contentC.text,
           money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
 
-      appController.addRecordToPrefs(recordExpense);
+      appController.addRecord(recordExpense);
       homeController.loadAllData();
-      // Get.to(()=>AppPage());
+
       Get.back();
       Get.snackbar(
           "snackbar.add.success.title".tr, "snackbar.add.success.message".tr,
-          // ignore: use_build_context_synchronously
-          backgroundColor: Theme.of(context).backgroundColor);
+          colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
     }
   }
 }
