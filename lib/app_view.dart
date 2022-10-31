@@ -6,7 +6,6 @@ import 'package:money_helper_getx_mvc/module/backup_module/view/backup_page.dart
 import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/view/home_page.dart';
 import 'package:money_helper_getx_mvc/module/setting_module/view/setting_page.dart';
-import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/view/statistic_page.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/widgets/bottom_nav_bar.dart';
@@ -14,13 +13,11 @@ import 'package:money_helper_getx_mvc/ultis/widgets/bottom_nav_bar.dart';
 // ignore: must_be_immutable
 class AppPage extends StatelessWidget {
   AppPage({super.key});
-  final homeController = Get.put(HomeController());
-  final appController = Get.put(AppController());
-  final statisticController = Get.put(StatisticController());
+  AppController appController = Get.find();
+  HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    homeController.loadAllData();
     return Scaffold(
         backgroundColor: AppColor.purple,
         floatingActionButton: FloatingActionButton(

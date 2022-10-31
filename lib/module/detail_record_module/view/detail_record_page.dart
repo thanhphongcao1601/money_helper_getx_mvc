@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:money_helper_getx_mvc/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
+import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../../home_module/model/record.dart';
@@ -19,7 +21,9 @@ class DetailRecordPage extends StatefulWidget {
 
 class _DetailRecordPageState extends State<DetailRecordPage>
     with TickerProviderStateMixin {
-  final HomeController homeController = Get.find<HomeController>();
+  AppController appController = Get.find();
+  HomeController homeController = Get.find();
+  StatisticController statisticController = Get.find();
 
   final formKeyExpense = GlobalKey<FormState>();
   final formKeyIncome = GlobalKey<FormState>();
@@ -226,7 +230,8 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 controller: genreC,
                 readOnly: true,
                 decoration: InputDecoration(
-                    hintText: 'form.typeHint'.tr,border: InputBorder.none,
+                    hintText: 'form.typeHint'.tr,
+                    border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
@@ -266,7 +271,8 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 controller: moneyC,
                 keyboardType: const TextInputType.numberWithOptions(),
                 decoration: InputDecoration(
-                    hintText: 'form.moneyHint'.tr,border: InputBorder.none,
+                    hintText: 'form.moneyHint'.tr,
+                    border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
@@ -293,7 +299,8 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 style: const TextStyle(color: Colors.black),
                 controller: contentC,
                 decoration: InputDecoration(
-                    hintText: 'form.contentHint'.tr,border: InputBorder.none,
+                    hintText: 'form.contentHint'.tr,
+                    border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
@@ -399,7 +406,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       confirm: ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
           onPressed: () {
-            homeController.deleteRecordById(currentRecord.id!);
+            appController.deleteRecordById(currentRecord.id!);
             Get.back();
             Get.back();
             Get.snackbar("snackbar.delete.success.title".tr,
@@ -458,10 +465,11 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           content: contentC.text,
           money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
 
-      homeController.updateRecord(recordExpense);
+      appController.updateRecord(recordExpense);
+      homeController.loadAllData();
+      statisticController.loadAllData();
+      
       Get.back();
-      //bugzz
-      // Get.to(()=>AppPage());
       Get.snackbar("snackbar.update.success.title".tr,
           "snackbar.update.success.message".tr,
           backgroundColor: Theme.of(context).backgroundColor);

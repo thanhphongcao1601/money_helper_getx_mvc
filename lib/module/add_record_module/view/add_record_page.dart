@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:money_helper_getx_mvc/app_view.dart';
+import 'package:money_helper_getx_mvc/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/model/record.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
@@ -19,7 +19,8 @@ class AddRecordPage extends StatefulWidget {
 
 class _AddRecordPageState extends State<AddRecordPage>
     with TickerProviderStateMixin {
-  final HomeController homeController = Get.find<HomeController>();
+  AppController appController = Get.find();
+  HomeController homeController = Get.find();
 
   final formKeyExpense = GlobalKey<FormState>();
   final formKeyIncome = GlobalKey<FormState>();
@@ -364,7 +365,7 @@ class _AddRecordPageState extends State<AddRecordPage>
     });
   }
 
-  void handleAddRecord() {
+  Future<void> handleAddRecord() async {
     setState(() {
       errorMessage = '';
     });
@@ -395,10 +396,13 @@ class _AddRecordPageState extends State<AddRecordPage>
           content: contentC.text,
           money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
 
-      homeController.addRecordToPrefs(recordExpense);
-      Get.to(AppPage());
+      appController.addRecordToPrefs(recordExpense);
+      homeController.loadAllData();
+      // Get.to(()=>AppPage());
+      Get.back();
       Get.snackbar(
           "snackbar.add.success.title".tr, "snackbar.add.success.message".tr,
+          // ignore: use_build_context_synchronously
           backgroundColor: Theme.of(context).backgroundColor);
     }
   }

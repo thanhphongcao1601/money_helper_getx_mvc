@@ -1,13 +1,10 @@
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/module/detail_record_module/view/detail_record_page.dart';
 import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
 import 'package:money_helper_getx_mvc/ultis/widgets/button_month_year_picker.dart';
-import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
 import '../../home_module/model/record.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,11 +15,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final homeController = Get.find<HomeController>();
+  HomeController homeController = Get.find();
 
   @override
   void initState() {
     super.initState();
+    homeController.loadAllData();
   }
 
   @override
@@ -88,15 +86,15 @@ class _HomePageState extends State<HomePage> {
                   style:
                       const TextStyle(fontSize: 20, color: AppColor.darkPurple),
                 ),
-                Text(
-                  (homeController.totalExpense.value +
-                          homeController.totalIncome.value)
+                Obx(()=>Text(
+                  (homeController.totalMonthExpense.value +
+                          homeController.totalMonthIncome.value)
                       .toString(),
                   style: const TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
                       color: AppColor.darkPurple),
-                ),
+                )),
               ],
             ),
           ),
@@ -121,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                       height: 5,
                     ),
                     Text(
-                      (homeController.totalIncome.value).toString(),
+                      (homeController.totalMonthIncome.value).toString(),
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -149,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                       height: 5,
                     ),
                     Text(
-                      (homeController.totalExpense.value).toString(),
+                      (homeController.totalMonthExpense.value).toString(),
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -169,42 +167,40 @@ class _HomePageState extends State<HomePage> {
     return Expanded(
       child: SizedBox(
         width: Get.width,
-        child: SingleChildScrollView(child: Obx(()=>Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              for (var item
-                  in homeController.listRecordGroupByDate.value)
-                Column(
+        child: SingleChildScrollView(
+            child: Obx(() => Column(
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          item.date,
-                          style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColor.gold,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const Expanded(
-                            child: Divider(
-                          color: AppColor.gold,
-                          thickness: 1,
-                        ))
-                      ],
+                    const SizedBox(
+                      height: 10,
                     ),
-                    for (var record in item.listRecord)
-                      buildRecord(record: record, context: context)
+                    for (var item in homeController.listRecordGroupByDate.value)
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                item.date,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.gold,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const Expanded(
+                                  child: Divider(
+                                color: AppColor.gold,
+                                thickness: 1,
+                              ))
+                            ],
+                          ),
+                          for (var record in item.listRecord)
+                            buildRecord(record: record, context: context)
+                        ],
+                      ),
+                    const SizedBox(
+                      height: 25,
+                    ),
                   ],
-                ),
-              const SizedBox(
-                height: 25,
-              ),
-            ],
-          )
-          )
-        ),
+                ))),
       ),
     );
   }

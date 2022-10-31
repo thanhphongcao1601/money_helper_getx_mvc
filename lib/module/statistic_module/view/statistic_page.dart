@@ -2,7 +2,6 @@ import 'package:d_chart/d_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/module/detail_record_module/view/detail_record_page.dart';
-import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
@@ -17,14 +16,14 @@ class StatisticPage extends StatefulWidget {
 
 class _StatisticPageState extends State<StatisticPage>
     with TickerProviderStateMixin {
-  final homeController = Get.find<HomeController>();
-  final statisticController = Get.find<StatisticController>();
+  StatisticController statisticController = Get.find();
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    statisticController.loadAllData();
   }
 
   void handleGoToDetailRecord(Record record) {
@@ -43,13 +42,13 @@ class _StatisticPageState extends State<StatisticPage>
               Obx(
                 () => Tab(
                   text:
-                      "${"tab.expense".tr}: ${homeController.totalExpense.value.toString()}",
+                      "${"tab.expense".tr}: ${statisticController.totalMonthExpense.value.toString()}",
                 ),
               ),
               Obx(
                 () => Tab(
                   text:
-                      "${"tab.income".tr}: ${homeController.totalIncome.toString()}",
+                      "${"tab.income".tr}: ${statisticController.totalMonthIncome.toString()}",
                 ),
               ),
             ]),
@@ -66,54 +65,50 @@ class _StatisticPageState extends State<StatisticPage>
   }
 
   Widget buildTabExpense() {
-    return homeController.dataExpenseToChart.value.isNotEmpty
-        ? SingleChildScrollView(
-            child: Obx(
-            () => Column(
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      homeController.mapGenreListRecord.value =
-                          homeController.getMapGenreListRecord(homeController
-                              .getListRecordByMonth(DateTime.now()));
-                      homeController.addDataToChart();
-                    },
-                    child: Text('click')),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: DChartPie(
-                      labelColor: Colors.white,
-                      labelLineColor: Colors.white,
-                      data: [...homeController.dataExpenseToChart.value],
-                      fillColor: (pieData, index) =>
-                          Helper().getItemTypeColor(pieData['domain']),
-                      pieLabel: (pieData, index) {
-                        return '${pieData['domain']}:\n${pieData['measure']}%';
-                      },
-                      labelPosition: PieLabelPosition.outside,
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Divider(
-                    height: 0,
-                    thickness: 2,
-                  ),
-                ),
-                buildListDetailExpense()
-              ],
+    return SingleChildScrollView(
+        child: Obx(
+      () => Column(
+        children: [
+          ElevatedButton(
+              onPressed: () {
+                statisticController.currentDate.value = DateTime(2022, 11);
+                statisticController.loadAllData();
+              },
+              child: const Text('click')),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: DChartPie(
+                labelColor: Colors.white,
+                labelLineColor: Colors.white,
+                data: [...statisticController.dataExpenseToChart.value],
+                fillColor: (pieData, index) =>
+                    Helper().getItemTypeColor(pieData['domain']),
+                pieLabel: (pieData, index) {
+                  return '${pieData['domain']}:\n${pieData['measure']}%';
+                },
+                labelPosition: PieLabelPosition.outside,
+              ),
             ),
-          ))
-        : const SizedBox();
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Divider(
+              height: 0,
+              thickness: 2,
+            ),
+          ),
+          buildListDetailExpense()
+        ],
+      ),
+    ));
   }
 
   Widget buildListDetailExpense() {
     return Obx(() => Column(
           children: [
-            for (var item in homeController.dataExpenseToChart.value)
+            for (var item in statisticController.dataExpenseToChart.value)
               Column(
                 children: [
                   ListTile(
@@ -138,7 +133,8 @@ class _StatisticPageState extends State<StatisticPage>
                         style:
                             const TextStyle(color: Colors.white, fontSize: 16)),
                   ),
-                  for (var record in homeController.listRecordGroupByDate.value)
+                  for (var record
+                      in statisticController.listRecordGroupByDate.value)
                     statisticController.tileSelected == item['domain']
                         ? Column(
                             children: [
@@ -181,51 +177,49 @@ class _StatisticPageState extends State<StatisticPage>
   }
 
   Widget buildTabIncome() {
-    return homeController.dataIncomeToChart.value.isNotEmpty
-        ? SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Obx(() => Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: AspectRatio(
-                          aspectRatio: 2 / 1,
-                          child: DChartBar(
-                            data: [
-                              {
-                                'id': 'Bar',
-                                'data': [
-                                  ...homeController.dataIncomeToChart.value
-                                ]
-                              }
-                            ],
-                            domainLabelColor: Colors.white,
-                            // axisLineColor: Theme.of(context).colorScheme.onSurface,
-                            // barValueColor: Theme.of(context).colorScheme.onSurface,
-                            axisLineColor: Colors.white,
-                            barValueColor: Colors.white,
-                            measureLabelColor: Colors.white,
-                            domainLabelPaddingToAxisLine: 16,
-                            measureLabelPaddingToAxisLine: 16,
-                            barColor: (barData, index, id) =>
-                                Helper().getItemTypeColor(barData['domain']),
-                            verticalDirection: false,
-                          ),
-                        ),
-                      ),
-                      buildListDetailIncome()
-                    ],
-                  )),
-            ),
-          )
-        : const SizedBox();
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Obx(() => Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: AspectRatio(
+                    aspectRatio: 2 / 1,
+                    child: DChartBar(
+                      data: [
+                        {
+                          'id': 'Bar',
+                          'data': [
+                            ...statisticController.dataIncomeToChart.value
+                          ]
+                        }
+                      ],
+                      domainLabelColor: Colors.white,
+                      // axisLineColor: Theme.of(context).colorScheme.onSurface,
+                      // barValueColor: Theme.of(context).colorScheme.onSurface,
+                      axisLineColor: Colors.white,
+                      barValueColor: Colors.white,
+                      measureLabelColor: Colors.white,
+                      domainLabelPaddingToAxisLine: 16,
+                      measureLabelPaddingToAxisLine: 16,
+                      barColor: (barData, index, id) =>
+                          Helper().getItemTypeColor(barData['domain']),
+                      verticalDirection: false,
+                    ),
+                  ),
+                ),
+                buildListDetailIncome()
+              ],
+            )),
+      ),
+    );
   }
 
   Widget buildListDetailIncome() {
     return Obx(() => Column(
           children: [
-            for (var item in homeController.dataIncomeToChart.value)
+            for (var item in statisticController.dataIncomeToChart.value)
               Column(
                 children: [
                   ListTile(
@@ -252,7 +246,8 @@ class _StatisticPageState extends State<StatisticPage>
                         style:
                             const TextStyle(color: Colors.white, fontSize: 16)),
                   ),
-                  for (var record in homeController.listRecordGroupByDate.value)
+                  for (var record
+                      in statisticController.listRecordGroupByDate.value)
                     statisticController.tileSelected == item['domain']
                         ? Column(
                             children: [

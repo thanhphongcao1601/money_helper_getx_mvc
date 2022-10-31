@@ -1,14 +1,17 @@
-import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:get/get.dart';
+import 'package:money_helper_getx_mvc/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/model/daily_record.dart';
 import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../model/record.dart';
 
 class HomeController extends GetxController {
-  final listRecord = RxList<Record>([]).obs;
+  AppController appController = Get.put(AppController());
+  final currentDate = DateTime.now().obs;
+  final totalMonthIncome = 0.obs;
+  final totalMonthExpense = 0.obs;
+  final listRecordByMonth = RxList<Record>([]).obs;
 
   final listRecordGroupByDate = RxList<DailyRecord>([]).obs;
   final mapGenreListRecord = RxMap<String, List<Record>>({}).obs;
@@ -17,36 +20,26 @@ class HomeController extends GetxController {
   final dataExpenseToChart = RxList<Map<String, dynamic>>([]).obs;
   final dataIncomeToChart = RxList<Map<String, dynamic>>([]).obs;
 
-  RxInt totalIncome = 0.obs;
-  RxInt totalExpense = 0.obs;
-
   loadAllData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
-
-    listRecord.value.clear();
-    totalExpense.value = 0;
-    totalIncome.value = 0;
-
-    //load record from pref
-    for (var strRecord in listStringRecord) {
-      Record record = Record.fromJson(jsonDecode(strRecord));
-      int money = record.money ?? 0;
-      if (money >= 0) {
-        totalIncome += money;
-      } else {
-        totalExpense += money;
+    await appController.getListRecordFromPrefs();
+    totalMonthExpense.value = 0;
+    totalMonthIncome.value = 0;
+    listRecordByMonth.value = getListRecordByMonth(currentDate.value);
+    for (var record in listRecordByMonth.value) {
+      if (record.money! >= 0) {
+        totalMonthIncome.value += record.money!;
       }
-      listRecord.value.add(record);
+      if (record.money! < 0) {
+        totalMonthExpense.value += record.money!;
+      }
     }
-
-    //data of home page
-    listRecord.value.sortReversed();
-    groupRecordByDate(listRecord.value);
+    groupRecordByDate(listRecordByMonth.value);
 
     //data of statistic page
-    mapGenreListRecord.value = getMapGenreListRecord(listRecord.value);
-    mapTypeListRecord.value = getMapTypeListRecord(listRecord.value);
+    mapGenreListRecord.value =
+        getMapGenreListRecord(appController.listRecord.value);
+    mapTypeListRecord.value =
+        getMapTypeListRecord(appController.listRecord.value);
     addDataToChart();
   }
 
@@ -56,7 +49,7 @@ class HomeController extends GetxController {
 
   getListRecordByMonth(DateTime selectedMonthYear) {
     RxList<Record> listRecordByMonth = RxList<Record>([]);
-    for (var record in listRecord.value) {
+    for (var record in appController.listRecord.value) {
       if (DateTime.fromMillisecondsSinceEpoch(record.datetime!).month ==
               selectedMonthYear.month &&
           DateTime.fromMillisecondsSinceEpoch(record.datetime!).year ==
@@ -74,12 +67,12 @@ class HomeController extends GetxController {
     //add expense item to expenseChart
     for (var item in mapGenreListRecord.value.entries) {
       for (var record in item.value) {
-        if (record.money! < 0 && totalExpense.value != 0) {
+        if (record.money! < 0 && totalMonthExpense.value != 0) {
           Map<String, dynamic> obj = {
             'domain': item.key.toString().tr,
             'measure': Helper().roundDouble(
                 (item.value.sumBy<int>((e) => e.money! < 0 ? e.money! : 0) /
-                    totalExpense.value *
+                    totalMonthExpense.value *
                     100),
                 2),
             'money': (item.value.sumBy<int>((e) => e.money! < 0 ? e.money! : 0))
@@ -95,12 +88,12 @@ class HomeController extends GetxController {
     //add income item to incomeChart
     for (var item in mapTypeListRecord.value.entries) {
       for (var record in item.value) {
-        if (record.money! > 0 && totalExpense.value != 0) {
+        if (record.money! > 0 && totalMonthExpense.value != 0) {
           Map<String, dynamic> obj = {
             'domain': item.key.toString().tr,
             'measure': Helper().roundDouble(
                 (item.value.sumBy<int>((e) => e.money! > 0 ? e.money! : 0) /
-                    totalIncome.value *
+                    totalMonthIncome.value *
                     100),
                 2),
             'money': item.value.sumBy<int>((e) => e.money! > 0 ? e.money! : 0)
@@ -147,43 +140,5 @@ class HomeController extends GetxController {
     var rxgroups = RxMap<String, List<Record>>({});
     rxgroups.value = groups;
     return rxgroups;
-  }
-
-  addRecordToPrefs(Record record) async {
-    String recordJson = jsonEncode(record.toJson());
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
-    listStringRecord.add(recordJson);
-
-    await prefs.setStringList('listRecord', listStringRecord);
-    loadAllData();
-  }
-
-  deleteRecordById(String id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
-    String deletedRecord = listStringRecord
-        .firstWhere((element) => Record.fromJson(jsonDecode(element)).id == id);
-    listStringRecord.remove(deletedRecord);
-
-    await prefs.setStringList('listRecord', listStringRecord);
-    loadAllData();
-  }
-
-  updateRecord(Record record) async {
-    String recordJson = jsonEncode(record.toJson());
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> listStringRecord = prefs.getStringList('listRecord') ?? [];
-
-    String deletedRecord = listStringRecord.firstWhere(
-        (element) => Record.fromJson(jsonDecode(element)).id == record.id);
-
-    listStringRecord.remove(deletedRecord);
-    listStringRecord.add(recordJson);
-
-    await prefs.setStringList('listRecord', listStringRecord);
-    loadAllData();
   }
 }
