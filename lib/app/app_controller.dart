@@ -14,11 +14,31 @@ class AppController extends GetxController {
   RxInt currentPageIndex = 0.obs;
   RxString currentLanguageCode = 'English'.obs;
   SharedPreferences? prefs;
+  RxBool isLockApp = false.obs;
+
+  final userDisplayName = ''.obs;
+  final userId = ''.obs;
+  final userEmail = ''.obs;
+  final userPhotoUrl = ''.obs;
 
   init() async {
     prefs = await SharedPreferences.getInstance();
+    isLockApp.value = prefs?.getBool('isLockApp') ?? false;
+    await initUserLogin();
     await initListStringRecord();
     await calculateRecord(listStringRecord);
+  }
+
+  initUserLogin() {
+    userDisplayName.value = prefs?.getString('displayName') ?? '';
+    userId.value = prefs?.getString('id') ?? '';
+    userEmail.value = prefs?.getString('email') ?? '';
+    userPhotoUrl.value = prefs?.getString('photoUrl') ?? '';
+  }
+
+  handleToggleLockApp(bool isLock) async {
+    isLockApp.value = isLock;
+    await prefs?.setBool('isLockApp', isLock);
   }
 
   initListStringRecord() async {

@@ -113,7 +113,7 @@ class _StatisticPageState extends State<StatisticPage>
         textAlign: TextAlign.center,
         resetIcon: null,
         style: const TextStyle(color: AppColor.gold),
-        initialValue: DateTime.now(),
+        initialValue: statisticController.currentDate.value,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(10),
           isCollapsed: true,
@@ -224,7 +224,7 @@ class _StatisticPageState extends State<StatisticPage>
                   )),
               statisticController.totalMonthIncome.value != 0
                   ? Padding(
-                      padding: const EdgeInsets.fromLTRB(10,0,10,10),
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                       child: AspectRatio(
                         aspectRatio: 2 / 1,
                         child: DChartBar(

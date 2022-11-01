@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:money_helper_getx_mvc/app_controller.dart';
+import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
@@ -109,7 +109,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       inactiveBgColor: Colors.grey,
       inactiveFgColor: Colors.white,
       totalSwitches: 2,
-      labels: const ['Expense', 'Income'],
+      labels: ['tab.expense'.tr, 'tab.income'.tr],
       icons: const [FontAwesomeIcons.minus, FontAwesomeIcons.plus],
       activeBgColors: const [
         [AppColor.gold],

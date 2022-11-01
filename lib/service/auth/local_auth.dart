@@ -1,12 +1,21 @@
+import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 
 class LocalAuth {
-  doAuthenticate() async {
+  Future<bool> doAuthenticate() async {
     final LocalAuthentication auth = LocalAuthentication();
-    print(auth);
-    auth.isDeviceSupported().then((bool isSupported) => print(isSupported));
-    bool authenticated = await auth.authenticate(
-        localizedReason:
-            'Scan your fingerprint (or face or whatever) to authenticate');
+    final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
+    final bool canAuthenticate =
+        canAuthenticateWithBiometrics || await auth.isDeviceSupported();
+    if (canAuthenticate) {
+      try {
+        final bool didAuthenticate = await auth.authenticate(
+            localizedReason: 'Please authenticate to open app');
+        return didAuthenticate;
+      } on PlatformException {
+        return false;
+      }
+    }
+    return false;
   }
 }

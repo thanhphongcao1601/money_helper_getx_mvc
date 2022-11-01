@@ -6,6 +6,7 @@ class Languages extends Translations {
         'en_US': {
           //app
           'appName': 'Money Helper',
+          'welcomeBack': 'Welcome back',
           'total': 'Total',
           'income': 'Income',
           'expense': 'Expense',
@@ -45,10 +46,12 @@ class Languages extends Translations {
           'form.dialog.delete.content':
               'After delete record, you can not restore the record!',
           //setting
+          'setting.lockAppBiometrics': 'Biometrics authentication',
           'setting.darkMode': 'Dark mode',
           'setting.language': 'Language',
           'setting.updateProfile': 'Update profile',
           'setting.signOut': 'Sign out',
+          'setting.signInt': 'Sign in',
           //snackbar
           'snackbar.add.success.title': 'Success',
           'snackbar.add.success.message': 'You add a record completely',
@@ -67,6 +70,7 @@ class Languages extends Translations {
         'vi_VN': {
           //app
           'appName': 'Quản lý chi tiêu',
+          'welcomeBack': 'Mừng trở lại',
           'total': 'Tổng',
           'income': 'Thu',
           'expense': 'Chi',
@@ -106,10 +110,12 @@ class Languages extends Translations {
           'form.dialog.delete.content':
               'Sau khi xóa, dữ liệu sẽ không thể khôi phục!',
           //setting
+          'setting.lockAppBiometrics': 'Xác thực bằng vân tay',
           'setting.darkMode': 'Chủ đề tối',
           'setting.language': 'Ngôn ngữ',
           'setting.updateProfile': 'Chỉnh sửa tài khoản',
           'setting.signOut': 'Đăng xuất',
+          'setting.signIn': 'Đăng nhập',
           //snackbar
           'snackbar.add.success.title': 'Thành công',
           'snackbar.add.success.message': 'Bạn đã thêm thành công',

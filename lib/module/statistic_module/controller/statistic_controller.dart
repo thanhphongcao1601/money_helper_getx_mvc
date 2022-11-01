@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:get/get.dart';
-import 'package:money_helper_getx_mvc/app_controller.dart';
+import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/model/daily_record.dart';
 import 'package:money_helper_getx_mvc/module/home_module/model/record.dart';
 import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
@@ -22,7 +22,7 @@ class StatisticController extends GetxController {
   final dataExpenseToChart = RxList<Map<String, dynamic>>([]).obs;
   final dataIncomeToChart = RxList<Map<String, dynamic>>([]).obs;
 
-  init(){
+  init() {
     currentDate.value = DateTime.now();
     loadAllData();
   }

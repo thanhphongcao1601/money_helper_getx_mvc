@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_helper_getx_mvc/app_controller.dart';
+import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/add_record_module/view/add_record_page.dart';
 import 'package:money_helper_getx_mvc/module/backup_module/view/backup_page.dart';
 import 'package:money_helper_getx_mvc/module/home_module/view/home_page.dart';
@@ -17,23 +17,24 @@ class AppPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColor.purple,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Get.to(() => const AddRecordPage());
-          },
-          backgroundColor: AppColor.gold,
-          child: const Icon(
-            Icons.add,
-            color: AppColor.darkPurple,
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        bottomNavigationBar: Obx(() =>
-            buildBottomBar(appController.currentPageIndex.value, context)),
-        body: Obx(() => Container(
-            color: AppColor.purple,
-            child: SafeArea(child: buildPageSelected()))));
+            backgroundColor: AppColor.purple,
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Get.to(() => const AddRecordPage());
+              },
+              backgroundColor: AppColor.gold,
+              child: const Icon(
+                Icons.add,
+                color: AppColor.darkPurple,
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.endDocked,
+            bottomNavigationBar: Obx(() =>
+                buildBottomBar(appController.currentPageIndex.value, context)),
+            body: Obx(() => Container(
+                color: AppColor.purple,
+                child: SafeArea(child: buildPageSelected()))));
   }
 
   Widget buildPageSelected() {
@@ -43,14 +44,14 @@ class AppPage extends StatelessWidget {
           return const HomePage();
         }
         return const Center(
-          child: CircularProgressIndicator(),
+          child: Text('No record'),
         );
       case 1:
         if (appController.listRecord.value.isNotEmpty) {
           return const StatisticPage();
         }
         return const Center(
-          child: CircularProgressIndicator(),
+          child: Text('No record'),
         );
       case 2:
         return const BackUpPage();

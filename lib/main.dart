@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_helper_getx_mvc/app_controller.dart';
-import 'package:money_helper_getx_mvc/app_view.dart';
+import 'package:money_helper_getx_mvc/app/app_controller.dart';
+import 'package:money_helper_getx_mvc/module/sign_in_module/view/sign_in_page.dart';
 import 'localization/languages.dart';
 
 void main() {
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blueGrey),
-      home: AppPage(),
+      home: const SignInPage(),
     );
   }
 }

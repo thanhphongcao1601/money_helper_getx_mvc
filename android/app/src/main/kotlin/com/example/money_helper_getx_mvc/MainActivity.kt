@@ -1,6 +1,7 @@
 package com.example.money_helper_getx_mvc
 
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 
-class MainActivity: FlutterActivity() {
+class MainActivity: FlutterFragmentActivity() {
+    // ...
 }

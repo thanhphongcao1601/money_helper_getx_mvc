@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:money_helper_getx_mvc/app_controller.dart';
+import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/model/record.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
@@ -19,8 +19,8 @@ class AddRecordPage extends StatefulWidget {
 
 class _AddRecordPageState extends State<AddRecordPage>
     with TickerProviderStateMixin {
-  AppController appController = Get.find();
-  HomeController homeController = Get.find();
+  AppController appController = Get.put(AppController());
+  HomeController homeController = Get.put(HomeController());
 
   final formKeyExpense = GlobalKey<FormState>();
   final formKeyIncome = GlobalKey<FormState>();
@@ -98,7 +98,7 @@ class _AddRecordPageState extends State<AddRecordPage>
       inactiveBgColor: Colors.grey,
       inactiveFgColor: Colors.white,
       totalSwitches: 2,
-      labels: const ['Expense', 'Income'],
+      labels:  ['tab.expense'.tr, 'tab.income'.tr],
       icons: const [FontAwesomeIcons.minus, FontAwesomeIcons.plus],
       activeBgColors: const [
         [AppColor.gold],

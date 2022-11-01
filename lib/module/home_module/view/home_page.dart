@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/api/google_sign_in.dart';
+import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/detail_record_module/view/detail_record_page.dart';
 import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
-import 'package:money_helper_getx_mvc/service/auth/local_auth.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
 import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
@@ -20,6 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final homeController = Get.put(HomeController());
+  final appController = Get.put(AppController());
 
   @override
   void initState() {
@@ -37,82 +38,89 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildHeader() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: (){
-                  // GApi().handleSignIn();
-                  LocalAuth().doAuthenticate();
-                },
-                child: const CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/dashboardbg.jpg'),
-                  radius: 30,
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+        child: Obx(
+          () => appController.userId == ''
+              ? Align(
+                  alignment: Alignment.centerRight,
+                  child: buildButtonMonthYearPicker(),
+                )
+              : Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      'Hi,',
-                      style: TextStyle(fontSize: 20, color: AppColor.gold),
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        GApi().handleSignIn();
+                      },
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(appController
+                                .userPhotoUrl.value.isNotEmpty
+                            ? appController.userPhotoUrl.value
+                            : 'https://daknong.dms.gov.vn/CmsView-QLTT-portlet/res/no-image.jpg'),
+                        radius: 25,
+                      ),
                     ),
-                    Text('Human',
-                        style: TextStyle(fontSize: 28, color: AppColor.gold)),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${'welcomeBack'.tr},',
+                            style: const TextStyle(
+                                fontSize: 16, color: AppColor.gold),
+                          ),
+                          Text(
+                              appController.userDisplayName.value.split(' ')[0],
+                              style: const TextStyle(
+                                  fontSize: 24, color: AppColor.gold)),
+                        ],
+                      ),
+                    ),
+                    buildButtonMonthYearPicker()
                   ],
                 ),
-              ),
-              buildButtonMonthYearPicker()
-            ],
-          )
-        ],
-      ),
-    );
+        ));
   }
 
   Widget buildButtonMonthYearPicker() {
-  return SizedBox(
-    width: 100,
-    child: DateTimeField(
-      textAlign: TextAlign.center,
-      resetIcon: null,
-      style: const TextStyle(color: AppColor.gold),
-      initialValue: DateTime.now(),
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.all(10),
-        isCollapsed: true,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide:
-              const BorderSide(width: 2, color: AppColor.gold), //<-- SEE HERE
+    return SizedBox(
+      width: 100,
+      child: DateTimeField(
+        textAlign: TextAlign.center,
+        resetIcon: null,
+        style: const TextStyle(color: AppColor.gold),
+        initialValue: DateTime.now(),
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(10),
+          isCollapsed: true,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide:
+                const BorderSide(width: 2, color: AppColor.gold), //<-- SEE HERE
+          ),
         ),
+        format: DateFormat("MM/yyyy"),
+        onShowPicker: (context, currentValue) async {
+          final date = await showMonthPicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2100),
+          );
+          if (date != null) {
+            homeController.handleHomeChangeMonthYear(date);
+            return date;
+          }
+          return null;
+        },
       ),
-      format: DateFormat("MM/yyyy"),
-      onShowPicker: (context, currentValue) async {
-        final date = await showMonthPicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2100),
-        );
-        if (date != null) {
-          homeController.handleHomeChangeMonthYear(date);
-          return date;
-        }
-        return null;
-      },
-    ),
-  );
-}
+    );
+  }
 
   Widget buildDashboard() {
     return Container(

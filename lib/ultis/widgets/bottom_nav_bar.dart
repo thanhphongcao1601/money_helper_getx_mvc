@@ -1,11 +1,10 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money_helper_getx_mvc/app_controller.dart';
+import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 
-Widget buildBottomBar(
-    int currentIndex, BuildContext context) {
+Widget buildBottomBar(int currentIndex, BuildContext context) {
   AppController appController = Get.find<AppController>();
   return BubbleBottomBar(
     backgroundColor: AppColor.darkPurple,
@@ -32,7 +31,8 @@ Widget buildBottomBar(
       BubbleBottomBarItem(
           backgroundColor: AppColor.gold,
           icon: const Icon(
-            Icons.dashboard,            color: AppColor.gold,
+            Icons.dashboard,
+            color: AppColor.gold,
           ),
           activeIcon: const Icon(
             Icons.dashboard,
@@ -41,7 +41,8 @@ Widget buildBottomBar(
       BubbleBottomBarItem(
           backgroundColor: AppColor.gold,
           icon: const Icon(
-            Icons.folder_open,            color: AppColor.gold,
+            Icons.folder_open,
+            color: AppColor.gold,
           ),
           activeIcon: const Icon(
             Icons.folder_open,
@@ -50,7 +51,8 @@ Widget buildBottomBar(
       BubbleBottomBarItem(
           backgroundColor: AppColor.gold,
           icon: const Icon(
-            Icons.settings,            color: AppColor.gold,
+            Icons.settings,
+            color: AppColor.gold,
           ),
           activeIcon: const Icon(
             Icons.settings,
