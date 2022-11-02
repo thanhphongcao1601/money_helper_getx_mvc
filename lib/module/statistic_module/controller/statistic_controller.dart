@@ -61,6 +61,7 @@ class StatisticController extends GetxController {
         listByMonth.add(record);
       }
     }
+    listByMonth.sortReversed();
     return listByMonth;
   }
 
@@ -91,6 +92,7 @@ class StatisticController extends GetxController {
         }
       }
     }
+    dataExpenseToChart.value.sort((a, b) => a["money"].compareTo(b["money"]));
 
     //add income item to incomeChart
     for (var item in mapTypeListRecord.value.entries) {
@@ -112,6 +114,7 @@ class StatisticController extends GetxController {
         }
       }
     }
+    dataIncomeToChart.value.sort((a, b) => b["money"].compareTo(a["money"]));
   }
 
   groupRecordByDate(List<Record> record) {

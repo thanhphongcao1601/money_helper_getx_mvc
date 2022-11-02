@@ -3,6 +3,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:money_helper_getx_mvc/module/detail_record_module/view/detail_record_page.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
@@ -45,13 +46,13 @@ class _StatisticPageState extends State<StatisticPage>
               Obx(
                 () => Tab(
                   text:
-                      "${"tab.expense".tr}: ${statisticController.totalMonthExpense.value.toString()}",
+                      "${"tab.expense".tr}: ${Helper().formatMoney(statisticController.totalMonthExpense.value)}",
                 ),
               ),
               Obx(
                 () => Tab(
                   text:
-                      "${"tab.income".tr}: ${statisticController.totalMonthIncome.value.toString()}",
+                      "${"tab.income".tr}: ${Helper().formatMoney(statisticController.totalMonthIncome.value)}",
                 ),
               ),
             ]),
@@ -95,7 +96,16 @@ class _StatisticPageState extends State<StatisticPage>
                       labelPosition: PieLabelPosition.outside,
                     ),
                   ))
-              : const SizedBox(),
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Lottie.asset('assets/lotties/empty.json', width: 100),
+                    Text(
+                      'noData'.tr,
+                      style: const TextStyle(color: AppColor.gold),
+                    )
+                  ],
+                ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Divider(),
@@ -165,7 +175,7 @@ class _StatisticPageState extends State<StatisticPage>
                     ),
                     title: Text(item['domain'],
                         style: const TextStyle(color: Colors.white)),
-                    trailing: Text(item['money'].toString(),
+                    trailing: Text(Helper().formatMoney(item['money']),
                         style:
                             const TextStyle(color: Colors.white, fontSize: 16)),
                   ),
@@ -194,7 +204,8 @@ class _StatisticPageState extends State<StatisticPage>
                                                     fontSize: 16),
                                               ),
                                               Text(
-                                                  recordFilter.money.toString(),
+                                                  Helper().formatMoney(
+                                                      recordFilter.money!),
                                                   style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 16))
@@ -250,7 +261,16 @@ class _StatisticPageState extends State<StatisticPage>
                         ),
                       ),
                     )
-                  : const SizedBox(),
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Lottie.asset('assets/lotties/empty.json', width: 100),
+                        Text(
+                          'noData'.tr,
+                          style: const TextStyle(color: AppColor.gold),
+                        )
+                      ],
+                    ),
               buildListDetailIncome()
             ],
           )),
@@ -283,7 +303,7 @@ class _StatisticPageState extends State<StatisticPage>
                       item['domain'].toString().tr,
                       style: const TextStyle(color: Colors.white),
                     ),
-                    trailing: Text(item['money'].toString(),
+                    trailing: Text(Helper().formatMoney(item['money']),
                         style:
                             const TextStyle(color: Colors.white, fontSize: 16)),
                   ),
@@ -312,7 +332,8 @@ class _StatisticPageState extends State<StatisticPage>
                                                     fontSize: 16),
                                               ),
                                               Text(
-                                                  recordFilter.money.toString(),
+                                                  Helper().formatMoney(
+                                                      recordFilter.money!),
                                                   style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 16))

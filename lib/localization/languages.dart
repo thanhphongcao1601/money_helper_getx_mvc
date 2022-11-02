@@ -10,6 +10,7 @@ class Languages extends Translations {
           'total': 'Total',
           'income': 'Income',
           'expense': 'Expense',
+          'noData': 'No data',
           //bottom nav bar
           'bottomNav.daily': 'Daily',
           'bottomNav.statistic': 'Statistic',
@@ -46,12 +47,13 @@ class Languages extends Translations {
           'form.dialog.delete.content':
               'After delete record, you can not restore the record!',
           //setting
-          'setting.lockAppBiometrics': 'Biometrics authentication',
+          'setting.lockAppBiometrics': 'Biometrics',
           'setting.darkMode': 'Dark mode',
           'setting.language': 'Language',
           'setting.updateProfile': 'Update profile',
           'setting.signOut': 'Sign out',
-          'setting.signInt': 'Sign in',
+          'setting.signIn': 'Sign in',
+          'setting.backUp': 'Back up',
           //snackbar
           'snackbar.add.success.title': 'Success',
           'snackbar.add.success.message': 'You add a record completely',
@@ -74,6 +76,7 @@ class Languages extends Translations {
           'total': 'Tổng',
           'income': 'Thu',
           'expense': 'Chi',
+          'noData': 'Không có dữ liệu',
           //bottom nav bar
           'bottomNav.daily': 'Nhật ký',
           'bottomNav.statistic': 'Thống kê',
@@ -113,6 +116,7 @@ class Languages extends Translations {
           'setting.lockAppBiometrics': 'Xác thực bằng vân tay',
           'setting.darkMode': 'Chủ đề tối',
           'setting.language': 'Ngôn ngữ',
+          'setting.backUp': 'Sao lưu',
           'setting.updateProfile': 'Chỉnh sửa tài khoản',
           'setting.signOut': 'Đăng xuất',
           'setting.signIn': 'Đăng nhập',

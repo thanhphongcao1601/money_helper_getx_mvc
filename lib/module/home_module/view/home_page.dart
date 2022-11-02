@@ -2,6 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:money_helper_getx_mvc/api/google_sign_in.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/detail_record_module/view/detail_record_page.dart';
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
         child: Obx(
-          () => appController.userId == ''
+          () => appController.userId.value == ''
               ? Align(
                   alignment: Alignment.centerRight,
                   child: buildButtonMonthYearPicker(),
@@ -140,9 +141,9 @@ class _HomePageState extends State<HomePage> {
                       const TextStyle(fontSize: 20, color: AppColor.darkPurple),
                 ),
                 Obx(() => Text(
-                      (homeController.totalMonthExpense.value +
-                              homeController.totalMonthIncome.value)
-                          .toString(),
+                      Helper().formatMoney(
+                          homeController.totalMonthExpense.value +
+                              homeController.totalMonthIncome.value),
                       style: const TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
@@ -172,7 +173,8 @@ class _HomePageState extends State<HomePage> {
                       height: 5,
                     ),
                     Text(
-                      (homeController.totalMonthIncome.value).toString(),
+                      Helper()
+                          .formatMoney(homeController.totalMonthIncome.value),
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -200,7 +202,8 @@ class _HomePageState extends State<HomePage> {
                       height: 5,
                     ),
                     Text(
-                      (homeController.totalMonthExpense.value).toString(),
+                      Helper()
+                          .formatMoney(homeController.totalMonthExpense.value),
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -217,6 +220,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildListRecord() {
+    if (homeController.listRecordGroupByDate.value.isEmpty) {
+      return Expanded(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Lottie.asset('assets/lotties/empty.json', width: 100),
+          Text(
+            'noData'.tr,
+            style: TextStyle(color: AppColor.gold),
+          )
+        ],
+      ));
+    }
     return Expanded(
       child: SizedBox(
         width: Get.width,
@@ -316,7 +333,7 @@ class _HomePageState extends State<HomePage> {
                       style: const TextStyle(color: Colors.white)),
                   const Expanded(child: SizedBox()),
                   Text(
-                    record.money.toString(),
+                    Helper().formatMoney(record.money!),
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

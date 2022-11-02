@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:money_helper_getx_mvc/api/google_sign_in.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
+import 'package:money_helper_getx_mvc/module/backup_module/view/backup_page.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 
 // ignore: must_be_immutable
@@ -32,21 +33,6 @@ class _SettingPageState extends State<SettingPage> {
         () => Column(
           children: [
             buildHeader(),
-            // ListTile(
-            //     title: Text('setting.darkMode'.tr),
-            //     trailing: Switch(
-            //       value: appController.isDarkMode.value,
-            //       activeColor: Theme.of(context).colorScheme.secondary,
-            //       onChanged: (bool value) {
-            //         Get.changeTheme(value
-            //             ? ThemeData.dark()
-            //             : ThemeData(primarySwatch: Colors.blueGrey));
-            //         appController.isDarkMode.value = value;
-            //       },
-            //     )),
-            // const Divider(
-            //   thickness: 1,
-            // ),
             ListTile(
                 title: Text(
                   'setting.lockAppBiometrics'.tr,
@@ -88,17 +74,13 @@ class _SettingPageState extends State<SettingPage> {
               thickness: 1,
             ),
             ListTile(
-              title: Text('setting.updateProfile'.tr,
+              onTap: () => Get.to(() => const BackUpPage()),
+              title: Text('setting.backUp'.tr,
                   style: const TextStyle(color: AppColor.gold)),
-              trailing: const Icon(Icons.arrow_right),
-            ),
-            const Divider(
-              thickness: 1,
-            ),
-            ListTile(
-              title: Text('setting.updateProfile'.tr,
-                  style: const TextStyle(color: AppColor.gold)),
-              trailing: const Icon(Icons.arrow_right),
+              trailing: const Icon(
+                Icons.arrow_right,
+                color: AppColor.gold,
+              ),
             ),
             const Divider(
               thickness: 1,
@@ -116,17 +98,21 @@ class _SettingPageState extends State<SettingPage> {
                       child: Text('setting.signIn'.tr,
                           style: const TextStyle(color: AppColor.gold)),
                     ))
-                : ListTile(
-                    onTap: () {
-                      GApi().handleSignOut();
-                    },
-                    title: Text('setting.signOut'.tr,
-                        style: const TextStyle(color: AppColor.gold)),
-                    trailing: const Icon(Icons.arrow_right),
+                : Column(
+                    children: [
+                      ListTile(
+                        onTap: () {
+                          GApi().handleSignOut();
+                        },
+                        title: Text('setting.signOut'.tr,
+                            style: const TextStyle(color: AppColor.gold)),
+                        trailing: const Icon(Icons.arrow_right),
+                      ),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                    ],
                   ),
-            const Divider(
-              thickness: 1,
-            ),
           ],
         ),
       )),

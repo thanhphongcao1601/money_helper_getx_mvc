@@ -7,6 +7,7 @@ import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../../home_module/model/record.dart';
 
@@ -267,9 +268,10 @@ class _DetailRecordPageState extends State<DetailRecordPage>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
+                inputFormatters: [ThousandsFormatter()],
                 style: const TextStyle(color: Colors.black),
                 controller: moneyC,
-                keyboardType: const TextInputType.numberWithOptions(),
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     hintText: 'form.moneyHint'.tr,
                     border: InputBorder.none,
@@ -466,7 +468,9 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           genre: isExpense ? currentItemGenre : null,
           type: !isExpense ? currentItemGenre : null,
           content: contentC.text,
-          money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
+          money: isExpense
+              ? -int.parse(moneyC.text.replaceAll(',', ''))
+              : int.parse(moneyC.text.replaceAll(',', '')));
 
       appController.updateRecord(recordExpense);
       homeController.loadAllData();

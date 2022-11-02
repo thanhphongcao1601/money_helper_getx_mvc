@@ -6,9 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/model/record.dart';
+import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:uuid/uuid.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 
 class AddRecordPage extends StatefulWidget {
   const AddRecordPage({Key? key}) : super(key: key);
@@ -21,6 +23,7 @@ class _AddRecordPageState extends State<AddRecordPage>
     with TickerProviderStateMixin {
   AppController appController = Get.put(AppController());
   HomeController homeController = Get.put(HomeController());
+  StatisticController statisticController = Get.put(StatisticController());
 
   final formKeyExpense = GlobalKey<FormState>();
   final formKeyIncome = GlobalKey<FormState>();
@@ -98,7 +101,7 @@ class _AddRecordPageState extends State<AddRecordPage>
       inactiveBgColor: Colors.grey,
       inactiveFgColor: Colors.white,
       totalSwitches: 2,
-      labels:  ['tab.expense'.tr, 'tab.income'.tr],
+      labels: ['tab.expense'.tr, 'tab.income'.tr],
       icons: const [FontAwesomeIcons.minus, FontAwesomeIcons.plus],
       activeBgColors: const [
         [AppColor.gold],
@@ -255,9 +258,10 @@ class _AddRecordPageState extends State<AddRecordPage>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
+                inputFormatters: [ThousandsFormatter()],
                 controller: moneyC,
                 style: const TextStyle(color: Colors.black),
-                keyboardType: const TextInputType.numberWithOptions(),
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     hintText: 'form.moneyHint'.tr,
                     border: InputBorder.none,
@@ -396,10 +400,13 @@ class _AddRecordPageState extends State<AddRecordPage>
           genre: isExpense ? currentItemGenre : null,
           type: !isExpense ? currentItemGenre : null,
           content: contentC.text,
-          money: isExpense ? -int.parse(moneyC.text) : int.parse(moneyC.text));
+          money: isExpense
+              ? -int.parse(moneyC.text.replaceAll(',', ''))
+              : int.parse(moneyC.text.replaceAll(',', '')));
 
       appController.addRecord(recordExpense);
       homeController.loadAllData();
+      statisticController.loadAllData();
 
       Get.back();
       Get.snackbar(

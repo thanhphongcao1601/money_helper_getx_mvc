@@ -20,13 +20,13 @@ class _SignInPageState extends State<SignInPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var prefs = await SharedPreferences.getInstance();
-      var isLock = prefs.getBool('isLockApp') ?? false;
-      if (!isLock) {
-        Get.to(() => AppPage());
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   var prefs = await SharedPreferences.getInstance();
+    //   var isLock = prefs.getBool('isLockApp') ?? false;
+    //   if (!isLock) {
+    //     Get.to(() => AppPage());
+    //   }
+    // });
   }
 
   @override

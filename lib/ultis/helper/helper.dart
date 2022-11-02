@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../constants/constant.dart';
 
@@ -9,6 +10,11 @@ class Helper {
   double roundDouble(double value, int places) {
     double mod = pow(10.0, places) as double;
     return ((value * mod).round().toDouble() / mod);
+  }
+
+  String formatMoney(int money) {
+    var formatter = NumberFormat('#,###');
+    return formatter.format(money);
   }
 
   Color getItemTypeColor(String type) {
