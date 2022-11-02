@@ -49,9 +49,9 @@ class AppPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Lottie.asset('assets/lotties/empty.json', width: 100),
-             Text(
-'noData'.tr,
-              style: TextStyle(color: AppColor.gold),
+            Text(
+              'noData'.tr,
+              style: const TextStyle(color: AppColor.gold),
             )
           ],
         ));

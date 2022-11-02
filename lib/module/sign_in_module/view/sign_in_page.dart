@@ -5,7 +5,6 @@ import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/app/app_view.dart';
 import 'package:money_helper_getx_mvc/service/auth/local_auth.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -20,13 +19,6 @@ class _SignInPageState extends State<SignInPage> {
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   var prefs = await SharedPreferences.getInstance();
-    //   var isLock = prefs.getBool('isLockApp') ?? false;
-    //   if (!isLock) {
-    //     Get.to(() => AppPage());
-    //   }
-    // });
   }
 
   @override
@@ -38,28 +30,28 @@ class _SignInPageState extends State<SignInPage> {
             child: Column(
           children: [
             Expanded(
-                flex: 3,
                 child: SizedBox(
                     width: 100,
                     child: Image.asset(
                       'assets/images/logo.png',
                       color: AppColor.gold,
                     ))),
-            Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () async {
-                    bool pass = await LocalAuth().doAuthenticate();
-                    if (pass) {
-                      Get.to(() => AppPage());
-                    }
-                  },
-                  child: const FaIcon(
-                    FontAwesomeIcons.fingerprint,
-                    size: 50,
-                    color: AppColor.gold,
-                  ),
-                )),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 50),
+              child: InkWell(
+                onTap: () async {
+                  bool pass = await LocalAuth().doAuthenticate();
+                  if (pass) {
+                    Get.to(() => AppPage());
+                  }
+                },
+                child: const FaIcon(
+                  FontAwesomeIcons.fingerprint,
+                  size: 50,
+                  color: AppColor.gold,
+                ),
+              ),
+            ),
           ],
         )),
       ),
