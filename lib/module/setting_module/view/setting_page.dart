@@ -5,6 +5,9 @@ import 'package:money_helper_getx_mvc/api/google_sign_in.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/backup_module/view/backup_page.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
+import 'package:money_helper_getx_mvc/api/google_drive_app_data.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:googleapis/drive/v3.dart' as drive;
 
 // ignore: must_be_immutable
 class SettingPage extends StatefulWidget {
@@ -17,6 +20,9 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   AppController appController = Get.find<AppController>();
   List<String> items = [];
+  final GoogleDriveAppData googleDriveAppData = GoogleDriveAppData();
+  GoogleSignInAccount? googleUser;
+  drive.DriveApi? driveApi;
 
   @override
   void initState() {
@@ -89,8 +95,15 @@ class _SettingPageState extends State<SettingPage> {
                 ? SizedBox(
                     width: Get.width / 2,
                     child: OutlinedButton(
-                      onPressed: () {
-                        GApi().handleSignIn();
+                      onPressed: () async {
+                        //GApi().handleSignIn();
+                        if (googleUser == null) {
+                          googleUser = await googleDriveAppData.signInGoogle();
+                          if (googleUser != null) {
+                            driveApi = await googleDriveAppData
+                                .getDriveApi(googleUser!);
+                          }
+                        } else {}
                       },
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppColor.gold),
@@ -101,8 +114,11 @@ class _SettingPageState extends State<SettingPage> {
                 : Column(
                     children: [
                       ListTile(
-                        onTap: () {
+                        onTap: () async {
                           GApi().handleSignOut();
+                          // await googleDriveAppData.signOut();
+                          // googleUser = null;
+                          // driveApi = null;
                         },
                         title: Text('setting.signOut'.tr,
                             style: const TextStyle(color: AppColor.gold)),

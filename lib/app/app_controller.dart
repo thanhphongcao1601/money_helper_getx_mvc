@@ -1,20 +1,22 @@
-import 'dart:convert';
 import 'dart:ui';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:money_helper_getx_mvc/module/home_module/model/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:money_helper_getx_mvc/module/home_module/model/record.dart';
 
 class AppController extends GetxController {
   final listRecord = RxList<Record>([]).obs;
   List<String> listStringRecord = [];
   RxInt totalIncome = 0.obs;
   RxInt totalExpense = 0.obs;
+
   final isDarkMode = false.obs;
   RxInt currentPageIndex = 0.obs;
   RxString currentLanguageCode = 'English'.obs;
-  SharedPreferences? prefs;
   RxBool isLockApp = false.obs;
+
+  SharedPreferences? prefs;
 
   final userDisplayName = ''.obs;
   final userId = ''.obs;
