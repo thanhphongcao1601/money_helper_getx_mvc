@@ -51,7 +51,8 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     InkWell(
                       onTap: () {
-                        GApi().handleSignIn();
+                        // GApi().handleSignIn();
+                        appController.signIn();
                       },
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(appController
@@ -131,7 +132,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           ElevatedButton(
               onPressed: () async {
-                GApi().handleSaveFileToDrive();
+                // GApi().handleSaveFileToDrive();
               },
               child: const Text('abc')),
           Padding(

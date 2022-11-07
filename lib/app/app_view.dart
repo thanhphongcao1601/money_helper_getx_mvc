@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/add_record_module/view/add_record_page.dart';
+import 'package:money_helper_getx_mvc/module/backup_module/view/backup_page.dart';
 import 'package:money_helper_getx_mvc/module/home_module/view/home_page.dart';
 import 'package:money_helper_getx_mvc/module/setting_module/view/setting_page.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/view/statistic_page.dart';
@@ -56,9 +57,9 @@ class AppPage extends StatelessWidget {
           ],
         ));
       case 2:
+        return BackUpPage();
+      case 3:
         return const SettingPage();
-      // case 3:
-      //   return const SettingPage();
       default:
         return const HomePage();
     }

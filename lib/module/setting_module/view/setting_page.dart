@@ -80,7 +80,7 @@ class _SettingPageState extends State<SettingPage> {
               thickness: 1,
             ),
             ListTile(
-              onTap: () => Get.to(() => const BackUpPage()),
+              onTap: () => Get.to(() => BackUpPage()),
               title: Text('setting.backUp'.tr,
                   style: const TextStyle(color: AppColor.gold)),
               trailing: const Icon(
@@ -115,10 +115,7 @@ class _SettingPageState extends State<SettingPage> {
                     children: [
                       ListTile(
                         onTap: () async {
-                          GApi().handleSignOut();
-                          // await googleDriveAppData.signOut();
-                          // googleUser = null;
-                          // driveApi = null;
+                          appController.signOut();
                         },
                         title: Text('setting.signOut'.tr,
                             style: const TextStyle(color: AppColor.gold)),

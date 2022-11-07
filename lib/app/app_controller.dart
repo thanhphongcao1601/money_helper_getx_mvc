@@ -1,11 +1,20 @@
 import 'dart:ui';
 import 'dart:convert';
+import 'package:file/file.dart';
+import 'package:file/memory.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:money_helper_getx_mvc/api/google_drive_app_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:money_helper_getx_mvc/module/home_module/model/record.dart';
 
 class AppController extends GetxController {
+  GoogleDriveAppData googleDriveAppData = GoogleDriveAppData();
+  GoogleSignInAccount? googleUser;
+  drive.DriveApi? driveApi;
+
   final listRecord = RxList<Record>([]).obs;
   List<String> listStringRecord = [];
   RxInt totalIncome = 0.obs;
@@ -27,7 +36,7 @@ class AppController extends GetxController {
     prefs = await SharedPreferences.getInstance();
     isLockApp.value = prefs?.getBool('isLockApp') ?? false;
     await initUserLogin();
-    await initListStringRecord();
+    await getListStringRecord();
     await calculateRecord(listStringRecord);
   }
 
@@ -38,14 +47,50 @@ class AppController extends GetxController {
     userPhotoUrl.value = prefs?.getString('photoUrl') ?? '';
   }
 
+  signIn() async {
+    var account = await googleDriveAppData.signInGoogle();
+    if (account != null) {
+      prefs?.setBool('isLogged', true);
+      prefs?.setString('id', account.id);
+      prefs?.setString('email', account.email);
+      prefs?.setString('displayName', account.displayName ?? "");
+      prefs?.setString('photoUrl', account.photoUrl ?? "");
+    }
+  }
+
+  signOut() {
+    googleDriveAppData.signOut();
+    prefs?.setBool('isLogged', false);
+    prefs?.remove('id');
+    prefs?.remove('email');
+    prefs?.remove('displayName');
+    prefs?.remove('photoUrl');
+  }
+
+  handleBackUp() async {
+    await getListStringRecord();
+    String jsonListRecord = jsonEncode(listStringRecord);
+
+    final FileSystem fs = MemoryFileSystem();
+    final Directory tmp =
+        await fs.systemTempDirectory.createTemp('systemTempDirectory_');
+    final File outputFile = tmp.childFile('money_manager_backup_file.txt');
+    await outputFile.writeAsString(jsonListRecord);
+    print(jsonListRecord);
+
+    googleDriveAppData.uploadDriveFile(
+      driveApi: driveApi!,
+      file: outputFile,
+    );
+  }
+
   handleToggleLockApp(bool isLock) async {
     isLockApp.value = isLock;
     await prefs?.setBool('isLockApp', isLock);
   }
 
-  initListStringRecord() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    listStringRecord = (prefs.getStringList('listRecord') ?? []);
+  getListStringRecord() async {
+    listStringRecord = (prefs?.getStringList('listRecord') ?? []);
   }
 
   calculateRecord(List<String> listStringRecord) {
