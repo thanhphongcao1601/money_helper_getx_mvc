@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 
+// ignore: must_be_immutable
 class BackUpPage extends StatelessWidget {
   BackUpPage({super.key});
   AppController appController = Get.find();
@@ -14,7 +15,7 @@ class BackUpPage extends StatelessWidget {
       child: Center(
           child: ElevatedButton(
         onPressed: () async {
-          appController.handleBackUp(); 
+          appController.handleBackUp();
         },
         child: Text('backUp'.tr),
       )),

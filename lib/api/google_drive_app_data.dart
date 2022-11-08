@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
 import 'package:flutter/foundation.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
@@ -6,7 +7,39 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_helper_getx_mvc/api/google_auth_client.dart';
 
 class GoogleDriveAppData {
-  /// sign in with google
+  Future<String?> getFolderId(drive.DriveApi driveApi) async {
+    const mimeType = "application/vnd.google-apps.folder";
+    String folderName = "MoneyManagerBackUp";
+
+    try {
+      final found = await driveApi.files.list(
+        q: "mimeType = '$mimeType' and name = '$folderName'",
+        $fields: "files(id, name)",
+      );
+      final files = found.files;
+      if (files == null) {
+        return null;
+      }
+
+      // The folder already exists
+      if (files.isNotEmpty) {
+        return files.first.id;
+      }
+
+      // Create a folder
+      var folder = drive.File();
+      folder.name = folderName;
+      folder.mimeType = mimeType;
+      final folderCreation = await driveApi.files.create(folder);
+      print("Folder ID: ${folderCreation.id}");
+
+      return folderCreation.id;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future<GoogleSignInAccount?> signInGoogle() async {
     GoogleSignInAccount? googleUser;
     try {
@@ -50,6 +83,8 @@ class GoogleDriveAppData {
     String? driveFileId,
   }) async {
     try {
+      final folderId = await getFolderId(driveApi);
+
       drive.File fileMetadata = drive.File();
       fileMetadata.name = path.basename(file.absolute.path);
 
@@ -63,7 +98,9 @@ class GoogleDriveAppData {
         );
       } else {
         /// [driveFileId] is null means we want to create new file
-        fileMetadata.parents = ['appDataFolder'];
+        //fileMetadata.parents = ['appDataFolder'];
+        print(folderId.toString()+'---------------------');
+        fileMetadata.parents = [folderId!];
         response = await driveApi.files.create(
           fileMetadata,
           uploadMedia: drive.Media(file.openRead(), file.lengthSync()),

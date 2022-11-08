@@ -1,9 +1,9 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:money_helper_getx_mvc/api/google_sign_in.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/detail_record_module/view/detail_record_page.dart';
 import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
         child: Obx(
-          () => appController.userId.value == ''
+          () => !appController.isLogged.value
               ? Align(
                   alignment: Alignment.centerRight,
                   child: buildButtonMonthYearPicker(),
@@ -49,18 +49,12 @@ class _HomePageState extends State<HomePage> {
               : Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        // GApi().handleSignIn();
-                        appController.signIn();
-                      },
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(appController
-                                .userPhotoUrl.value.isNotEmpty
-                            ? appController.userPhotoUrl.value
-                            : 'https://daknong.dms.gov.vn/CmsView-QLTT-portlet/res/no-image.jpg'),
-                        radius: 25,
-                      ),
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(appController
+                              .userPhotoUrl.value.isNotEmpty
+                          ? appController.userPhotoUrl.value
+                          : 'https://daknong.dms.gov.vn/CmsView-QLTT-portlet/res/no-image.jpg'),
+                      radius: 25,
                     ),
                     const SizedBox(
                       width: 10,
@@ -130,11 +124,6 @@ class _HomePageState extends State<HomePage> {
           color: AppColor.gold, borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
-          ElevatedButton(
-              onPressed: () async {
-                // GApi().handleSaveFileToDrive();
-              },
-              child: const Text('abc')),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: Row(
@@ -265,7 +254,18 @@ class _HomePageState extends State<HomePage> {
                                   child: Divider(
                                 color: AppColor.gold,
                                 thickness: 1,
-                              ))
+                              )),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                Helper().formatMoney(item.listRecord
+                                    .sumBy<int>((e) => e.money!)),
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.gold,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ],
                           ),
                           for (var record in item.listRecord)

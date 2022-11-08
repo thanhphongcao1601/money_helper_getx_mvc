@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:money_helper_getx_mvc/api/google_sign_in.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/backup_module/view/backup_page.dart';
+import 'package:money_helper_getx_mvc/module/setting_module/view/setting_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/api/google_drive_app_data.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -18,11 +18,15 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  final settingController = Get.put(SettingController());
   AppController appController = Get.find<AppController>();
+
   List<String> items = [];
   final GoogleDriveAppData googleDriveAppData = GoogleDriveAppData();
   GoogleSignInAccount? googleUser;
   drive.DriveApi? driveApi;
+
+  String backUpTime = 'day';
 
   @override
   void initState() {
@@ -80,7 +84,155 @@ class _SettingPageState extends State<SettingPage> {
               thickness: 1,
             ),
             ListTile(
-              onTap: () => Get.to(() => BackUpPage()),
+              onTap: () {
+                Get.bottomSheet(
+                  Container(
+                      padding: const EdgeInsets.all(10),
+                      height: Get.height / 2,
+                      color: AppColor.darkPurple,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'setting.backUp.bottomSheet.chooseBackUpTime'.tr,
+                            style: const TextStyle(
+                                color: AppColor.gold, fontSize: 20),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Obx(() => Checkbox(
+                                    checkColor: AppColor.darkPurple,
+                                    fillColor: MaterialStateColor.resolveWith(
+                                        (states) => AppColor.gold),
+                                    value: settingController
+                                        .isAutoBackUpCheckBox.value,
+                                    onChanged: (bool? value) {
+                                      settingController
+                                          .changeIsAutoBackUpCheckBox();
+                                    },
+                                  )),
+                              Text(
+                                'setting.backUp.bottomSheet.autoBackUp'.tr,
+                                style: const TextStyle(color: AppColor.gold),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Obx(() => Radio(
+                                    value: 'day',
+                                    fillColor: MaterialStateColor.resolveWith(
+                                        (states) => AppColor.gold),
+                                    groupValue:
+                                        settingController.backUpType.value,
+                                    activeColor: AppColor.gold,
+                                    onChanged: (String? value) {
+                                      settingController.changeBackUpType('day');
+                                    },
+                                  )),
+                              Text(
+                                'setting.backUp.bottomSheet.daily'.tr,
+                                style: const TextStyle(color: AppColor.gold),
+                              ),
+                              const SizedBox(
+                                width: 50,
+                              ),
+                              Obx(() => Radio(
+                                    value: 'week',
+                                    groupValue:
+                                        settingController.backUpType.value,
+                                    activeColor: AppColor.gold,
+                                    fillColor: MaterialStateColor.resolveWith(
+                                        (states) => AppColor.gold), //
+                                    onChanged: (String? value) {
+                                      settingController
+                                          .changeBackUpType('week');
+                                    },
+                                  )),
+                              Text(
+                                'setting.backUp.bottomSheet.weekly'.tr,
+                                style: const TextStyle(color: AppColor.gold),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border:
+                                    Border.all(width: 2, color: AppColor.gold)),
+                            child: Column(children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'setting.backUp.bottomSheet.time'.tr,
+                                    style:
+                                        const TextStyle(color: AppColor.gold),
+                                  ),
+                                  Text(DateTime.now().toString(),
+                                      style:
+                                          const TextStyle(color: AppColor.gold))
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('setting.backUp.bottomSheet.url'.tr,
+                                      style: const TextStyle(
+                                          color: AppColor.gold)),
+                                  const Text('https://drive.google.com',
+                                      style: TextStyle(color: AppColor.gold))
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('setting.backUp.bottomSheet.email'.tr,
+                                      style: const TextStyle(
+                                          color: AppColor.gold)),
+                                  Text(appController.userEmail.value,
+                                      style: TextStyle(color: AppColor.gold))
+                                ],
+                              )
+                            ]),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              buildCancelButton(),
+                              buildBackUpButton(),
+                            ],
+                          )
+                        ],
+                      )),
+                  // barrierColor: Colors.red[50],
+                  // isDismissible: false,
+                );
+              },
               title: Text('setting.backUp'.tr,
                   style: const TextStyle(color: AppColor.gold)),
               trailing: const Icon(
@@ -91,19 +243,13 @@ class _SettingPageState extends State<SettingPage> {
             const Divider(
               thickness: 1,
             ),
-            appController.userId.value == ''
+            !appController.isLogged.value
                 ? SizedBox(
                     width: Get.width / 2,
                     child: OutlinedButton(
                       onPressed: () async {
                         //GApi().handleSignIn();
-                        if (googleUser == null) {
-                          googleUser = await googleDriveAppData.signInGoogle();
-                          if (googleUser != null) {
-                            driveApi = await googleDriveAppData
-                                .getDriveApi(googleUser!);
-                          }
-                        } else {}
+                        appController.signIn();
                       },
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppColor.gold),
@@ -119,7 +265,8 @@ class _SettingPageState extends State<SettingPage> {
                         },
                         title: Text('setting.signOut'.tr,
                             style: const TextStyle(color: AppColor.gold)),
-                        trailing: const Icon(Icons.arrow_right),
+                        trailing:
+                            const Icon(Icons.arrow_right, color: AppColor.gold),
                       ),
                       const Divider(
                         thickness: 1,
@@ -134,7 +281,7 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget buildHeader() {
     return Obx(() => Visibility(
-          visible: appController.userId.value != '',
+          visible: appController.isLogged.value,
           child: Container(
             color: AppColor.darkPurple,
             child: Padding(
@@ -180,5 +327,37 @@ class _SettingPageState extends State<SettingPage> {
             ),
           ),
         ));
+  }
+
+  Widget buildBackUpButton() {
+    return SizedBox(
+      width: Get.width / 2 - 20,
+      child: ElevatedButton(
+        onPressed: () {
+          appController.handleBackUp();
+        },
+        style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
+        child: Text(
+          'setting.backUp.bottomSheet.backUp'.tr,
+          style: const TextStyle(color: AppColor.darkPurple),
+        ),
+      ),
+    );
+  }
+
+  Widget buildCancelButton() {
+    return SizedBox(
+      width: Get.width / 2 - 20,
+      child: OutlinedButton(
+        onPressed: () {
+          Get.back();
+        },
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: AppColor.gold),
+        ),
+        child: Text('setting.backUp.bottomSheet.cancel'.tr,
+            style: const TextStyle(color: AppColor.gold)),
+      ),
+    );
   }
 }

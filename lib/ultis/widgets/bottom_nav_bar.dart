@@ -38,16 +38,16 @@ Widget buildBottomBar(int currentIndex, BuildContext context) {
             Icons.dashboard,
           ),
           title: Text("bottomNav.statistic".tr)),
-      BubbleBottomBarItem(
-          backgroundColor: AppColor.gold,
-          icon: const Icon(
-            Icons.folder_open,
-            color: AppColor.gold,
-          ),
-          activeIcon: const Icon(
-            Icons.folder_open,
-          ),
-          title: Text("bottomNav.backup".tr)),
+      // BubbleBottomBarItem(
+      //     backgroundColor: AppColor.gold,
+      //     icon: const Icon(
+      //       Icons.folder_open,
+      //       color: AppColor.gold,
+      //     ),
+      //     activeIcon: const Icon(
+      //       Icons.folder_open,
+      //     ),
+      //     title: Text("bottomNav.backup".tr)),
       BubbleBottomBarItem(
           backgroundColor: AppColor.gold,
           icon: const Icon(

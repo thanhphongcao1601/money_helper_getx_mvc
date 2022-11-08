@@ -25,7 +25,7 @@ class _SplashPageState extends State<SplashPage> {
 
     var prefs = await SharedPreferences.getInstance();
     var isLock = prefs.getBool('isLockApp') ?? false;
-    await Future.delayed(const Duration(milliseconds: 1500));
+    // await Future.delayed(const Duration(milliseconds: 1500));
     if (!isLock) {
       return AppPage();
     }
