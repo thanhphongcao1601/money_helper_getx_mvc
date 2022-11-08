@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
-import 'package:money_helper_getx_mvc/module/backup_module/view/backup_page.dart';
 import 'package:money_helper_getx_mvc/module/setting_module/view/setting_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/api/google_drive_app_data.dart';
@@ -212,7 +211,8 @@ class _SettingPageState extends State<SettingPage> {
                                       style: const TextStyle(
                                           color: AppColor.gold)),
                                   Text(appController.userEmail.value,
-                                      style: TextStyle(color: AppColor.gold))
+                                      style:
+                                          const TextStyle(color: AppColor.gold))
                                 ],
                               )
                             ]),

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:money_helper_getx_mvc/api/google_drive_app_data.dart';
+import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -87,25 +88,37 @@ class AppController extends GetxController {
 
   handleBackUp() async {
     loadListStringRecord();
-
     var account = await googleDriveAppData.signInGoogle();
     if (account != null) {
       driveApi = await googleDriveAppData.getDriveApi(account);
+
+      //create a file
+      //create directory path
+      final tempDirectory = await getTemporaryDirectory();
+      String appDocPath = tempDirectory.path;
+      //create name of file
+      DateTime tsDate = DateTime.now();
+      String fileBackUpName = "MMB_$tsDate.txt";
+      File file = File('$appDocPath/$fileBackUpName');
+      //write data to file
+      file.writeAsString(listStringRecord.toString());
+
+      File outputFile = await file.create();
+
+      drive.File? response = await googleDriveAppData.uploadDriveFile(
+          driveApi: driveApi!, file: outputFile);
+      if (response != null) {
+        Get.back();
+        Get.snackbar("snackbar.backup.success.title".tr,
+            "snackbar.backup.success.message".tr,
+            colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
+      } else {
+        Get.back();
+        Get.snackbar(
+            "snackbar.backup.fail.title".tr, "snackbar.backup.fail.message".tr,
+            colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
+      }
     }
-    //create a file
-    //create directory path
-    final tempDirectory = await getTemporaryDirectory();
-    String appDocPath = tempDirectory.path;
-    //create name of file
-    DateTime tsDate = DateTime.now();
-    String fileBackUpName = "MMB_$tsDate.txt";
-    File file = File('$appDocPath/$fileBackUpName');
-    //write data to file
-    file.writeAsString(listStringRecord.toString());
-
-    File outputFile = await file.create();
-
-    googleDriveAppData.uploadDriveFile(driveApi: driveApi!, file: outputFile);
   }
 
   handleToggleLockApp(bool isLock) async {

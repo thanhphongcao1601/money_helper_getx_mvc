@@ -31,11 +31,11 @@ class GoogleDriveAppData {
       folder.name = folderName;
       folder.mimeType = mimeType;
       final folderCreation = await driveApi.files.create(folder);
-      print("Folder ID: ${folderCreation.id}");
+      debugPrint("Folder ID: ${folderCreation.id}");
 
       return folderCreation.id;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -99,7 +99,6 @@ class GoogleDriveAppData {
       } else {
         /// [driveFileId] is null means we want to create new file
         //fileMetadata.parents = ['appDataFolder'];
-        print(folderId.toString()+'---------------------');
         fileMetadata.parents = [folderId!];
         response = await driveApi.files.create(
           fileMetadata,
