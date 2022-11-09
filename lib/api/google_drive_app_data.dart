@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:io' as io;
-// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
 import 'package:flutter/foundation.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
@@ -98,8 +98,8 @@ class GoogleDriveAppData {
         );
       } else {
         /// [driveFileId] is null means we want to create new file
-        //fileMetadata.parents = ['appDataFolder'];
-        fileMetadata.parents = [folderId!];
+        fileMetadata.parents = ['appDataFolder'];
+        // fileMetadata.parents = [folderId!];
         response = await driveApi.files.create(
           fileMetadata,
           uploadMedia: drive.Media(file.openRead(), file.lengthSync()),
@@ -138,15 +138,56 @@ class GoogleDriveAppData {
     }
   }
 
+  Future<List<drive.File?>> getListDriveFile(drive.DriveApi driveApi) async {
+    try {
+      final folderId = await getFolderId(driveApi);
+      drive.FileList fileList = await driveApi.files.list(
+          // q: "'$folderId' in parents",
+          spaces: 'appDataFolder',
+          $fields: 'files(id, name, modifiedTime)');
+
+      List<drive.File>? files = fileList.files;
+
+      for (var i = 0; i < files!.length; i++) {
+        print("Id: ${files[i].id} File Name:${files[i].name}");
+      }
+
+      return files;
+    } catch (e) {
+      debugPrint(e.toString());
+      return [];
+    }
+  }
+
+  Future<String> getContentFromDriveFile(
+      drive.DriveApi driveApi, drive.File driveFile) async {
+    var response = await driveApi.files
+        .get(driveFile.id!, downloadOptions: drive.DownloadOptions.fullMedia);
+    if (response is! drive.Media) throw Exception("invalid response");
+    var content = await utf8.decodeStream(response.stream);
+    return content;
+  }
+
   /// get drive file info
   Future<drive.File?> getDriveFile(
       drive.DriveApi driveApi, String filename) async {
     try {
+      final folderId = await getFolderId(driveApi);
       drive.FileList fileList = await driveApi.files.list(
-          spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
+          // q: "'$folderId' in parents",
+          spaces: 'appDataFolder',
+          $fields: 'files(id, name, modifiedTime)');
+
       List<drive.File>? files = fileList.files;
+
+      for (var i = 0; i < files!.length; i++) {
+        print(files[i].trashed.toString());
+        print("Id: ${files[i].id} File Name:${files[i].name}");
+      }
+
       drive.File? driveFile =
-          files?.firstWhere((element) => element.name == filename);
+          files.firstWhere((element) => element.name == filename);
+
       return driveFile;
     } catch (e) {
       debugPrint(e.toString());

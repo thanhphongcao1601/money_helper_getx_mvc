@@ -34,6 +34,8 @@ class AppController extends GetxController {
   final userEmail = ''.obs;
   final userPhotoUrl = ''.obs;
 
+  final listBackUpFile = <drive.File?>[].obs;
+
   init() async {
     prefs = await SharedPreferences.getInstance();
     isLockApp.value = prefs?.getBool('isLockApp') ?? false;
@@ -42,6 +44,7 @@ class AppController extends GetxController {
     await getUserLoggedInfo();
     await loadListStringRecord();
     await calculateRecord(listStringRecord);
+    await loadListFileBackUp();
   }
 
   getUserLoggedInfo() {
@@ -84,6 +87,39 @@ class AppController extends GetxController {
     prefs?.remove('email');
     prefs?.remove('displayName');
     prefs?.remove('photoUrl');
+  }
+
+  restoreDataFromBackUpFile(String response) async {
+    List<Record> listRecord = [];
+
+    listRecord =
+        (json.decode(response) as List).map((i) => Record.fromJson(i)).toList();
+    listStringRecord = [];
+    for (var record in listRecord) {
+      String recordJson = jsonEncode(record.toJson());
+      listStringRecord.add(recordJson);
+    }
+    calculateRecord(listStringRecord);
+
+    await prefs!.setStringList('listRecord', listStringRecord);
+  }
+
+  loadListFileBackUp() async {
+    var account = await googleDriveAppData.signInGoogle();
+    if (account != null) {
+      driveApi = await googleDriveAppData.getDriveApi(account);
+      listBackUpFile.value =
+          await googleDriveAppData.getListDriveFile(driveApi!);
+    }
+  }
+
+  handleRestore(String fileName) async {
+    var fileBackUp = await googleDriveAppData.getDriveFile(driveApi!, fileName);
+    if (fileBackUp != null) {
+      var response = await googleDriveAppData.getContentFromDriveFile(
+          driveApi!, fileBackUp);
+      restoreDataFromBackUpFile(response);
+    }
   }
 
   handleBackUp() async {
@@ -184,19 +220,13 @@ class AppController extends GetxController {
     currentPageIndex.value = newIndex!;
   }
 
-  List<String> listLangue = [
-    'Tiếng Việt',
-    'English',
-  ];
-
   Map<String, String> listMapLanguageAndCode = {
+    'English': 'en',
     'Tiếng Việt': 'vi',
-    'English': 'en'
   };
 
-  changeLanguage(String language) {
-    var code = listMapLanguageAndCode[language]!;
-    currentLanguageCode.value = language;
-    Get.updateLocale(Locale(code));
+  changeLanguage(String languageCode) {
+    Get.updateLocale(Locale(languageCode));
+    Get.back();
   }
 }

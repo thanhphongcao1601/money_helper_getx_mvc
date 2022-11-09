@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/setting_module/view/setting_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
@@ -30,7 +29,6 @@ class _SettingPageState extends State<SettingPage> {
   @override
   void initState() {
     super.initState();
-    items = appController.listLangue;
   }
 
   @override
@@ -58,26 +56,34 @@ class _SettingPageState extends State<SettingPage> {
               thickness: 1,
             ),
             ListTile(
+              onTap: () {
+                Get.defaultDialog(
+                    backgroundColor: AppColor.darkPurple,
+                    titleStyle: const TextStyle(color: AppColor.gold),
+                    title: 'setting.language'.tr,
+                    content: Column(
+                      children: [
+                        for (var item
+                            in appController.listMapLanguageAndCode.entries)
+                          InkWell(
+                            onTap: () {
+                              appController.changeLanguage(item.value);
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 10, top: 10),
+                              child: Text(
+                                item.key,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          )
+                      ],
+                    ));
+              },
               title: Text('setting.language'.tr,
                   style: const TextStyle(color: AppColor.gold)),
-              trailing: DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  items: items
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item,
-                                style: const TextStyle(color: AppColor.gold)),
-                          ))
-                      .toList(),
-                  value: appController.currentLanguageCode.value,
-                  onChanged: (value) {
-                    appController.changeLanguage(value.toString());
-                  },
-                  buttonHeight: 40,
-                  buttonWidth: 140,
-                  itemHeight: 40,
-                ),
-              ),
+              trailing: const Icon(Icons.arrow_right, color: AppColor.gold),
             ),
             const Divider(
               thickness: 1,
@@ -119,7 +125,7 @@ class _SettingPageState extends State<SettingPage> {
                                   )),
                               Text(
                                 'setting.backUp.bottomSheet.autoBackUp'.tr,
-                                style: const TextStyle(color: AppColor.gold),
+                                style: const TextStyle(color: AppColor.white),
                               ),
                             ],
                           ),
@@ -139,7 +145,7 @@ class _SettingPageState extends State<SettingPage> {
                                   )),
                               Text(
                                 'setting.backUp.bottomSheet.daily'.tr,
-                                style: const TextStyle(color: AppColor.gold),
+                                style: const TextStyle(color: AppColor.white),
                               ),
                               const SizedBox(
                                 width: 50,
@@ -158,7 +164,7 @@ class _SettingPageState extends State<SettingPage> {
                                   )),
                               Text(
                                 'setting.backUp.bottomSheet.weekly'.tr,
-                                style: const TextStyle(color: AppColor.gold),
+                                style: const TextStyle(color: AppColor.white),
                               ),
                             ],
                           ),
@@ -181,9 +187,12 @@ class _SettingPageState extends State<SettingPage> {
                                     style:
                                         const TextStyle(color: AppColor.gold),
                                   ),
-                                  Text(DateTime.now().toString(),
-                                      style:
-                                          const TextStyle(color: AppColor.gold))
+                                  Text(
+                                      DateTime.now()
+                                          .toString()
+                                          .substring(0, 19),
+                                      style: const TextStyle(
+                                          color: AppColor.white))
                                 ],
                               ),
                               const SizedBox(
@@ -197,7 +206,7 @@ class _SettingPageState extends State<SettingPage> {
                                       style: const TextStyle(
                                           color: AppColor.gold)),
                                   const Text('https://drive.google.com',
-                                      style: TextStyle(color: AppColor.gold))
+                                      style: TextStyle(color: AppColor.white))
                                 ],
                               ),
                               const SizedBox(
@@ -223,7 +232,7 @@ class _SettingPageState extends State<SettingPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              buildCancelButton(),
+                              buildRestoreButton(),
                               buildBackUpButton(),
                             ],
                           )
@@ -345,17 +354,38 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget buildCancelButton() {
+  Widget buildRestoreButton() {
     return SizedBox(
       width: Get.width / 2 - 20,
       child: OutlinedButton(
         onPressed: () {
-          Get.back();
+          // Get.back();
+          Get.defaultDialog(
+              backgroundColor: AppColor.darkPurple,
+              titleStyle: const TextStyle(color: AppColor.gold),
+              title: 'setting.backUp'.tr,
+              content: Column(
+                children: [
+                  for (var file in appController.listBackUpFile.value)
+                    InkWell(
+                      onTap: () {
+                        appController.handleRestore(file.name!);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Text(
+                          file!.name!,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
+                ],
+              ));
         },
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: AppColor.gold),
         ),
-        child: Text('setting.backUp.bottomSheet.cancel'.tr,
+        child: Text('setting.backUp.bottomSheet.restore'.tr,
             style: const TextStyle(color: AppColor.gold)),
       ),
     );

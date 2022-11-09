@@ -1,4 +1,8 @@
 {
+    "[dart]": {
+        "editor.defaultFormatter": "Dart-Code.dart-code",
+        "editor.formatOnSave": true,
+    },
     "cSpell.words": [
         "Cupertino",
         "dashboardbg",
