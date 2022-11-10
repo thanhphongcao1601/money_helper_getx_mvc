@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io' as io;
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
 import 'package:flutter/foundation.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
@@ -7,6 +8,24 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_helper_getx_mvc/api/google_auth_client.dart';
 
 class GoogleDriveAppData {
+  
+  Future<GoogleSignInAccount?> signInGoogle() async {
+    GoogleSignInAccount? googleUser;
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: [
+          drive.DriveApi.driveAppdataScope,
+        ],
+      );
+
+      googleUser =
+          await googleSignIn.signInSilently() ?? await googleSignIn.signIn();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return googleUser;
+  }
+
   Future<String?> getFolderId(drive.DriveApi driveApi) async {
     const mimeType = "application/vnd.google-apps.folder";
     String folderName = "MoneyManagerBackUp";
@@ -40,23 +59,6 @@ class GoogleDriveAppData {
     }
   }
 
-  Future<GoogleSignInAccount?> signInGoogle() async {
-    GoogleSignInAccount? googleUser;
-    try {
-      GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: [
-          drive.DriveApi.driveAppdataScope,
-        ],
-      );
-
-      googleUser =
-          await googleSignIn.signInSilently() ?? await googleSignIn.signIn();
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-    return googleUser;
-  }
-
   ///sign out from google
   Future<void> signOut() async {
     GoogleSignIn googleSignIn = GoogleSignIn();
@@ -83,7 +85,7 @@ class GoogleDriveAppData {
     String? driveFileId,
   }) async {
     try {
-      final folderId = await getFolderId(driveApi);
+      // final folderId = await getFolderId(driveApi);
 
       drive.File fileMetadata = drive.File();
       fileMetadata.name = path.basename(file.absolute.path);
@@ -140,19 +142,19 @@ class GoogleDriveAppData {
 
   Future<List<drive.File?>> getListDriveFile(drive.DriveApi driveApi) async {
     try {
-      final folderId = await getFolderId(driveApi);
+      // final folderId = await getFolderId(driveApi);
       drive.FileList fileList = await driveApi.files.list(
           // q: "'$folderId' in parents",
           spaces: 'appDataFolder',
           $fields: 'files(id, name, modifiedTime)');
 
-      List<drive.File>? files = fileList.files;
+      List<drive.File>? listFiles = fileList.files;
 
-      for (var i = 0; i < files!.length; i++) {
-        print("Id: ${files[i].id} File Name:${files[i].name}");
+      for (var i = 0; i < listFiles!.length; i++) {
+        print("Id: ${listFiles[i].id} File Name:${listFiles[i].name}");
       }
 
-      return files;
+      return listFiles;
     } catch (e) {
       debugPrint(e.toString());
       return [];
@@ -172,7 +174,7 @@ class GoogleDriveAppData {
   Future<drive.File?> getDriveFile(
       drive.DriveApi driveApi, String filename) async {
     try {
-      final folderId = await getFolderId(driveApi);
+      // final folderId = await getFolderId(driveApi);
       drive.FileList fileList = await driveApi.files.list(
           // q: "'$folderId' in parents",
           spaces: 'appDataFolder',
@@ -180,13 +182,8 @@ class GoogleDriveAppData {
 
       List<drive.File>? files = fileList.files;
 
-      for (var i = 0; i < files!.length; i++) {
-        print(files[i].trashed.toString());
-        print("Id: ${files[i].id} File Name:${files[i].name}");
-      }
-
       drive.File? driveFile =
-          files.firstWhere((element) => element.name == filename);
+          files?.firstWhere((element) => element.name == filename);
 
       return driveFile;
     } catch (e) {

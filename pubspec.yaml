@@ -59,6 +59,7 @@ dependencies:
   easy_splash_screen: ^1.0.4
   file: ^6.1.4
   path_provider: ^2.0.11
+  loading_overlay: ^0.3.0
 
 dev_dependencies:
   flutter_test:

@@ -73,10 +73,22 @@ class Languages extends Translations {
           'snackbar.update.success.message': 'You update record completely',
           'snackbar.update.fail.title': 'Fail',
           'snackbar.update.fail.message': 'Fail to update record',
+
           'snackbar.delete.success.title': 'Success',
           'snackbar.delete.success.message': 'You delete a record completely',
           'snackbar.delete.fail.title': 'Fail',
           'snackbar.delete.fail.message': 'Fail to delete record',
+
+          'snackbar.backup.success.title': 'Success',
+          'snackbar.backup.success.message': 'Back up completely',
+          'snackbar.backup.fail.title': 'Fail',
+          'snackbar.backup.fail.message': 'Back up fail',
+
+          'snackbar.restore.success.title': 'Success',
+          'snackbar.restore.success.message': 'Restore completely',
+          'snackbar.restore.fail.title': 'Fail',
+          'snackbar.restore.fail.message':
+              'Restore fail, please check and try again',
         },
         'vi_VN': {
           //app
@@ -97,9 +109,9 @@ class Languages extends Translations {
           //form
           'form.dateAndTime': 'Ngày và giờ',
           'form.dateAndTimeHint': 'Nhập ngày và giờ',
-          'form.type': 'Loại tài khoản',
+          'form.type': 'Thể loại',
           //form-type-value
-          'form.typeHint': 'Chọn loại tài khoản',
+          'form.typeHint': 'Chọn thể loại',
           'form.type.cash': 'Tiền mặt',
           'form.type.bank': 'Ngân hàng',
           'form.type.eWallet': 'Ví điện tử',
@@ -153,6 +165,17 @@ class Languages extends Translations {
           'snackbar.delete.success.message': 'Xóa bản ghi thành công',
           'snackbar.delete.fail.title': 'Thất bại',
           'snackbar.delete.fail.message': 'Hello Xóa bản ghi thất bại',
+
+          'snackbar.backup.success.title': 'Thành công',
+          'snackbar.backup.success.message':
+              'Dữ liệu đã được sao lưu thành công',
+          'snackbar.backup.fail.title': 'Thất bại',
+          'snackbar.backup.fail.message': 'Sao lưu thất bại',
+
+          'snackbar.restore.success.title': 'Thành công',
+          'snackbar.restore.success.message': 'Khôi phục dữ liệu hoàn tất',
+          'snackbar.restore.fail.title': 'Thất bại',
+          'snackbar.restore.fail.message': 'Khôi phục dữ liệu thất bại',
         },
       };
 }

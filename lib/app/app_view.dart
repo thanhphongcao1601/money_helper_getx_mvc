@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:lottie/lottie.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/add_record_module/view/add_record_page.dart';
@@ -31,9 +32,15 @@ class AppPage extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: Obx(() =>
             buildBottomBar(appController.currentPageIndex.value, context)),
-        body: Obx(() => Container(
-            color: AppColor.purple,
-            child: SafeArea(child: buildPageSelected()))));
+        body: Obx(() => LoadingOverlay(
+              progressIndicator:
+                  const CircularProgressIndicator(color: AppColor.gold),
+              color: AppColor.darkPurple,
+              isLoading: appController.isLoading.value,
+              child: Container(
+                  color: AppColor.purple,
+                  child: SafeArea(child: buildPageSelected())),
+            )));
   }
 
   Widget buildPageSelected() {

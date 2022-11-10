@@ -131,6 +131,7 @@ class _AddRecordPageState extends State<AddRecordPage>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: DateTimeField(
+                resetIcon: null,
                 initialValue: dateTime,
                 style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(

@@ -28,6 +28,7 @@ class AppController extends GetxController {
   RxString currentLanguageCode = 'English'.obs;
 
   SharedPreferences? prefs;
+  RxBool isLoading = false.obs;
 
   final userDisplayName = ''.obs;
   final userId = ''.obs;
@@ -37,6 +38,7 @@ class AppController extends GetxController {
   final listBackUpFile = <drive.File?>[].obs;
 
   init() async {
+    isLoading.value = true;
     prefs = await SharedPreferences.getInstance();
     isLockApp.value = prefs?.getBool('isLockApp') ?? false;
     isLogged.value = prefs?.getBool('isLogged') ?? false;
@@ -45,6 +47,12 @@ class AppController extends GetxController {
     await loadListStringRecord();
     await calculateRecord(listStringRecord);
     await loadListFileBackUp();
+
+    String languageCode = prefs?.getString('languageCode') ?? '';
+    if (languageCode != '') {
+      Get.updateLocale(Locale(languageCode));
+    }
+    isLoading.value = false;
   }
 
   getUserLoggedInfo() {
@@ -55,6 +63,7 @@ class AppController extends GetxController {
   }
 
   signIn() async {
+    isLoading.value = true;
     var account = await googleDriveAppData.signInGoogle();
     if (account != null) {
       driveApi = await googleDriveAppData.getDriveApi(account);
@@ -71,9 +80,11 @@ class AppController extends GetxController {
       userEmail.value = account.email;
       userPhotoUrl.value = account.photoUrl ?? '';
     }
+    isLoading.value = false;
   }
 
   signOut() {
+    isLoading.value = true;
     googleDriveAppData.signOut();
 
     userDisplayName.value = '';
@@ -87,6 +98,8 @@ class AppController extends GetxController {
     prefs?.remove('email');
     prefs?.remove('displayName');
     prefs?.remove('photoUrl');
+
+    isLoading.value = false;
   }
 
   restoreDataFromBackUpFile(String response) async {
@@ -102,6 +115,7 @@ class AppController extends GetxController {
     calculateRecord(listStringRecord);
 
     await prefs!.setStringList('listRecord', listStringRecord);
+    isLoading.value = false;
   }
 
   loadListFileBackUp() async {
@@ -114,20 +128,32 @@ class AppController extends GetxController {
   }
 
   handleRestore(String fileName) async {
+    Get.back();
+    Get.back();
+    isLoading.value = true;
     var fileBackUp = await googleDriveAppData.getDriveFile(driveApi!, fileName);
     if (fileBackUp != null) {
       var response = await googleDriveAppData.getContentFromDriveFile(
           driveApi!, fileBackUp);
-      restoreDataFromBackUpFile(response);
+      await restoreDataFromBackUpFile(response);
+      Get.snackbar("snackbar.restore.success.title".tr,
+          "snackbar.restore.success.message".tr,
+          colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
+    } else {
+      Get.snackbar(
+          "snackbar.restore.fail.title".tr, "snackbar.restore.fail.message".tr,
+          colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
     }
+    isLoading.value = false;
   }
 
   handleBackUp() async {
+    Get.back();
+    isLoading.value = true;
     loadListStringRecord();
     var account = await googleDriveAppData.signInGoogle();
     if (account != null) {
       driveApi = await googleDriveAppData.getDriveApi(account);
-
       //create a file
       //create directory path
       final tempDirectory = await getTemporaryDirectory();
@@ -144,17 +170,17 @@ class AppController extends GetxController {
       drive.File? response = await googleDriveAppData.uploadDriveFile(
           driveApi: driveApi!, file: outputFile);
       if (response != null) {
-        Get.back();
         Get.snackbar("snackbar.backup.success.title".tr,
             "snackbar.backup.success.message".tr,
             colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
+        loadListFileBackUp();
       } else {
-        Get.back();
         Get.snackbar(
             "snackbar.backup.fail.title".tr, "snackbar.backup.fail.message".tr,
             colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
       }
     }
+    isLoading.value = false;
   }
 
   handleToggleLockApp(bool isLock) async {
@@ -226,6 +252,7 @@ class AppController extends GetxController {
   };
 
   changeLanguage(String languageCode) {
+    prefs?.setString('languageCode', languageCode);
     Get.updateLocale(Locale(languageCode));
     Get.back();
   }
