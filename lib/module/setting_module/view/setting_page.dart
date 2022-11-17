@@ -30,6 +30,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   void initState() {
     super.initState();
+    settingController.init();
   }
 
   @override
@@ -194,7 +195,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget buildBackUpBottomSheet() {
     return Container(
         padding: const EdgeInsets.all(10),
-        height: Get.height / 2,
+        height: 300,
         color: AppColor.darkPurple,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -218,7 +219,7 @@ class _SettingPageState extends State<SettingPage> {
                           (states) => AppColor.gold),
                       value: settingController.isAutoBackUpCheckBox.value,
                       onChanged: (bool? value) {
-                        settingController.changeIsAutoBackUpCheckBox();
+                        settingController.changeIsAutoBackUpCheckBox(value!);
                       },
                     )),
                 Text(
@@ -227,42 +228,42 @@ class _SettingPageState extends State<SettingPage> {
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Obx(() => Radio(
-                      value: 'day',
-                      fillColor: MaterialStateColor.resolveWith(
-                          (states) => AppColor.gold),
-                      groupValue: settingController.backUpType.value,
-                      activeColor: AppColor.gold,
-                      onChanged: (String? value) {
-                        settingController.changeBackUpType('day');
-                      },
-                    )),
-                Text(
-                  'setting.backUp.bottomSheet.daily'.tr,
-                  style: const TextStyle(color: AppColor.white),
-                ),
-                const SizedBox(
-                  width: 50,
-                ),
-                Obx(() => Radio(
-                      value: 'week',
-                      groupValue: settingController.backUpType.value,
-                      activeColor: AppColor.gold,
-                      fillColor: MaterialStateColor.resolveWith(
-                          (states) => AppColor.gold), //
-                      onChanged: (String? value) {
-                        settingController.changeBackUpType('week');
-                      },
-                    )),
-                Text(
-                  'setting.backUp.bottomSheet.weekly'.tr,
-                  style: const TextStyle(color: AppColor.white),
-                ),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   children: [
+            //     Obx(() => Radio(
+            //           value: 'day',
+            //           fillColor: MaterialStateColor.resolveWith(
+            //               (states) => AppColor.gold),
+            //           groupValue: settingController.backUpType.value,
+            //           activeColor: AppColor.gold,
+            //           onChanged: (String? value) {
+            //             settingController.changeBackUpType('day');
+            //           },
+            //         )),
+            //     Text(
+            //       'setting.backUp.bottomSheet.daily'.tr,
+            //       style: const TextStyle(color: AppColor.white),
+            //     ),
+            //     const SizedBox(
+            //       width: 50,
+            //     ),
+            //     Obx(() => Radio(
+            //           value: 'week',
+            //           groupValue: settingController.backUpType.value,
+            //           activeColor: AppColor.gold,
+            //           fillColor: MaterialStateColor.resolveWith(
+            //               (states) => AppColor.gold), //
+            //           onChanged: (String? value) {
+            //             settingController.changeBackUpType('week');
+            //           },
+            //         )),
+            //     Text(
+            //       'setting.backUp.bottomSheet.weekly'.tr,
+            //       style: const TextStyle(color: AppColor.white),
+            //     ),
+            //   ],
+            // ),
             const SizedBox(
               height: 10,
             ),
@@ -347,24 +348,27 @@ class _SettingPageState extends State<SettingPage> {
           Get.defaultDialog(
               backgroundColor: AppColor.darkPurple,
               titleStyle: const TextStyle(color: AppColor.gold),
-              title: 'setting.backUp'.tr,
+              title: 'setting.backUp.bottomSheet.dialog.chooseFile'.tr,
               content: appController.listBackUpFile.isNotEmpty
                   ? SizedBox(
-                      height: 250,
+                      width: Get.width,
+                      height: Get.height / 3,
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
                             for (var file in appController.listBackUpFile)
-                              InkWell(
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.file_copy,
+                                  color: Colors.white,
+                                ),
                                 onTap: () {
                                   appController.handleRestore(file.name!);
                                 },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    file!.name!,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
+                                title: Text(
+                                  file!.name!
+                                      .substring(0, file.name!.length - 11),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                               )
                           ],

@@ -27,7 +27,7 @@ class _SplashPageState extends State<SplashPage> {
     var isLock = prefs.getBool('isLockApp') ?? false;
     await Future.delayed(const Duration(milliseconds: 1500));
     if (!isLock) {
-      return AppPage();
+      return const AppPage();
     }
     return const SignInPage();
   }

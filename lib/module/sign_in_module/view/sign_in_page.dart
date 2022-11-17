@@ -42,7 +42,7 @@ class _SignInPageState extends State<SignInPage> {
                 onTap: () async {
                   bool pass = await LocalAuth().doAuthenticate();
                   if (pass) {
-                    Get.to(() => AppPage());
+                    Get.to(() => const AppPage());
                   }
                 },
                 child: const FaIcon(

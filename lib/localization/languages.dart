@@ -55,7 +55,7 @@ class Languages extends Translations {
           'setting.signIn': 'Sign in',
           'setting.backUp': 'Back up',
           'setting.backUp.bottomSheet.chooseBackUpTime': 'Google Drive Back up',
-          'setting.backUp.bottomSheet.autoBackUp': 'Auto back up',
+          'setting.backUp.bottomSheet.autoBackUp': 'Auto back up every day',
           'setting.backUp.bottomSheet.daily': 'Daily',
           'setting.backUp.bottomSheet.weekly': 'Weekly',
           'setting.backUp.bottomSheet.backUp': 'Back up',
@@ -63,6 +63,8 @@ class Languages extends Translations {
           'setting.backUp.bottomSheet.time': 'Time',
           'setting.backUp.bottomSheet.url': 'URL',
           'setting.backUp.bottomSheet.email': 'Email',
+          'setting.backUp.bottomSheet.dialog.chooseFile':
+              'Choose file to restore',
           //snackbar
           'snackbar.add.success.title': 'Success',
           'snackbar.add.success.message': 'You add a record completely',
@@ -142,7 +144,7 @@ class Languages extends Translations {
           'setting.signOut': 'Đăng xuất',
           'setting.signIn': 'Đăng nhập',
           'setting.backUp.bottomSheet.chooseBackUpTime': 'Google Drive Sao lưu',
-          'setting.backUp.bottomSheet.autoBackUp': 'Sao lưu tự động',
+          'setting.backUp.bottomSheet.autoBackUp': 'Sao lưu tự động mỗi ngày',
           'setting.backUp.bottomSheet.daily': 'Hằng ngày',
           'setting.backUp.bottomSheet.weekly': 'Hằng tuần',
           'setting.backUp.bottomSheet.backUp': 'Sao lưu',
@@ -150,6 +152,8 @@ class Languages extends Translations {
           'setting.backUp.bottomSheet.time': 'Thời gian',
           'setting.backUp.bottomSheet.url': 'URL',
           'setting.backUp.bottomSheet.email': 'Email',
+          'setting.backUp.bottomSheet.dialog.chooseFile':
+              'Chọn file muốn khôi phục',
           //snackbar
           'snackbar.add.success.title': 'Thành công',
           'snackbar.add.success.message': 'Bạn đã thêm thành công',

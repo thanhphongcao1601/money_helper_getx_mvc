@@ -46,13 +46,32 @@ class AppController extends GetxController {
     await getUserLoggedInfo();
     await loadListStringRecord();
     await calculateRecord(listStringRecord);
-    await loadListFileBackUp();
+    await autoBackUp();
 
+    isLoading.value = false;
+  }
+
+  loadLanguage() async {
+    prefs = await SharedPreferences.getInstance();
     String languageCode = prefs?.getString('languageCode') ?? '';
     if (languageCode != '') {
       Get.updateLocale(Locale(languageCode));
     }
-    isLoading.value = false;
+  }
+
+  autoBackUp() async {
+    bool isAutoBackUp = prefs?.getBool('isAutoBackUp') ?? false;
+
+    if (isLogged.value && isAutoBackUp) {
+      await loadListFileBackUp();
+      final today = DateTime.now();
+
+      //check autobackup already today
+      if (listBackUpFile.isEmpty) return;
+      if (listBackUpFile[0]!.modifiedTime!.day != today.day) {
+        handleBackUp();
+      }
+    }
   }
 
   getUserLoggedInfo() {
@@ -79,6 +98,8 @@ class AppController extends GetxController {
       userId.value = account.id;
       userEmail.value = account.email;
       userPhotoUrl.value = account.photoUrl ?? '';
+
+      loadListFileBackUp();
     }
     isLoading.value = false;
   }
@@ -98,6 +119,8 @@ class AppController extends GetxController {
     prefs?.remove('email');
     prefs?.remove('displayName');
     prefs?.remove('photoUrl');
+
+    listBackUpFile.value = [];
 
     isLoading.value = false;
   }
@@ -119,11 +142,13 @@ class AppController extends GetxController {
   }
 
   loadListFileBackUp() async {
-    var account = await googleDriveAppData.signInGoogle();
-    if (account != null) {
-      driveApi = await googleDriveAppData.getDriveApi(account);
-      listBackUpFile.value =
-          await googleDriveAppData.getListDriveFile(driveApi!);
+    if (isLogged.value) {
+      var account = await googleDriveAppData.signInGoogle();
+      if (account != null) {
+        driveApi = await googleDriveAppData.getDriveApi(account);
+        listBackUpFile.value =
+            await googleDriveAppData.getListDriveFile(driveApi!);
+      }
     }
   }
 
@@ -151,8 +176,10 @@ class AppController extends GetxController {
     Get.back();
     isLoading.value = true;
     loadListStringRecord();
+
     var account = await googleDriveAppData.signInGoogle();
     if (account != null) {
+      loadListFileBackUp();
       driveApi = await googleDriveAppData.getDriveApi(account);
       //create a file
       //create directory path

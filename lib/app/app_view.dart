@@ -10,9 +10,14 @@ import 'package:money_helper_getx_mvc/module/statistic_module/view/statistic_pag
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/widgets/bottom_nav_bar.dart';
 
-// ignore: must_be_immutable
-class AppPage extends StatelessWidget {
-  AppPage({super.key});
+class AppPage extends StatefulWidget {
+  const AppPage({super.key});
+
+  @override
+  State<AppPage> createState() => _AppPageState();
+}
+
+class _AppPageState extends State<AppPage> {
   AppController appController = Get.find();
 
   @override

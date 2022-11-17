@@ -8,7 +8,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_helper_getx_mvc/api/google_auth_client.dart';
 
 class GoogleDriveAppData {
-  
   Future<GoogleSignInAccount?> signInGoogle() async {
     GoogleSignInAccount? googleUser;
     try {
@@ -150,11 +149,19 @@ class GoogleDriveAppData {
 
       List<drive.File>? listFiles = fileList.files;
 
-      for (var i = 0; i < listFiles!.length; i++) {
-        print("Id: ${listFiles[i].id} File Name:${listFiles[i].name}");
-      }
+      final today = DateTime.now();
+      final sevenDayAgo = today.subtract(const Duration(days: 7));
 
-      return listFiles;
+      List<drive.File?> listFileWithInSevenDays = [];
+
+      for (var i = 0; i < listFiles!.length; i++) {
+        // print("Id: ${listFiles[i].id} File Name:${listFiles[i].name}");
+        if (listFiles[i].modifiedTime!.isAfter(sevenDayAgo)) {
+          listFileWithInSevenDays.add(listFiles[i]);
+        }
+      }
+      return listFileWithInSevenDays;
+      // return listFiles;
     } catch (e) {
       debugPrint(e.toString());
       return [];
