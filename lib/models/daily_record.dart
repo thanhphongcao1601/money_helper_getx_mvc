@@ -1,4 +1,4 @@
-import 'package:money_helper_getx_mvc/module/home_module/model/record.dart';
+import 'package:money_helper_getx_mvc/models/record.dart';
 
 class DailyRecord {
   String date;

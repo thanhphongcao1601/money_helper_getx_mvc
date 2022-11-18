@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:lottie/lottie.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
-import 'package:money_helper_getx_mvc/module/add_record_module/view/add_record_page.dart';
-import 'package:money_helper_getx_mvc/module/home_module/view/home_page.dart';
-import 'package:money_helper_getx_mvc/module/setting_module/view/setting_page.dart';
-import 'package:money_helper_getx_mvc/module/statistic_module/view/statistic_page.dart';
+import 'package:money_helper_getx_mvc/module/add_record_module/add_record_page.dart';
+import 'package:money_helper_getx_mvc/module/home_module/home_page.dart';
+import 'package:money_helper_getx_mvc/module/setting_module/setting_page.dart';
+import 'package:money_helper_getx_mvc/module/statistic_module/statistic_page.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/widgets/bottom_nav_bar.dart';
 

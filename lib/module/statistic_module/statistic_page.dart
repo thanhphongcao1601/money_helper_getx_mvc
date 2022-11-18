@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:money_helper_getx_mvc/module/detail_record_module/view/detail_record_page.dart';
-import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
+import 'package:money_helper_getx_mvc/module/detail_record_module/detail_record_page.dart';
+import 'package:money_helper_getx_mvc/module/statistic_module/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
 import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
-import '../../home_module/model/record.dart';
+import '../../models/record.dart';
 
 class StatisticPage extends StatefulWidget {
   const StatisticPage({Key? key}) : super(key: key);

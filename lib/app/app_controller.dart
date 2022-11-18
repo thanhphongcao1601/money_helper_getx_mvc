@@ -9,7 +9,7 @@ import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:money_helper_getx_mvc/module/home_module/model/record.dart';
+import 'package:money_helper_getx_mvc/models/record.dart';
 
 class AppController extends GetxController {
   GoogleDriveAppData googleDriveAppData = GoogleDriveAppData();
@@ -61,12 +61,10 @@ class AppController extends GetxController {
 
   autoBackUp() async {
     bool isAutoBackUp = prefs?.getBool('isAutoBackUp') ?? false;
-
+    await loadListFileBackUp();
     if (isLogged.value && isAutoBackUp) {
-      await loadListFileBackUp();
       final today = DateTime.now();
-
-      //check autobackup already today
+      //check auto backup already today
       if (listBackUpFile.isEmpty) return;
       if (listBackUpFile[0]!.modifiedTime!.day != today.day) {
         handleBackUp();
@@ -81,7 +79,7 @@ class AppController extends GetxController {
     userPhotoUrl.value = prefs?.getString('photoUrl') ?? '';
   }
 
-  signIn() async {
+  Future<GoogleSignInAccount?> signIn() async {
     isLoading.value = true;
     var account = await googleDriveAppData.signInGoogle();
     if (account != null) {
@@ -102,6 +100,7 @@ class AppController extends GetxController {
       loadListFileBackUp();
     }
     isLoading.value = false;
+    return account;
   }
 
   signOut() {
@@ -128,8 +127,7 @@ class AppController extends GetxController {
   restoreDataFromBackUpFile(String response) async {
     List<Record> listRecord = [];
 
-    listRecord =
-        (json.decode(response) as List).map((i) => Record.fromJson(i)).toList();
+    listRecord = (json.decode(response) as List).map((i) => Record.fromJson(i)).toList();
     listStringRecord = [];
     for (var record in listRecord) {
       String recordJson = jsonEncode(record.toJson());
@@ -146,40 +144,35 @@ class AppController extends GetxController {
       var account = await googleDriveAppData.signInGoogle();
       if (account != null) {
         driveApi = await googleDriveAppData.getDriveApi(account);
-        listBackUpFile.value =
-            await googleDriveAppData.getListDriveFile(driveApi!);
+        listBackUpFile.value = await googleDriveAppData.getListDriveFile(driveApi!);
       }
     }
   }
 
   handleRestore(String fileName) async {
-    Get.back();
-    Get.back();
+    Get.back(closeOverlays: true);
     isLoading.value = true;
     var fileBackUp = await googleDriveAppData.getDriveFile(driveApi!, fileName);
     if (fileBackUp != null) {
-      var response = await googleDriveAppData.getContentFromDriveFile(
-          driveApi!, fileBackUp);
+      var response = await googleDriveAppData.getContentFromDriveFile(driveApi!, fileBackUp);
       await restoreDataFromBackUpFile(response);
-      Get.snackbar("snackbar.restore.success.title".tr,
-          "snackbar.restore.success.message".tr,
-          colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
+      Get.snackbar("snackbar.restore.success.title".tr, "snackbar.restore.success.message".tr,
+          duration: const Duration(seconds: 1), colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
     } else {
-      Get.snackbar(
-          "snackbar.restore.fail.title".tr, "snackbar.restore.fail.message".tr,
-          colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
+      Get.snackbar("snackbar.restore.fail.title".tr, "snackbar.restore.fail.message".tr,
+          duration: const Duration(seconds: 1), colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
     }
     isLoading.value = false;
   }
 
   handleBackUp() async {
-    Get.back();
+    Get.back(closeOverlays: true);
     isLoading.value = true;
     loadListStringRecord();
 
-    var account = await googleDriveAppData.signInGoogle();
+    var account = await signIn();
+
     if (account != null) {
-      loadListFileBackUp();
       driveApi = await googleDriveAppData.getDriveApi(account);
       //create a file
       //create directory path
@@ -194,17 +187,14 @@ class AppController extends GetxController {
 
       File outputFile = await file.create();
 
-      drive.File? response = await googleDriveAppData.uploadDriveFile(
-          driveApi: driveApi!, file: outputFile);
+      drive.File? response = await googleDriveAppData.uploadDriveFile(driveApi: driveApi!, file: outputFile);
       if (response != null) {
-        Get.snackbar("snackbar.backup.success.title".tr,
-            "snackbar.backup.success.message".tr,
-            colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
+        Get.snackbar("snackbar.backup.success.title".tr, "snackbar.backup.success.message".tr,
+            duration: const Duration(seconds: 1), colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
         loadListFileBackUp();
       } else {
-        Get.snackbar(
-            "snackbar.backup.fail.title".tr, "snackbar.backup.fail.message".tr,
-            colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
+        Get.snackbar("snackbar.backup.fail.title".tr, "snackbar.backup.fail.message".tr,
+            duration: const Duration(seconds: 1), colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
       }
     }
     isLoading.value = false;
@@ -246,22 +236,19 @@ class AppController extends GetxController {
 
   deleteRecord(Record record) async {
     listRecord.value.remove(record);
-    String deletedRecord = listStringRecord.firstWhere(
-        (element) => Record.fromJson(jsonDecode(element)).id == record.id);
+    String deletedRecord = listStringRecord.firstWhere((element) => Record.fromJson(jsonDecode(element)).id == record.id);
     listStringRecord.remove(deletedRecord);
     await prefs!.setStringList('listRecord', listStringRecord);
   }
 
   updateRecord(Record record) async {
-    var deletedRecord =
-        listRecord.value.firstWhere((element) => element.id == record.id);
+    var deletedRecord = listRecord.value.firstWhere((element) => element.id == record.id);
     listRecord.value.remove(deletedRecord);
     listRecord.value.add(record);
 
     String recordJson = jsonEncode(record.toJson());
 
-    String deletedStringRecord = listStringRecord.firstWhere(
-        (element) => Record.fromJson(jsonDecode(element)).id == record.id);
+    String deletedStringRecord = listStringRecord.firstWhere((element) => Record.fromJson(jsonDecode(element)).id == record.id);
 
     listStringRecord.remove(deletedStringRecord);
     listStringRecord.add(recordJson);
@@ -281,6 +268,6 @@ class AppController extends GetxController {
   changeLanguage(String languageCode) {
     prefs?.setString('languageCode', languageCode);
     Get.updateLocale(Locale(languageCode));
-    Get.back();
+    Get.back(closeOverlays: true);
   }
 }

@@ -4,24 +4,22 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
-import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
-import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
+import 'package:money_helper_getx_mvc/module/home_module/home_controller.dart';
+import 'package:money_helper_getx_mvc/module/statistic_module/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import '../../home_module/model/record.dart';
+import '../../models/record.dart';
 
 class DetailRecordPage extends StatefulWidget {
-  const DetailRecordPage({Key? key, required this.currentRecord})
-      : super(key: key);
+  const DetailRecordPage({Key? key, required this.currentRecord}) : super(key: key);
   final Record currentRecord;
 
   @override
   State<DetailRecordPage> createState() => _DetailRecordPageState();
 }
 
-class _DetailRecordPageState extends State<DetailRecordPage>
-    with TickerProviderStateMixin {
+class _DetailRecordPageState extends State<DetailRecordPage> with TickerProviderStateMixin {
   AppController appController = Get.put(AppController());
   HomeController homeController = Get.put(HomeController());
   StatisticController statisticController = Get.put(StatisticController());
@@ -55,9 +53,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
 
     dateTime = DateTime.fromMillisecondsSinceEpoch(currentRecord.datetime!);
     datetimeC.text = dateTime.millisecondsSinceEpoch.toString();
-    currentItemGenre = currentRecord.money! < 0
-        ? currentRecord.genre.toString()
-        : currentRecord.type.toString();
+    currentItemGenre = currentRecord.money! < 0 ? currentRecord.genre.toString() : currentRecord.type.toString();
     genreC.text = currentItemGenre.tr;
     errorMessage = '';
     moneyC.text = currentRecord.money!.abs().toString();
@@ -82,12 +78,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buildDateTimeField(),
-                    buildGenreField(),
-                    buildMoneyField(),
-                    buildContentField()
-                  ],
+                  children: [buildDateTimeField(), buildGenreField(), buildMoneyField(), buildContentField()],
                 ),
               ),
               buildErrorMessage(),
@@ -136,29 +127,22 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: DateTimeField(
                 resetIcon: null,
                 style: const TextStyle(color: Colors.black),
                 initialValue: dateTime,
-                decoration: InputDecoration(
-                    hintText: 'form.dateAndTimeHint'.tr,
-                    hintStyle: const TextStyle(color: Colors.grey)),
+                decoration: InputDecoration(hintText: 'form.dateAndTimeHint'.tr, hintStyle: const TextStyle(color: Colors.grey)),
                 format: DateFormat("yyyy-MM-dd  HH:mm"),
                 onShowPicker: (context, currentValue) async {
                   final date = await showDatePicker(
-                      context: context,
-                      firstDate: DateTime(2000),
-                      initialDate: currentValue ?? DateTime.now(),
-                      lastDate: DateTime(2100));
+                      context: context, firstDate: DateTime(2000), initialDate: currentValue ?? DateTime.now(), lastDate: DateTime(2100));
                   if (date != null) {
                     final time = await showTimePicker(
                       context: context,
-                      initialTime: TimeOfDay.fromDateTime(
-                          currentValue ?? DateTime.now()),
+                      initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                     );
                     dateTime = DateTimeField.combine(date, time);
                     return dateTime;
@@ -184,18 +168,14 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           ),
           Container(
               margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: TextField(
                   style: const TextStyle(color: Colors.black),
                   controller: genreC,
                   readOnly: true,
-                  decoration: InputDecoration(
-                      hintText: 'form.typeHint'.tr,
-                      border: InputBorder.none,
-                      hintStyle: const TextStyle(color: Colors.grey)),
+                  decoration: InputDecoration(hintText: 'form.typeHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
                 ),
               )),
           GridView.count(
@@ -205,10 +185,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
             mainAxisSpacing: 5,
             crossAxisSpacing: 5,
             childAspectRatio: 3 / 1,
-            children: [
-              for (var item in AppConstantList.listIncomeType)
-                buildItemGenre(item, currentItemGenre == item)
-            ],
+            children: [for (var item in AppConstantList.listIncomeType) buildItemGenre(item, currentItemGenre == item)],
           ),
         ],
       );
@@ -223,18 +200,14 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
                 style: const TextStyle(color: Colors.black),
                 controller: genreC,
                 readOnly: true,
-                decoration: InputDecoration(
-                    hintText: 'form.typeHint'.tr,
-                    border: InputBorder.none,
-                    hintStyle: const TextStyle(color: Colors.grey)),
+                decoration: InputDecoration(hintText: 'form.typeHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
         GridView.count(
@@ -244,10 +217,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           mainAxisSpacing: 5,
           crossAxisSpacing: 5,
           childAspectRatio: 3 / 1,
-          children: [
-            for (var item in AppConstantList.listExpenseGenre)
-              buildItemGenre(item, currentItemGenre == item)
-          ],
+          children: [for (var item in AppConstantList.listExpenseGenre) buildItemGenre(item, currentItemGenre == item)],
         ),
       ],
     );
@@ -264,8 +234,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
@@ -273,10 +242,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 style: const TextStyle(color: Colors.black),
                 controller: moneyC,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    hintText: 'form.moneyHint'.tr,
-                    border: InputBorder.none,
-                    hintStyle: const TextStyle(color: Colors.grey)),
+                decoration: InputDecoration(hintText: 'form.moneyHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
       ],
@@ -294,17 +260,14 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
                 style: const TextStyle(color: Colors.black),
                 controller: contentC,
-                decoration: InputDecoration(
-                    hintText: 'form.contentHint'.tr,
-                    border: InputBorder.none,
-                    hintStyle: const TextStyle(color: Colors.grey)),
+                decoration:
+                    InputDecoration(hintText: 'form.contentHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
       ],
@@ -350,8 +313,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: Colors.red),
         ),
-        child: Text('form.button.delete'.tr,
-            style: const TextStyle(color: Colors.red)),
+        child: Text('form.button.delete'.tr, style: const TextStyle(color: Colors.red)),
       ),
     );
   }
@@ -361,13 +323,12 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       width: Get.width / 2,
       child: OutlinedButton(
         onPressed: () {
-          Get.back();
+          Get.back(closeOverlays: true);
         },
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: AppColor.gold),
         ),
-        child: Text('form.button.cancel'.tr,
-            style: const TextStyle(color: AppColor.gold)),
+        child: Text('form.button.cancel'.tr, style: const TextStyle(color: AppColor.gold)),
       ),
     );
   }
@@ -377,13 +338,10 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       onTap: () => chooseItem(item),
       child: Container(
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: isSelected ? AppColor.gold : Colors.grey,
-            borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(color: isSelected ? AppColor.gold : Colors.grey, borderRadius: BorderRadius.circular(10)),
         child: Text(
           item.tr,
-          style:
-              TextStyle(color: isSelected ? AppColor.darkPurple : Colors.white),
+          style: TextStyle(color: isSelected ? AppColor.darkPurple : Colors.white),
         ),
       ),
     );
@@ -413,11 +371,13 @@ class _DetailRecordPageState extends State<DetailRecordPage>
             homeController.loadAllData();
             statisticController.loadAllData();
 
-            Get.back();
-            Get.back();
-            Get.snackbar("snackbar.delete.success.title".tr,
+            Get.back(closeOverlays: true);
+            Get.snackbar(
+                "snackbar.delete.success.title".tr,
+                duration: const Duration(seconds: 1),
                 "snackbar.delete.success.message".tr,
-                colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
+                colorText: AppColor.darkPurple,
+                backgroundColor: AppColor.gold);
           },
           child: Text(
             "form.button.delete".tr,
@@ -430,7 +390,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
               side: const BorderSide(color: AppColor.gold),
             ),
             onPressed: () {
-              Get.back();
+              Get.back(closeOverlays: true);
             },
             child: Text(
               "form.button.cancel".tr,
@@ -469,18 +429,15 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           genre: isExpense ? currentItemGenre : null,
           type: !isExpense ? currentItemGenre : null,
           content: contentC.text,
-          money: isExpense
-              ? -int.parse(moneyC.text.replaceAll(',', ''))
-              : int.parse(moneyC.text.replaceAll(',', '')));
+          money: isExpense ? -int.parse(moneyC.text.replaceAll(',', '')) : int.parse(moneyC.text.replaceAll(',', '')));
 
       appController.updateRecord(recordExpense);
       homeController.loadAllData();
       statisticController.loadAllData();
 
-      Get.back();
-      Get.snackbar("snackbar.update.success.title".tr,
-          "snackbar.update.success.message".tr,
-          colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
+      Get.back(closeOverlays: true);
+      Get.snackbar("snackbar.update.success.title".tr, "snackbar.update.success.message".tr,
+          duration: const Duration(seconds: 1), colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
     }
   }
 }

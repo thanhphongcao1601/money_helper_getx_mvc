@@ -4,9 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
-import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
-import 'package:money_helper_getx_mvc/module/home_module/model/record.dart';
-import 'package:money_helper_getx_mvc/module/statistic_module/controller/statistic_controller.dart';
+import 'package:money_helper_getx_mvc/module/home_module/home_controller.dart';
+import 'package:money_helper_getx_mvc/models/record.dart';
+import 'package:money_helper_getx_mvc/module/statistic_module/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:uuid/uuid.dart';
@@ -19,8 +19,7 @@ class AddRecordPage extends StatefulWidget {
   State<AddRecordPage> createState() => _AddRecordPageState();
 }
 
-class _AddRecordPageState extends State<AddRecordPage>
-    with TickerProviderStateMixin {
+class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateMixin {
   AppController appController = Get.put(AppController());
   HomeController homeController = Get.put(HomeController());
   StatisticController statisticController = Get.put(StatisticController());
@@ -74,12 +73,7 @@ class _AddRecordPageState extends State<AddRecordPage>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buildDateTimeField(),
-                    buildGenreField(),
-                    buildMoneyField(),
-                    buildContentField()
-                  ],
+                  children: [buildDateTimeField(), buildGenreField(), buildMoneyField(), buildContentField()],
                 ),
               ),
               buildErrorMessage(),
@@ -126,29 +120,22 @@ class _AddRecordPageState extends State<AddRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: DateTimeField(
                 resetIcon: null,
                 initialValue: dateTime,
                 style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                    hintText: 'form.dateAndTimeHint'.tr,
-                    hintStyle: const TextStyle(color: Colors.grey)),
+                decoration: InputDecoration(hintText: 'form.dateAndTimeHint'.tr, hintStyle: const TextStyle(color: Colors.grey)),
                 format: DateFormat("yyyy-MM-dd  HH:mm"),
                 onShowPicker: (context, currentValue) async {
                   final date = await showDatePicker(
-                      context: context,
-                      firstDate: DateTime(2000),
-                      initialDate: currentValue ?? DateTime.now(),
-                      lastDate: DateTime(2100));
+                      context: context, firstDate: DateTime(2000), initialDate: currentValue ?? DateTime.now(), lastDate: DateTime(2100));
                   if (date != null) {
                     final time = await showTimePicker(
                       context: context,
-                      initialTime: TimeOfDay.fromDateTime(
-                          currentValue ?? DateTime.now()),
+                      initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                     );
                     dateTime = DateTimeField.combine(date, time);
                     return dateTime;
@@ -174,18 +161,14 @@ class _AddRecordPageState extends State<AddRecordPage>
           ),
           Container(
               margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: TextField(
                   controller: genreC,
                   style: const TextStyle(color: Colors.black),
                   readOnly: true,
-                  decoration: InputDecoration(
-                      hintText: 'form.typeHint'.tr,
-                      border: InputBorder.none,
-                      hintStyle: const TextStyle(color: Colors.grey)),
+                  decoration: InputDecoration(hintText: 'form.typeHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
                 ),
               )),
           GridView.count(
@@ -195,10 +178,7 @@ class _AddRecordPageState extends State<AddRecordPage>
             mainAxisSpacing: 5,
             crossAxisSpacing: 5,
             childAspectRatio: 3 / 1,
-            children: [
-              for (var item in AppConstantList.listIncomeType)
-                buildItemGenre(item, currentItemGenre == item)
-            ],
+            children: [for (var item in AppConstantList.listIncomeType) buildItemGenre(item, currentItemGenre == item)],
           ),
         ],
       );
@@ -213,18 +193,14 @@ class _AddRecordPageState extends State<AddRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
                 controller: genreC,
                 style: const TextStyle(color: Colors.black),
                 readOnly: true,
-                decoration: InputDecoration(
-                    hintText: 'form.typeHint'.tr,
-                    border: InputBorder.none,
-                    hintStyle: const TextStyle(color: Colors.grey)),
+                decoration: InputDecoration(hintText: 'form.typeHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
         GridView.count(
@@ -234,10 +210,7 @@ class _AddRecordPageState extends State<AddRecordPage>
           mainAxisSpacing: 5,
           crossAxisSpacing: 5,
           childAspectRatio: 3 / 1,
-          children: [
-            for (var item in AppConstantList.listExpenseGenre)
-              buildItemGenre(item, currentItemGenre == item)
-          ],
+          children: [for (var item in AppConstantList.listExpenseGenre) buildItemGenre(item, currentItemGenre == item)],
         ),
       ],
     );
@@ -254,8 +227,7 @@ class _AddRecordPageState extends State<AddRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
@@ -263,10 +235,7 @@ class _AddRecordPageState extends State<AddRecordPage>
                 controller: moneyC,
                 style: const TextStyle(color: Colors.black),
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    hintText: 'form.moneyHint'.tr,
-                    border: InputBorder.none,
-                    hintStyle: const TextStyle(color: Colors.grey)),
+                decoration: InputDecoration(hintText: 'form.moneyHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
       ],
@@ -284,17 +253,14 @@ class _AddRecordPageState extends State<AddRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
                 controller: contentC,
                 style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                    hintText: 'form.contentHint'.tr,
-                    border: InputBorder.none,
-                    hintStyle: const TextStyle(color: Colors.grey)),
+                decoration:
+                    InputDecoration(hintText: 'form.contentHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
       ],
@@ -335,13 +301,12 @@ class _AddRecordPageState extends State<AddRecordPage>
       width: Get.width / 2,
       child: OutlinedButton(
         onPressed: () {
-          Get.back();
+          Get.back(closeOverlays: true);
         },
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: AppColor.gold),
         ),
-        child: Text('form.button.cancel'.tr,
-            style: const TextStyle(color: AppColor.gold)),
+        child: Text('form.button.cancel'.tr, style: const TextStyle(color: AppColor.gold)),
       ),
     );
   }
@@ -351,13 +316,10 @@ class _AddRecordPageState extends State<AddRecordPage>
       onTap: () => chooseItem(item),
       child: Container(
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: isSelected ? AppColor.gold : Colors.grey,
-            borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(color: isSelected ? AppColor.gold : Colors.grey, borderRadius: BorderRadius.circular(10)),
         child: Text(
           item.tr,
-          style:
-              TextStyle(color: isSelected ? AppColor.darkPurple : Colors.white),
+          style: TextStyle(color: isSelected ? AppColor.darkPurple : Colors.white),
         ),
       ),
     );
@@ -401,18 +363,19 @@ class _AddRecordPageState extends State<AddRecordPage>
           genre: isExpense ? currentItemGenre : null,
           type: !isExpense ? currentItemGenre : null,
           content: contentC.text,
-          money: isExpense
-              ? -int.parse(moneyC.text.replaceAll(',', ''))
-              : int.parse(moneyC.text.replaceAll(',', '')));
+          money: isExpense ? -int.parse(moneyC.text.replaceAll(',', '')) : int.parse(moneyC.text.replaceAll(',', '')));
 
       appController.addRecord(recordExpense);
       homeController.loadAllData();
       statisticController.loadAllData();
 
-      Get.back();
+      Get.back(closeOverlays: true);
       Get.snackbar(
-          "snackbar.add.success.title".tr, "snackbar.add.success.message".tr,
-          colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
+          duration: const Duration(seconds: 1),
+          "snackbar.add.success.title".tr,
+          "snackbar.add.success.message".tr,
+          colorText: AppColor.darkPurple,
+          backgroundColor: AppColor.gold);
     }
   }
 }

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/app/app_view.dart';
-import 'package:money_helper_getx_mvc/module/home_module/controller/home_controller.dart';
-import 'package:money_helper_getx_mvc/module/sign_in_module/view/sign_in_page.dart';
+import 'package:money_helper_getx_mvc/module/home_module/home_controller.dart';
+import 'package:money_helper_getx_mvc/module/sign_in_module/sign_in_page.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
