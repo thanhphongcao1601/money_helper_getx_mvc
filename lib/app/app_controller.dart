@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:money_helper_getx_mvc/api/google_drive_app_data.dart';
+import 'package:money_helper_getx_mvc/module/home_module/home_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,31 +80,42 @@ class AppController extends GetxController {
     userPhotoUrl.value = prefs?.getString('photoUrl') ?? '';
   }
 
-  Future<GoogleSignInAccount?> signIn() async {
+  signIn() async {
     isLoading.value = true;
     var account = await googleDriveAppData.signInGoogle();
     if (account != null) {
       driveApi = await googleDriveAppData.getDriveApi(account);
 
-      prefs?.setBool('isLogged', true);
-      prefs?.setString('id', account.id);
-      prefs?.setString('email', account.email);
-      prefs?.setString('displayName', account.displayName ?? "");
-      prefs?.setString('photoUrl', account.photoUrl ?? "");
+      saveLoggedInfo(account);
 
-      isLogged.value = true;
-      userDisplayName.value = account.displayName ?? '';
-      userId.value = account.id;
-      userEmail.value = account.email;
-      userPhotoUrl.value = account.photoUrl ?? '';
-
-      loadListFileBackUp();
+      await loadListFileBackUp();
+      if (listBackUpFile.isNotEmpty) {
+        handleRestore(listBackUpFile.first!.name!);
+      } else {
+        listRecord.value.clear();
+        listStringRecord.clear();
+      }
+      init();
     }
     isLoading.value = false;
-    return account;
   }
 
-  signOut() {
+  saveLoggedInfo(GoogleSignInAccount account) {
+    prefs?.setBool('isLogged', true);
+    prefs?.setString('id', account.id);
+    prefs?.setString('email', account.email);
+    prefs?.setString('displayName', account.displayName ?? "");
+    prefs?.setString('photoUrl', account.photoUrl ?? "");
+
+    isLogged.value = true;
+    userDisplayName.value = account.displayName ?? '';
+    userId.value = account.id;
+    userEmail.value = account.email;
+    userPhotoUrl.value = account.photoUrl ?? '';
+  }
+
+  signOut() async {
+    // await handleBackUp(isShowNotification: false);
     isLoading.value = true;
     googleDriveAppData.signOut();
 
@@ -119,8 +131,11 @@ class AppController extends GetxController {
     prefs?.remove('displayName');
     prefs?.remove('photoUrl');
 
-    listBackUpFile.value = [];
+    listBackUpFile.clear();
+    listRecord.value.clear();
+    listStringRecord.clear();
 
+    await Future.delayed(Duration(seconds: 1));
     isLoading.value = false;
   }
 
@@ -170,9 +185,11 @@ class AppController extends GetxController {
     isLoading.value = true;
     loadListStringRecord();
 
-    var account = await signIn();
+    var account = await googleDriveAppData.signInGoogle();
 
     if (account != null) {
+      saveLoggedInfo(account);
+
       driveApi = await googleDriveAppData.getDriveApi(account);
       //create a file
       //create directory path
@@ -224,6 +241,8 @@ class AppController extends GetxController {
       listRecord.value.add(record);
     }
     listRecord.value.sortReversed();
+    HomeController homeController = Get.find();
+    homeController.init();
   }
 
   addRecord(Record record) async {

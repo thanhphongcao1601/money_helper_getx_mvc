@@ -21,6 +21,7 @@ class Languages extends Translations {
           'tab.income': 'Income',
           //form
           'form.dateAndTime': 'Date and Time',
+          'form.dateAndTime.validate' : 'Date and time can not be empty',
           'form.dateAndTimeHint': 'Enter your date',
           'form.type': 'Type',
           'form.typeHint': 'Choose money type',
@@ -29,23 +30,37 @@ class Languages extends Translations {
           'form.type.bank': 'Bank',
           'form.type.eWallet': 'E-wallet',
           'form.genre': 'Genre',
+          'form.genre.validate' : 'Genre can not be empty',
           'form.genreHint': 'Choose your genre',
           //form-genre-value
-          'form.genre.mustHave': 'Must have',
-          'form.genre.niceToHave': 'Nice to have',
-          'form.genre.wasted': 'Wasted',
+          // 'form.genre.mustHave': 'Must have',
+          // 'form.genre.niceToHave': 'Nice to have',
+          // 'form.genre.wasted': 'Wasted',
+          'form.genre.eating': 'Eating',
+          'form.genre.entertainment': 'Entertainment',
+          'form.genre.development': 'Development',
+          'form.genre.transportation': 'Transportation',
+          'form.genre.hobby': 'Hobby',
+          'form.genre.living': 'Living',
+          'form.genre.clothes': 'Clothes',
+          'form.genre.beautify': 'Beautify',
+          'form.genre.health': 'Health',
+          'form.genre.education': 'Education',
+          'form.genre.event': 'Event',
+          'form.genre.other': 'Other',
 
           'form.money': 'Money',
           'form.moneyHint': 'Enter your money',
-          'form.money.validate': 'Money can not empty',
+          'form.money.validate': 'Money can not be empty',
           'form.content': 'Content',
           'form.contentHint': 'Enter your content',
+          'form.content.validate': 'Content can not be empty',
+
           'form.button.save': 'Save',
           'form.button.cancel': 'Cancel',
           'form.button.delete': 'Delete',
           'form.dialog.delete.title': 'Delete record?',
-          'form.dialog.delete.content':
-              'After delete record, you can not restore the record!',
+          'form.dialog.delete.content': 'After delete record, you can not restore the record!',
           //setting
           'setting.lockAppBiometrics': 'Biometrics',
           'setting.darkMode': 'Dark mode',
@@ -63,8 +78,7 @@ class Languages extends Translations {
           'setting.backUp.bottomSheet.time': 'Time',
           'setting.backUp.bottomSheet.url': 'URL',
           'setting.backUp.bottomSheet.email': 'Email',
-          'setting.backUp.bottomSheet.dialog.chooseFile':
-              'Choose file to restore',
+          'setting.backUp.bottomSheet.dialog.chooseFile': 'Choose file to restore',
           //snackbar
           'snackbar.add.success.title': 'Success',
           'snackbar.add.success.message': 'You add a record completely',
@@ -89,8 +103,7 @@ class Languages extends Translations {
           'snackbar.restore.success.title': 'Success',
           'snackbar.restore.success.message': 'Restore completely',
           'snackbar.restore.fail.title': 'Fail',
-          'snackbar.restore.fail.message':
-              'Restore fail, please check and try again',
+          'snackbar.restore.fail.message': 'Restore fail, please check and try again',
         },
         'vi_VN': {
           //app
@@ -110,7 +123,7 @@ class Languages extends Translations {
           'tab.income': 'Thu',
           //form
           'form.dateAndTime': 'Ngày và giờ',
-          'form.dateAndTimeHint': 'Nhập ngày và giờ',
+          'form.dateAndTime.validate' : 'Phải chọn ngày và giờ',           'form.dateAndTimeHint': 'Nhập ngày và giờ',
           'form.type': 'Thể loại',
           //form-type-value
           'form.typeHint': 'Chọn thể loại',
@@ -118,23 +131,36 @@ class Languages extends Translations {
           'form.type.bank': 'Ngân hàng',
           'form.type.eWallet': 'Ví điện tử',
           'form.genre': 'Thể loại',
+          'form.genre.validate':'Phải chọn thể loại', 
           'form.genreHint': 'Chọn thể loại',
           //form-genre-value
-          'form.genre.mustHave': 'Cần thiết',
-          'form.genre.niceToHave': 'Nên',
-          'form.genre.wasted': 'Lãng phí',
+          // 'form.genre.mustHave': 'Cần thiết',
+          // 'form.genre.niceToHave': 'Nên',
+          // 'form.genre.wasted': 'Lãng phí',
+          'form.genre.eating': 'Ăn uống',
+          'form.genre.entertainment': 'Giải trí',
+          'form.genre.development': 'Tự phát triển',
+          'form.genre.transportation': 'Xăng xe',
+          'form.genre.hobby': 'Sở thích',
+          'form.genre.living': 'Sinh hoạt',
+          'form.genre.clothes': 'Áo quần',
+          'form.genre.beautify': 'Làm đẹp',
+          'form.genre.health': 'Sức khỏe',
+          'form.genre.education': 'Giáo dục',
+          'form.genre.event': 'Sự kiện',
+          'form.genre.other': 'Khác',
 
           'form.money': 'Số tiền',
           'form.moneyHint': 'Nhập số tiền',
           'form.money.validate': 'Số tiền không được để trống',
           'form.content': 'Nội dung',
           'form.contentHint': 'Nhập nội dung',
+          'form.content.validate': 'Thiếu nội dung',
           'form.button.save': 'Lưu',
           'form.button.cancel': 'Hủy',
           'form.button.delete': 'Xóa',
           'form.dialog.delete.title': 'Xóa bản ghi?',
-          'form.dialog.delete.content':
-              'Sau khi xóa, dữ liệu sẽ không thể khôi phục!',
+          'form.dialog.delete.content': 'Sau khi xóa, dữ liệu sẽ không thể khôi phục!',
           //setting
           'setting.lockAppBiometrics': 'Xác thực bằng vân tay',
           'setting.darkMode': 'Chủ đề tối',
@@ -152,8 +178,7 @@ class Languages extends Translations {
           'setting.backUp.bottomSheet.time': 'Thời gian',
           'setting.backUp.bottomSheet.url': 'URL',
           'setting.backUp.bottomSheet.email': 'Email',
-          'setting.backUp.bottomSheet.dialog.chooseFile':
-              'Chọn file muốn khôi phục',
+          'setting.backUp.bottomSheet.dialog.chooseFile': 'Chọn file muốn khôi phục',
           //snackbar
           'snackbar.add.success.title': 'Thành công',
           'snackbar.add.success.message': 'Bạn đã thêm thành công',
@@ -171,8 +196,7 @@ class Languages extends Translations {
           'snackbar.delete.fail.message': 'Hello Xóa bản ghi thất bại',
 
           'snackbar.backup.success.title': 'Thành công',
-          'snackbar.backup.success.message':
-              'Dữ liệu đã được sao lưu thành công',
+          'snackbar.backup.success.message': 'Dữ liệu đã được sao lưu thành công',
           'snackbar.backup.fail.title': 'Thất bại',
           'snackbar.backup.fail.message': 'Sao lưu thất bại',
 

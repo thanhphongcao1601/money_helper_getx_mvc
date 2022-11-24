@@ -131,9 +131,44 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
                 format: DateFormat("yyyy-MM-dd  HH:mm"),
                 onShowPicker: (context, currentValue) async {
                   final date = await showDatePicker(
-                      context: context, firstDate: DateTime(2000), initialDate: currentValue ?? DateTime.now(), lastDate: DateTime(2100));
+                      builder: (context, child) => Theme(
+                            data: Theme.of(context).copyWith(
+                              colorScheme: const ColorScheme.light(
+                                primaryContainer: AppColor.purple,
+                                primary: AppColor.darkPurple, // header background color
+                                onPrimary: AppColor.gold, // header text color
+                                onSurface: AppColor.darkPurple, // body text color
+                              ),
+                              textButtonTheme: TextButtonThemeData(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: AppColor.darkPurple, // button text color
+                                ),
+                              ),
+                            ),
+                            child: child!,
+                          ),
+                      context: context,
+                      firstDate: DateTime(2000),
+                      initialDate: currentValue ?? DateTime.now(),
+                      lastDate: DateTime(2100));
                   if (date != null) {
                     final time = await showTimePicker(
+                      builder: (context, child) => Theme(
+                        data: Theme.of(context).copyWith(
+                          colorScheme: const ColorScheme.light(
+                            primaryContainer: AppColor.purple,
+                            primary: AppColor.darkPurple, // header background color
+                            onPrimary: AppColor.gold, // header text color
+                            onSurface: AppColor.darkPurple, // body text color
+                          ),
+                          textButtonTheme: TextButtonThemeData(
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppColor.darkPurple, // button text color
+                            ),
+                          ),
+                        ),
+                        child: child!,
+                      ),
                       context: context,
                       initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                     );
@@ -338,16 +373,16 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
     });
 
     if (datetimeC.text.isEmpty) {
-      errorMessage += 'Date & Time can not null\n';
+      errorMessage += '${'form.dateAndTime.validate'.tr}\n';
     }
     if (genreC.text.isEmpty) {
-      errorMessage += 'Type can not null\n';
+      errorMessage += '${'form.genre.validate'.tr}\n';
     }
     if (moneyC.text.isEmpty) {
-      errorMessage += 'Money can not null\n';
+      errorMessage += '${'form.money.validate'.tr}\n';
     }
     if (contentC.text.isEmpty) {
-      errorMessage += 'Content can not null\n';
+      errorMessage += '${'form.content.validate'.tr}\n';
     }
 
     if (errorMessage != '') {

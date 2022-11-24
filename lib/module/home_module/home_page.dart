@@ -130,6 +130,7 @@ class _HomePageState extends State<HomePage> {
                   child: Obx(() => AutoSizeText(
                         Helper().formatMoney(homeController.totalMonthExpense.value + homeController.totalMonthIncome.value),
                         maxLines: 1,
+                        textAlign: TextAlign.right,
                         style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: AppColor.darkPurple),
                       )),
                 ),
