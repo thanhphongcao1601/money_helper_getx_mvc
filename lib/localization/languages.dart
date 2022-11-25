@@ -21,7 +21,7 @@ class Languages extends Translations {
           'tab.income': 'Income',
           //form
           'form.dateAndTime': 'Date and Time',
-          'form.dateAndTime.validate' : 'Date and time can not be empty',
+          'form.dateAndTime.validate': 'Date and time can not be empty',
           'form.dateAndTimeHint': 'Enter your date',
           'form.type': 'Type',
           'form.typeHint': 'Choose money type',
@@ -30,7 +30,7 @@ class Languages extends Translations {
           'form.type.bank': 'Bank',
           'form.type.eWallet': 'E-wallet',
           'form.genre': 'Genre',
-          'form.genre.validate' : 'Genre can not be empty',
+          'form.genre.validate': 'Genre can not be empty',
           'form.genreHint': 'Choose your genre',
           //form-genre-value
           // 'form.genre.mustHave': 'Must have',
@@ -61,6 +61,11 @@ class Languages extends Translations {
           'form.button.delete': 'Delete',
           'form.dialog.delete.title': 'Delete record?',
           'form.dialog.delete.content': 'After delete record, you can not restore the record!',
+
+          'form.dialog.addNewItemSelected.title': 'Add new item',
+          'form.dialog.deleteItemSelected.title': 'Delete item?',
+          'form.dialog.deleteItemSelected.content': 'Delete selected item',
+          'form.addNewItemSelectedHint': 'Enter new item',
           //setting
           'setting.lockAppBiometrics': 'Biometrics',
           'setting.darkMode': 'Dark mode',
@@ -123,7 +128,7 @@ class Languages extends Translations {
           'tab.income': 'Thu',
           //form
           'form.dateAndTime': 'Ngày và giờ',
-          'form.dateAndTime.validate' : 'Phải chọn ngày và giờ',           'form.dateAndTimeHint': 'Nhập ngày và giờ',
+          'form.dateAndTime.validate': 'Phải chọn ngày và giờ', 'form.dateAndTimeHint': 'Nhập ngày và giờ',
           'form.type': 'Thể loại',
           //form-type-value
           'form.typeHint': 'Chọn thể loại',
@@ -131,7 +136,7 @@ class Languages extends Translations {
           'form.type.bank': 'Ngân hàng',
           'form.type.eWallet': 'Ví điện tử',
           'form.genre': 'Thể loại',
-          'form.genre.validate':'Phải chọn thể loại', 
+          'form.genre.validate': 'Phải chọn thể loại',
           'form.genreHint': 'Chọn thể loại',
           //form-genre-value
           // 'form.genre.mustHave': 'Cần thiết',
@@ -161,6 +166,8 @@ class Languages extends Translations {
           'form.button.delete': 'Xóa',
           'form.dialog.delete.title': 'Xóa bản ghi?',
           'form.dialog.delete.content': 'Sau khi xóa, dữ liệu sẽ không thể khôi phục!',
+          'form.dialog.deleteItemSelected.title': 'Xác nhận xóa?',
+          'form.dialog.deleteItemSelected.content': 'Xóa mục được chọn',
           //setting
           'setting.lockAppBiometrics': 'Xác thực bằng vân tay',
           'setting.darkMode': 'Chủ đề tối',

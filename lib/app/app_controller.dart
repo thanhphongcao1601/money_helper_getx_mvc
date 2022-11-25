@@ -38,21 +38,44 @@ class AppController extends GetxController {
 
   final listBackUpFile = <drive.File?>[].obs;
 
-  init() async {
+  final listGenre = <String>[].obs;
+  final listType = <String>[].obs;
+
+  Future init() async {
     isLoading.value = true;
     prefs = await SharedPreferences.getInstance();
     isLockApp.value = prefs?.getBool('isLockApp') ?? false;
-    isLogged.value = prefs?.getBool('isLogged') ?? false;
 
-    await getUserLoggedInfo();
+    getUserLoggedInfo();
     await loadListStringRecord();
-    await calculateRecord(listStringRecord);
+    calculateRecord(listStringRecord);
+    loadItemSelectedList();
     await autoBackUp();
 
     isLoading.value = false;
   }
 
-  loadLanguage() async {
+  void loadItemSelectedList() {
+    List<String> rootListExpenseGenre = AppConstantList.listExpenseGenre;
+    List<String> rootListIncomeType = AppConstantList.listIncomeType;
+
+    List<String> customListExpenseGenre = prefs?.getStringList('customListExpenseGenre') ?? [];
+    List<String> customListIncomeType = prefs?.getStringList('customListIncomeType') ?? [];
+
+    if (customListExpenseGenre.isEmpty) {
+      listGenre.value = rootListExpenseGenre;
+    } else {
+      listGenre.value = customListExpenseGenre;
+    }
+
+    if (customListIncomeType.isEmpty) {
+      listType.value = rootListIncomeType;
+    } else {
+      listType.value = customListIncomeType;
+    }
+  }
+
+  Future loadLanguage() async {
     prefs = await SharedPreferences.getInstance();
     String languageCode = prefs?.getString('languageCode') ?? '';
     if (languageCode != '') {
@@ -60,7 +83,7 @@ class AppController extends GetxController {
     }
   }
 
-  autoBackUp() async {
+  Future autoBackUp() async {
     bool isAutoBackUp = prefs?.getBool('isAutoBackUp') ?? false;
     await loadListFileBackUp();
     if (isLogged.value && isAutoBackUp) {
@@ -73,7 +96,8 @@ class AppController extends GetxController {
     }
   }
 
-  getUserLoggedInfo() {
+  void getUserLoggedInfo() {
+    isLogged.value = prefs?.getBool('isLogged') ?? false;
     userDisplayName.value = prefs?.getString('displayName') ?? '';
     userId.value = prefs?.getString('id') ?? '';
     userEmail.value = prefs?.getString('email') ?? '';
@@ -84,8 +108,6 @@ class AppController extends GetxController {
     isLoading.value = true;
     var account = await googleDriveAppData.signInGoogle();
     if (account != null) {
-      driveApi = await googleDriveAppData.getDriveApi(account);
-
       saveLoggedInfo(account);
 
       await loadListFileBackUp();
@@ -95,19 +117,22 @@ class AppController extends GetxController {
         listRecord.value.clear();
         listStringRecord.clear();
       }
-      init();
+
+      await prefs?.remove('customListExpenseGenre');
+      await prefs?.remove('customListIncomeType');
     }
     isLoading.value = false;
   }
 
   saveLoggedInfo(GoogleSignInAccount account) {
+    isLogged.value = true;
+
     prefs?.setBool('isLogged', true);
     prefs?.setString('id', account.id);
     prefs?.setString('email', account.email);
     prefs?.setString('displayName', account.displayName ?? "");
     prefs?.setString('photoUrl', account.photoUrl ?? "");
 
-    isLogged.value = true;
     userDisplayName.value = account.displayName ?? '';
     userId.value = account.id;
     userEmail.value = account.email;
@@ -115,10 +140,15 @@ class AppController extends GetxController {
   }
 
   signOut() async {
-    // await handleBackUp(isShowNotification: false);
     isLoading.value = true;
+    clearAllData();
     googleDriveAppData.signOut();
 
+    await Future.delayed(const Duration(seconds: 1));
+    isLoading.value = false;
+  }
+
+  void clearAllData() {
     userDisplayName.value = '';
     userId.value = '';
     userEmail.value = '';
@@ -130,16 +160,20 @@ class AppController extends GetxController {
     prefs?.remove('email');
     prefs?.remove('displayName');
     prefs?.remove('photoUrl');
+    prefs?.remove('customListExpenseGenre');
+    prefs?.remove('customListIncomeType');
+    prefs?.remove('listRecord');
 
     listBackUpFile.clear();
     listRecord.value.clear();
     listStringRecord.clear();
+    isLogged.value = false;
 
-    await Future.delayed(Duration(seconds: 1));
-    isLoading.value = false;
+    listGenre.value = AppConstantList.listExpenseGenre;
+    listType.value = AppConstantList.listIncomeType;
   }
 
-  restoreDataFromBackUpFile(String response) async {
+  Future restoreDataFromBackUpFile(String response) async {
     List<Record> listRecord = [];
 
     listRecord = (json.decode(response) as List).map((i) => Record.fromJson(i)).toList();
@@ -154,7 +188,7 @@ class AppController extends GetxController {
     isLoading.value = false;
   }
 
-  loadListFileBackUp() async {
+  Future loadListFileBackUp() async {
     if (isLogged.value) {
       var account = await googleDriveAppData.signInGoogle();
       if (account != null) {
@@ -164,7 +198,7 @@ class AppController extends GetxController {
     }
   }
 
-  handleRestore(String fileName) async {
+  Future handleRestore(String fileName) async {
     Get.back(closeOverlays: true);
     isLoading.value = true;
     var fileBackUp = await googleDriveAppData.getDriveFile(driveApi!, fileName);
@@ -217,16 +251,16 @@ class AppController extends GetxController {
     isLoading.value = false;
   }
 
-  handleToggleLockApp(bool isLock) async {
+  Future handleToggleLockApp(bool isLock) async {
     isLockApp.value = isLock;
     await prefs?.setBool('isLockApp', isLock);
   }
 
-  loadListStringRecord() async {
+  Future loadListStringRecord() async {
     listStringRecord = (prefs?.getStringList('listRecord') ?? []);
   }
 
-  calculateRecord(List<String> listStringRecord) {
+  Future<void> calculateRecord(List<String> listStringRecord) async {
     listRecord.value.clear();
     totalExpense.value = 0;
     totalIncome.value = 0;
@@ -235,17 +269,26 @@ class AppController extends GetxController {
       int money = record.money ?? 0;
       if (money >= 0) {
         totalIncome += money;
+        if (!listType.contains(record.type)) {
+          listType.value = [...listType, record.type!];
+        }
       } else {
         totalExpense += money;
+        if (!listGenre.contains(record.genre)) {
+          listGenre.value = [...listGenre, record.genre!];
+        }
       }
       listRecord.value.add(record);
     }
+    await prefs?.setStringList('customListIncomeType', [...listType]);
+    await prefs?.setStringList('customListExpenseGenre', [...listGenre]);
+
     listRecord.value.sortReversed();
     HomeController homeController = Get.find();
     homeController.init();
   }
 
-  addRecord(Record record) async {
+  Future addRecord(Record record) async {
     listRecord.value.add(record);
     String recordJson = jsonEncode(record.toJson());
 
@@ -253,21 +296,23 @@ class AppController extends GetxController {
     await prefs!.setStringList('listRecord', listStringRecord);
   }
 
-  deleteRecord(Record record) async {
+  Future deleteRecord(Record record) async {
     listRecord.value.remove(record);
-    String deletedRecord = listStringRecord.firstWhere((element) => Record.fromJson(jsonDecode(element)).id == record.id);
+    String deletedRecord =
+        listStringRecord.firstWhere((element) => Record.fromJson(jsonDecode(element)).id == record.id);
     listStringRecord.remove(deletedRecord);
     await prefs!.setStringList('listRecord', listStringRecord);
   }
 
-  updateRecord(Record record) async {
+  Future updateRecord(Record record) async {
     var deletedRecord = listRecord.value.firstWhere((element) => element.id == record.id);
     listRecord.value.remove(deletedRecord);
     listRecord.value.add(record);
 
     String recordJson = jsonEncode(record.toJson());
 
-    String deletedStringRecord = listStringRecord.firstWhere((element) => Record.fromJson(jsonDecode(element)).id == record.id);
+    String deletedStringRecord =
+        listStringRecord.firstWhere((element) => Record.fromJson(jsonDecode(element)).id == record.id);
 
     listStringRecord.remove(deletedStringRecord);
     listStringRecord.add(recordJson);
@@ -275,7 +320,7 @@ class AppController extends GetxController {
     await prefs!.setStringList('listRecord', listStringRecord);
   }
 
-  dynamic changePage(int? newIndex) {
+  void changePage(int? newIndex) {
     currentPageIndex.value = newIndex!;
   }
 
@@ -284,7 +329,7 @@ class AppController extends GetxController {
     'Tiếng Việt': 'vi',
   };
 
-  changeLanguage(String languageCode) {
+  void changeLanguage(String languageCode) {
     prefs?.setString('languageCode', languageCode);
     Get.updateLocale(Locale(languageCode));
     Get.back(closeOverlays: true);

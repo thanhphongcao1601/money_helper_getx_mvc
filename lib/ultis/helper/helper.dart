@@ -39,10 +39,10 @@ List<Color> colorArray = [
   const Color(0xFF33991A),
   const Color(0xFFCC9999),
   const Color(0xFFB3B31A),
-  const Color(0xFF00E680),
+  // const Color(0xFF00E680),
   const Color(0xFF4D8066),
   const Color(0xFF809980),
-  const Color(0xFFE6FF80),
+  // const Color(0xFFE6FF80),
   const Color(0xFF1AFF33),
   const Color(0xFF999933),
   const Color(0xFFFF3380),
@@ -53,7 +53,7 @@ List<Color> colorArray = [
   const Color(0xFFE64D66),
   const Color(0xFF4DB380),
   const Color(0xFFFF4D4D),
-  const Color(0xFF99E6E6),
+  // const Color(0xFF99E6E6),
   const Color(0xFF6666FF)
 ];
 
@@ -68,17 +68,8 @@ class Helper {
     return formatter.format(money);
   }
 
-  Color getItemTypeColor(String type) {
-    if (type == 'form.type.cash' || type == 'form.type.cash'.tr) {
-      return AppColor.pink;
-    }
-    if (type == 'form.type.bank' || type == 'form.type.bank'.tr) {
-      return Colors.blue;
-    }
-    if (type == 'form.type.eWallet' || type == 'form.type.eWallet'.tr) {
-      return AppColor.gold;
-    }
-    var listGenre = AppConstantList.listExpenseGenre;
+  Color getItemTypeColor(String type, List<String> listInput) {
+    var listGenre = listInput;
     for (var i = 0; i < listGenre.length; i++) {
       if (type == listGenre[i] || type == listGenre[i].tr) {
         return colorArray[i];

@@ -28,13 +28,14 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
   final formKeyIncome = GlobalKey<FormState>();
 
   late bool isExpense;
-  late String currentItemGenre;
+  late String currentItemSelected;
 
   late TextEditingController datetimeC;
   late TextEditingController expenseTypeC;
   late TextEditingController genreC;
   late TextEditingController contentC;
   late TextEditingController moneyC;
+  late TextEditingController addNewItemSelectedC;
 
   late DateTime dateTime;
   late String errorMessage;
@@ -47,14 +48,15 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
     genreC = TextEditingController();
     contentC = TextEditingController();
     moneyC = TextEditingController();
+    addNewItemSelectedC = TextEditingController();
 
     currentRecord = widget.currentRecord;
     isExpense = currentRecord.money! < 0;
 
     dateTime = DateTime.fromMillisecondsSinceEpoch(currentRecord.datetime!);
     datetimeC.text = dateTime.millisecondsSinceEpoch.toString();
-    currentItemGenre = currentRecord.money! < 0 ? currentRecord.genre.toString() : currentRecord.type.toString();
-    genreC.text = currentItemGenre.tr;
+    currentItemSelected = currentRecord.money! < 0 ? currentRecord.genre.toString() : currentRecord.type.toString();
+    genreC.text = currentItemSelected.tr;
     errorMessage = '';
     moneyC.text = currentRecord.money!.abs().toString();
     contentC.text = currentRecord.content.toString();
@@ -134,7 +136,8 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
                 resetIcon: null,
                 style: const TextStyle(color: Colors.black),
                 initialValue: dateTime,
-                decoration: InputDecoration(hintText: 'form.dateAndTimeHint'.tr, hintStyle: const TextStyle(color: Colors.grey)),
+                decoration: InputDecoration(
+                    hintText: 'form.dateAndTimeHint'.tr, hintStyle: const TextStyle(color: Colors.grey)),
                 format: DateFormat("yyyy-MM-dd  HH:mm"),
                 onShowPicker: (context, currentValue) async {
                   final date = await showDatePicker(
@@ -210,18 +213,24 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
                   style: const TextStyle(color: Colors.black),
                   controller: genreC,
                   readOnly: true,
-                  decoration: InputDecoration(hintText: 'form.typeHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
+                  decoration: InputDecoration(
+                      hintText: 'form.typeHint'.tr,
+                      border: InputBorder.none,
+                      hintStyle: const TextStyle(color: Colors.grey)),
                 ),
               )),
-          GridView.count(
-            padding: const EdgeInsets.all(5),
-            crossAxisCount: 3,
-            shrinkWrap: true,
-            mainAxisSpacing: 5,
-            crossAxisSpacing: 5,
-            childAspectRatio: 3 / 1,
-            children: [for (var item in AppConstantList.listIncomeType) buildItemGenre(item, currentItemGenre == item)],
-          ),
+          Obx(() => GridView.count(
+                padding: const EdgeInsets.all(5),
+                crossAxisCount: 3,
+                shrinkWrap: true,
+                mainAxisSpacing: 5,
+                crossAxisSpacing: 5,
+                childAspectRatio: 3 / 1,
+                children: [
+                  for (var item in appController.listType) buildItemSelected(item, currentItemSelected == item),
+                  buildAddItem()
+                ],
+              )),
         ],
       );
     }
@@ -242,18 +251,24 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
                 style: const TextStyle(color: Colors.black),
                 controller: genreC,
                 readOnly: true,
-                decoration: InputDecoration(hintText: 'form.typeHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
+                decoration: InputDecoration(
+                    hintText: 'form.typeHint'.tr,
+                    border: InputBorder.none,
+                    hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
-        GridView.count(
-          padding: const EdgeInsets.all(5),
-          crossAxisCount: 3,
-          shrinkWrap: true,
-          mainAxisSpacing: 5,
-          crossAxisSpacing: 5,
-          childAspectRatio: 3 / 1,
-          children: [for (var item in AppConstantList.listExpenseGenre) buildItemGenre(item, currentItemGenre == item)],
-        ),
+        Obx(() => GridView.count(
+              padding: const EdgeInsets.all(5),
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              mainAxisSpacing: 5,
+              crossAxisSpacing: 5,
+              childAspectRatio: 3 / 1,
+              children: [
+                for (var item in appController.listGenre) buildItemSelected(item, currentItemSelected == item),
+                buildAddItem()
+              ],
+            )),
       ],
     );
   }
@@ -277,7 +292,10 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
                 style: const TextStyle(color: Colors.black),
                 controller: moneyC,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(hintText: 'form.moneyHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
+                decoration: InputDecoration(
+                    hintText: 'form.moneyHint'.tr,
+                    border: InputBorder.none,
+                    hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
       ],
@@ -301,8 +319,10 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
               child: TextField(
                 style: const TextStyle(color: Colors.black),
                 controller: contentC,
-                decoration:
-                    InputDecoration(hintText: 'form.contentHint'.tr, border: InputBorder.none, hintStyle: const TextStyle(color: Colors.grey)),
+                decoration: InputDecoration(
+                    hintText: 'form.contentHint'.tr,
+                    border: InputBorder.none,
+                    hintStyle: const TextStyle(color: Colors.grey)),
               ),
             )),
       ],
@@ -368,12 +388,14 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
     );
   }
 
-  Widget buildItemGenre(String item, bool isSelected) {
+  Widget buildItemSelected(String item, bool isSelected) {
     return InkWell(
+      onLongPress: () => showDialogConfirmDelete(item),
       onTap: () => chooseItem(item),
       child: Container(
         alignment: Alignment.center,
-        decoration: BoxDecoration(color: isSelected ? AppColor.gold : Colors.grey, borderRadius: BorderRadius.circular(10)),
+        decoration:
+            BoxDecoration(color: isSelected ? AppColor.gold : Colors.grey, borderRadius: BorderRadius.circular(10)),
         child: Text(
           item.tr,
           style: TextStyle(color: isSelected ? AppColor.darkPurple : Colors.white),
@@ -382,9 +404,144 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
     );
   }
 
+  Widget buildAddItem() {
+    return InkWell(
+      onTap: () => showDialogAddNewItemSelected(),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(10)),
+        child: const Text(
+          '+',
+          style: TextStyle(color: Colors.white, fontSize: 24),
+        ),
+      ),
+    );
+  }
+
+  showDialogAddNewItemSelected() {
+    Get.defaultDialog(
+      backgroundColor: AppColor.purple,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+      title: "form.dialog.addNewItemSelected.title".tr,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TextField(
+                  controller: addNewItemSelectedC,
+                  style: const TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                      hintText: 'form.addNewItemSelectedHint'.tr,
+                      border: InputBorder.none,
+                      hintStyle: const TextStyle(color: Colors.grey)),
+                ),
+              )),
+        ],
+      ),
+      titleStyle: const TextStyle(color: AppColor.gold),
+      confirm: ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
+          onPressed: () {
+            addNewItemSelected(isExpense, addNewItemSelectedC.text);
+            Get.back();
+          },
+          child: Text(
+            "form.button.save".tr,
+            style: const TextStyle(color: AppColor.darkPurple),
+          )),
+      cancel: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: AppColor.gold),
+            ),
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              "form.button.cancel".tr,
+              style: const TextStyle(color: AppColor.gold),
+            )),
+      ),
+    );
+  }
+
+  addNewItemSelected(bool isExpense, String newItemSelected) async {
+    if (isExpense) {
+      var oldList = appController.prefs?.getStringList('customListExpenseGenre') ?? [];
+      await appController.prefs?.setStringList('customListExpenseGenre', [...oldList, newItemSelected]);
+      appController.loadItemSelectedList();
+      setState(() {
+        currentItemSelected = newItemSelected;
+        contentC.text = newItemSelected;
+      });
+    } else {
+      var oldList = appController.prefs?.getStringList('customListIncomeType') ?? [];
+      await appController.prefs?.setStringList('customListIncomeType', [...oldList, newItemSelected]);
+      appController.loadItemSelectedList();
+      setState(() {
+        currentItemSelected = newItemSelected;
+        contentC.text = newItemSelected;
+      });
+    }
+  }
+
+  showDialogConfirmDelete(String item) {
+    Get.defaultDialog(
+      backgroundColor: AppColor.purple,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+      content: Text(
+        "form.dialog.deleteItemSelected.content".tr,
+        style: const TextStyle(color: Colors.white),
+      ),
+      title: "form.dialog.deleteItemSelected.title".tr,
+      titleStyle: const TextStyle(color: AppColor.gold),
+      confirm: ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
+          onPressed: () {
+            if (isExpense) {
+              var list = appController.listGenre.value;
+              list.remove(item);
+              appController.listGenre.value = [...list];
+              appController.prefs?.setStringList('customListExpenseGenre', [...list]);
+              Get.back();
+            } else {
+              var list = appController.listType.value;
+              list.remove(item);
+              appController.listType.value = [...list];
+              appController.prefs?.setStringList('customListIncomeType', [...list]);
+              Get.back();
+            }
+          },
+          child: Text(
+            "form.button.delete".tr,
+            style: const TextStyle(color: AppColor.darkPurple),
+          )),
+      cancel: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: AppColor.gold),
+            ),
+            onPressed: () {
+              Get.back(closeOverlays: true);
+            },
+            child: Text(
+              "form.button.cancel".tr,
+              style: const TextStyle(color: AppColor.gold),
+            )),
+      ),
+    );
+  }
+
   void chooseItem(String item) {
     setState(() {
-      currentItemGenre = item;
+      currentItemSelected = item;
       genreC.text = item.tr;
     });
   }
@@ -461,8 +618,8 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
       final recordExpense = Record(
           id: currentRecord.id,
           datetime: dateTime.millisecondsSinceEpoch,
-          genre: isExpense ? currentItemGenre : null,
-          type: !isExpense ? currentItemGenre : null,
+          genre: isExpense ? currentItemSelected : null,
+          type: !isExpense ? currentItemSelected : null,
           content: contentC.text,
           money: isExpense ? -int.parse(moneyC.text.replaceAll(',', '')) : int.parse(moneyC.text.replaceAll(',', '')));
 

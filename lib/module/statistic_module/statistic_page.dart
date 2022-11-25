@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/detail_record_module/detail_record_page.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
@@ -18,10 +19,10 @@ class StatisticPage extends StatefulWidget {
   State<StatisticPage> createState() => _StatisticPageState();
 }
 
-class _StatisticPageState extends State<StatisticPage>
-    with TickerProviderStateMixin {
+class _StatisticPageState extends State<StatisticPage> with TickerProviderStateMixin {
   final statisticController = Get.put(StatisticController());
   late TabController _tabController;
+  AppController appController = Get.find();
 
   @override
   void initState() {
@@ -38,24 +39,18 @@ class _StatisticPageState extends State<StatisticPage>
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColor.darkPurple,
-        appBar: TabBar(
-            indicatorColor: AppColor.gold,
-            labelColor: AppColor.gold,
-            controller: _tabController,
-            tabs: [
-              Obx(
-                () => Tab(
-                  text:
-                      "${"tab.expense".tr}: ${Helper().formatMoney(statisticController.totalMonthExpense.value)}",
-                ),
-              ),
-              Obx(
-                () => Tab(
-                  text:
-                      "${"tab.income".tr}: ${Helper().formatMoney(statisticController.totalMonthIncome.value)}",
-                ),
-              ),
-            ]),
+        appBar: TabBar(indicatorColor: AppColor.gold, labelColor: AppColor.gold, controller: _tabController, tabs: [
+          Obx(
+            () => Tab(
+              text: "${"tab.expense".tr}: ${Helper().formatMoney(statisticController.totalMonthExpense.value)}",
+            ),
+          ),
+          Obx(
+            () => Tab(
+              text: "${"tab.income".tr}: ${Helper().formatMoney(statisticController.totalMonthIncome.value)}",
+            ),
+          ),
+        ]),
         body: Container(
           color: AppColor.purple,
           child: TabBarView(
@@ -88,8 +83,7 @@ class _StatisticPageState extends State<StatisticPage>
                       labelColor: Colors.white,
                       labelLineColor: Colors.white,
                       data: statisticController.dataExpenseToChart.value,
-                      fillColor: (pieData, index) =>
-                          Helper().getItemTypeColor(pieData['domain']),
+                      fillColor: (pieData, index) => Helper().getItemTypeColor(pieData['domain'], appController.listGenre),
                       pieLabel: (pieData, index) {
                         return '${pieData['domain']}:\n${pieData['measure']}%';
                       },
@@ -129,8 +123,7 @@ class _StatisticPageState extends State<StatisticPage>
           isCollapsed: true,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide:
-                const BorderSide(width: 2, color: AppColor.gold), //<-- SEE HERE
+            borderSide: const BorderSide(width: 2, color: AppColor.gold), //<-- SEE HERE
           ),
         ),
         format: DateFormat("MM/yyyy"),
@@ -158,57 +151,40 @@ class _StatisticPageState extends State<StatisticPage>
               Column(
                 children: [
                   ListTile(
-                    onTap: () =>
-                        statisticController.handleExpandTile(item['domain']),
+                    onTap: () => statisticController.handleExpandTile(item['domain']),
                     leading: Container(
                       padding: const EdgeInsets.all(5),
                       width: 75,
                       height: 30,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Helper().getItemTypeColor(item['domain'])),
+                          borderRadius: BorderRadius.circular(5), color: Helper().getItemTypeColor(item['domain'], appController.listGenre)),
                       child: Center(
                           child: Text('${item['measure']}%',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold))),
+                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
                     ),
-                    title: Text(item['domain'],
-                        style: const TextStyle(color: Colors.white)),
+                    title: Text(item['domain'], style: const TextStyle(color: Colors.white)),
                     trailing: Text(Helper().formatMoney(item['money']),
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 16)),
+                        style: const TextStyle(color: Colors.white, fontSize: 16)),
                   ),
-                  for (var record
-                      in statisticController.listRecordGroupByDate.value)
+                  for (var record in statisticController.listRecordGroupByDate.value)
                     statisticController.tileSelected == item['domain']
                         ? Column(
                             children: [
                               for (var recordFilter in record.listRecord)
-                                item['domain'].toString().tr ==
-                                        recordFilter.genre.toString().tr
+                                item['domain'].toString().tr == recordFilter.genre.toString().tr
                                     ? Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            50, 0, 15, 5),
+                                        padding: const EdgeInsets.fromLTRB(50, 0, 15, 5),
                                         child: InkWell(
-                                          onTap: () => handleGoToDetailRecord(
-                                              recordFilter),
+                                          onTap: () => handleGoToDetailRecord(recordFilter),
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
                                                 recordFilter.content!,
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16),
+                                                style: const TextStyle(color: Colors.white, fontSize: 16),
                                               ),
-                                              Text(
-                                                  Helper().formatMoney(
-                                                      recordFilter.money!),
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16))
+                                              Text(Helper().formatMoney(recordFilter.money!),
+                                                  style: const TextStyle(color: Colors.white, fontSize: 16))
                                             ],
                                           ),
                                         ),
@@ -242,9 +218,7 @@ class _StatisticPageState extends State<StatisticPage>
                           data: [
                             {
                               'id': 'Bar',
-                              'data': [
-                                ...statisticController.dataIncomeToChart.value
-                              ]
+                              'data': [...statisticController.dataIncomeToChart.value]
                             }
                           ],
                           domainLabelColor: Colors.white,
@@ -255,8 +229,7 @@ class _StatisticPageState extends State<StatisticPage>
                           measureLabelColor: Colors.white,
                           domainLabelPaddingToAxisLine: 16,
                           measureLabelPaddingToAxisLine: 16,
-                          barColor: (barData, index, id) =>
-                              Helper().getItemTypeColor(barData['domain']),
+                          barColor: (barData, index, id) => Helper().getItemTypeColor(barData['domain'], appController.listType),
                           verticalDirection: false,
                         ),
                       ),
@@ -284,59 +257,43 @@ class _StatisticPageState extends State<StatisticPage>
               Column(
                 children: [
                   ListTile(
-                    onTap: () =>
-                        statisticController.handleExpandTile(item['domain']),
+                    onTap: () => statisticController.handleExpandTile(item['domain']),
                     leading: Container(
                       padding: const EdgeInsets.all(5),
                       width: 75,
                       height: 30,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Helper().getItemTypeColor(item['domain'])),
+                          borderRadius: BorderRadius.circular(5), color: Helper().getItemTypeColor(item['domain'], appController.listType)),
                       child: Center(
                           child: Text('${item['measure'].toString().tr}%',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold))),
+                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
                     ),
                     title: Text(
                       item['domain'].toString().tr,
                       style: const TextStyle(color: Colors.white),
                     ),
                     trailing: Text(Helper().formatMoney(item['money']),
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 16)),
+                        style: const TextStyle(color: Colors.white, fontSize: 16)),
                   ),
-                  for (var record
-                      in statisticController.listRecordGroupByDate.value)
+                  for (var record in statisticController.listRecordGroupByDate.value)
                     statisticController.tileSelected == item['domain']
                         ? Column(
                             children: [
                               for (var recordFilter in record.listRecord)
-                                item['domain'].toString().tr ==
-                                        recordFilter.type.toString().tr
+                                item['domain'].toString().tr == recordFilter.type.toString().tr
                                     ? Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            50, 0, 15, 5),
+                                        padding: const EdgeInsets.fromLTRB(50, 0, 15, 5),
                                         child: InkWell(
-                                          onTap: () => handleGoToDetailRecord(
-                                              recordFilter),
+                                          onTap: () => handleGoToDetailRecord(recordFilter),
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
                                                 recordFilter.content!,
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16),
+                                                style: const TextStyle(color: Colors.white, fontSize: 16),
                                               ),
-                                              Text(
-                                                  Helper().formatMoney(
-                                                      recordFilter.money!),
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16))
+                                              Text(Helper().formatMoney(recordFilter.money!),
+                                                  style: const TextStyle(color: Colors.white, fontSize: 16))
                                             ],
                                           ),
                                         ),

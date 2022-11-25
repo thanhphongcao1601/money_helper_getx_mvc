@@ -281,7 +281,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10)),
-                      color: Helper().getItemTypeColor(record.money! < 0 ? record.genre! : record.type!)),
+                      color: record.money! < 0 ? Helper().getItemTypeColor(record.genre!,appController.listGenre) : Helper().getItemTypeColor(record.type!,appController.listType)),
                   padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
