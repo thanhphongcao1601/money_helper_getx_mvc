@@ -537,13 +537,13 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
           style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
           onPressed: () {
             if (isExpense) {
-              var list = appController.listGenre.value;
+              var list = appController.listGenre;
               list.remove(item);
               appController.listGenre.value = [...list];
               appController.prefs?.setStringList('customListExpenseGenre', [...list]);
               Get.back();
             } else {
-              var list = appController.listType.value;
+              var list = appController.listType;
               list.remove(item);
               appController.listType.value = [...list];
               appController.prefs?.setStringList('customListIncomeType', [...list]);
