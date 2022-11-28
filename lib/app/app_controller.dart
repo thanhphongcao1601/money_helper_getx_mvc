@@ -193,7 +193,20 @@ class AppController extends GetxController {
       var account = await googleDriveAppData.signInGoogle();
       if (account != null) {
         driveApi = await googleDriveAppData.getDriveApi(account);
+        DateTime now = DateTime.now();
+        DateTime limitDate = now.subtract(const Duration(days: 7));
         listBackUpFile.value = await googleDriveAppData.getListDriveFile(driveApi!);
+
+        var newList = <drive.File>[];
+        for (var file in listBackUpFile) {
+          if (file!.modifiedTime!.toLocal().isBefore(limitDate)) {
+            listBackUpFile.remove(file);
+            await googleDriveAppData.deleteDriveFile(driveApi!, file.name!);
+          } else {
+            newList.add(file);
+          }
+        }
+        listBackUpFile.value = newList;
       }
     }
   }

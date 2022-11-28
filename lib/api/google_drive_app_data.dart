@@ -17,8 +17,7 @@ class GoogleDriveAppData {
         ],
       );
 
-      googleUser =
-          await googleSignIn.signInSilently() ?? await googleSignIn.signIn();
+      googleUser = await googleSignIn.signInSilently() ?? await googleSignIn.signIn();
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -120,8 +119,8 @@ class GoogleDriveAppData {
     required String targetLocalPath,
   }) async {
     try {
-      drive.Media media = await driveApi.files.get(driveFile.id!,
-          downloadOptions: drive.DownloadOptions.fullMedia) as drive.Media;
+      drive.Media media =
+          await driveApi.files.get(driveFile.id!, downloadOptions: drive.DownloadOptions.fullMedia) as drive.Media;
 
       List<int> dataStore = [];
 
@@ -168,18 +167,15 @@ class GoogleDriveAppData {
     }
   }
 
-  Future<String> getContentFromDriveFile(
-      drive.DriveApi driveApi, drive.File driveFile) async {
-    var response = await driveApi.files
-        .get(driveFile.id!, downloadOptions: drive.DownloadOptions.fullMedia);
+  Future<String> getContentFromDriveFile(drive.DriveApi driveApi, drive.File driveFile) async {
+    var response = await driveApi.files.get(driveFile.id!, downloadOptions: drive.DownloadOptions.fullMedia);
     if (response is! drive.Media) throw Exception("invalid response");
     var content = await utf8.decodeStream(response.stream);
     return content;
   }
 
   /// get drive file info
-  Future<drive.File?> getDriveFile(
-      drive.DriveApi driveApi, String filename) async {
+  Future<drive.File?> getDriveFile(drive.DriveApi driveApi, String filename) async {
     try {
       // final folderId = await getFolderId(driveApi);
       drive.FileList fileList = await driveApi.files.list(
@@ -189,13 +185,32 @@ class GoogleDriveAppData {
 
       List<drive.File>? files = fileList.files;
 
-      drive.File? driveFile =
-          files?.firstWhere((element) => element.name == filename);
+      drive.File? driveFile = files?.firstWhere((element) => element.name == filename);
 
       return driveFile;
     } catch (e) {
       debugPrint(e.toString());
       return null;
+    }
+  }
+
+  /// delete drive file by name
+  Future deleteDriveFile(drive.DriveApi driveApi, String filename) async {
+    try {
+      // final folderId = await getFolderId(driveApi);
+      drive.FileList fileList = await driveApi.files.list(
+          // q: "'$folderId' in parents",
+          spaces: 'appDataFolder',
+          $fields: 'files(id, name, modifiedTime)');
+
+      List<drive.File>? files = fileList.files;
+
+      drive.File? driveFile = files?.firstWhere((element) => element.name == filename);
+      if (driveFile != null) {
+        await driveApi.files.delete(driveFile.id!);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 }

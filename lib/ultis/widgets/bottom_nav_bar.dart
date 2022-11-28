@@ -31,23 +31,23 @@ Widget buildBottomBar(int currentIndex, BuildContext context) {
       BubbleBottomBarItem(
           backgroundColor: AppColor.gold,
           icon: const Icon(
-            Icons.dashboard,
+            Icons.bar_chart_outlined,
             color: AppColor.gold,
           ),
           activeIcon: const Icon(
-            Icons.dashboard,
+            Icons.bar_chart_outlined,
           ),
           title: Text("bottomNav.statistic".tr)),
-      // BubbleBottomBarItem(
-      //     backgroundColor: AppColor.gold,
-      //     icon: const Icon(
-      //       Icons.folder_open,
-      //       color: AppColor.gold,
-      //     ),
-      //     activeIcon: const Icon(
-      //       Icons.folder_open,
-      //     ),
-      //     title: Text("bottomNav.backup".tr)),
+      BubbleBottomBarItem(
+          backgroundColor: AppColor.gold,
+          icon: const Icon(
+            Icons.exposure_rounded,
+            color: AppColor.gold,
+          ),
+          activeIcon: const Icon(
+            Icons.exposure_rounded,
+          ),
+          title: Text("bottomNav.loan".tr)),
       BubbleBottomBarItem(
           backgroundColor: AppColor.gold,
           icon: const Icon(

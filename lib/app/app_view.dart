@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/add_record_module/add_record_page.dart';
 import 'package:money_helper_getx_mvc/module/home_module/home_page.dart';
+import 'package:money_helper_getx_mvc/module/loan_module/loan_page.dart';
 import 'package:money_helper_getx_mvc/module/setting_module/setting_page.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/statistic_page.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
@@ -35,16 +36,12 @@ class _AppPageState extends State<AppPage> {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        bottomNavigationBar: Obx(() =>
-            buildBottomBar(appController.currentPageIndex.value, context)),
+        bottomNavigationBar: Obx(() => buildBottomBar(appController.currentPageIndex.value, context)),
         body: Obx(() => LoadingOverlay(
-              progressIndicator:
-                  const CircularProgressIndicator(color: AppColor.gold),
+              progressIndicator: const CircularProgressIndicator(color: AppColor.gold),
               color: AppColor.darkPurple,
               isLoading: appController.isLoading.value,
-              child: Container(
-                  color: AppColor.purple,
-                  child: SafeArea(child: buildPageSelected())),
+              child: Container(color: AppColor.purple, child: SafeArea(child: buildPageSelected())),
             )));
   }
 
@@ -67,9 +64,9 @@ class _AppPageState extends State<AppPage> {
             )
           ],
         ));
-      // case 2:
-      //   return BackUpPage();
       case 2:
+        return LoanPage();
+      case 3:
         return const SettingPage();
       default:
         return const HomePage();

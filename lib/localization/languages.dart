@@ -14,7 +14,7 @@ class Languages extends Translations {
           //bottom nav bar
           'bottomNav.daily': 'Daily',
           'bottomNav.statistic': 'Statistic',
-          'bottomNav.backup': 'Backup',
+          'bottomNav.loan': 'Loan',
           'bottomNav.setting': 'Setting',
           //tab
           'tab.expense': 'Expense',
@@ -66,6 +66,10 @@ class Languages extends Translations {
           'form.dialog.deleteItemSelected.title': 'Delete item?',
           'form.dialog.deleteItemSelected.content': 'Delete selected item',
           'form.addNewItemSelectedHint': 'Enter new item',
+          //loan
+          'loan.loan': 'Loan',
+          'loan.inDebt': 'In debt',
+
           //setting
           'setting.lockAppBiometrics': 'Biometrics',
           'setting.darkMode': 'Dark mode',
@@ -121,7 +125,7 @@ class Languages extends Translations {
           //bottom nav bar
           'bottomNav.daily': 'Nhật ký',
           'bottomNav.statistic': 'Thống kê',
-          'bottomNav.backup': 'Sao lưu',
+          'bottomNav.loan': 'Khoản vay',
           'bottomNav.setting': 'Cài dặt',
           //tab
           'tab.expense': 'Chi',
@@ -168,6 +172,9 @@ class Languages extends Translations {
           'form.dialog.delete.content': 'Sau khi xóa, dữ liệu sẽ không thể khôi phục!',
           'form.dialog.deleteItemSelected.title': 'Xác nhận xóa?',
           'form.dialog.deleteItemSelected.content': 'Xóa mục được chọn',
+          //loan
+          'loan.loan': 'Đang cho vay',
+          'loan.inDebt': 'Đang nợ',
           //setting
           'setting.lockAppBiometrics': 'Xác thực bằng vân tay',
           'setting.darkMode': 'Chủ đề tối',
