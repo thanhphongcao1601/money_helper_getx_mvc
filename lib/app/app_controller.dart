@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:money_helper_getx_mvc/api/google_drive_app_data.dart';
 import 'package:money_helper_getx_mvc/module/home_module/home_controller.dart';
+import 'package:money_helper_getx_mvc/module/loan_module/loan_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,8 +20,8 @@ class AppController extends GetxController {
 
   final listRecord = RxList<Record>([]).obs;
   List<String> listStringRecord = [];
-  RxInt totalIncome = 0.obs;
-  RxInt totalExpense = 0.obs;
+  // RxInt totalIncome = 0.obs;
+  // RxInt totalExpense = 0.obs;
 
   RxBool isDarkMode = false.obs;
   RxBool isLockApp = false.obs;
@@ -275,20 +276,25 @@ class AppController extends GetxController {
 
   Future<void> calculateRecord(List<String> listStringRecord) async {
     listRecord.value.clear();
-    totalExpense.value = 0;
-    totalIncome.value = 0;
+    // totalExpense.value = 0;
+    // totalIncome.value = 0;
     for (var strRecord in listStringRecord) {
       Record record = Record.fromJson(jsonDecode(strRecord));
       int money = record.money ?? 0;
-      if (money >= 0) {
-        totalIncome += money;
+      if (money > 0) {
+        // totalIncome += money;
         if (!listType.contains(record.type)) {
-          listType.value = [...listType, record.type!];
+          if (record.type != null) {
+            listType.value = [...listType, record.type!];
+          }
         }
-      } else {
-        totalExpense += money;
+      }
+      if (money < 0) {
+        // totalExpense += money;
         if (!listGenre.contains(record.genre)) {
-          listGenre.value = [...listGenre, record.genre!];
+          if (record.genre != null) {
+            listGenre.value = [...listGenre, record.genre!];
+          }
         }
       }
       listRecord.value.add(record);
@@ -298,7 +304,9 @@ class AppController extends GetxController {
 
     listRecord.value.sortReversed();
     HomeController homeController = Get.find();
+    LoanController loanController = Get.put(LoanController());
     homeController.init();
+    loanController.init();
   }
 
   Future addRecord(Record record) async {

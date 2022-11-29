@@ -6,12 +6,11 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
-import 'package:money_helper_getx_mvc/module/detail_record_module/detail_record_page.dart';
 import 'package:money_helper_getx_mvc/module/home_module/home_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
+import 'package:money_helper_getx_mvc/ultis/widgets/record_tile.dart';
 import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
-import '../../models/record.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,8 +33,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Obx(() => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-            children: [buildHeader(), buildDashboard(), buildListRecord()])));
+        child: Column(children: [buildHeader(), buildDashboard(), buildListRecord()])));
   }
 
   Widget buildHeader() {
@@ -51,8 +49,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CircleAvatar(
-                      backgroundImage: NetworkImage(appController
-                              .userPhotoUrl.value.isNotEmpty
+                      backgroundImage: NetworkImage(appController.userPhotoUrl.value.isNotEmpty
                           ? appController.userPhotoUrl.value
                           : 'https://daknong.dms.gov.vn/CmsView-QLTT-portlet/res/no-image.jpg'),
                       radius: 25,
@@ -68,13 +65,10 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Text(
                             '${'welcomeBack'.tr},',
-                            style: const TextStyle(
-                                fontSize: 16, color: AppColor.gold),
+                            style: const TextStyle(fontSize: 16, color: AppColor.gold),
                           ),
-                          Text(
-                              appController.userDisplayName.value.split(' ')[0],
-                              style: const TextStyle(
-                                  fontSize: 24, color: AppColor.gold)),
+                          Text(appController.userDisplayName.value.split(' ')[0],
+                              style: const TextStyle(fontSize: 24, color: AppColor.gold)),
                         ],
                       ),
                     ),
@@ -97,8 +91,7 @@ class _HomePageState extends State<HomePage> {
           isCollapsed: true,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide:
-                const BorderSide(width: 2, color: AppColor.gold), //<-- SEE HERE
+            borderSide: const BorderSide(width: 2, color: AppColor.gold), //<-- SEE HERE
           ),
         ),
         format: DateFormat("MM/yyyy"),
@@ -121,8 +114,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildDashboard() {
     return Container(
-      decoration: BoxDecoration(
-          color: AppColor.gold, borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(color: AppColor.gold, borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
           Padding(
@@ -133,20 +125,15 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Text(
                   '${'total'.tr}:',
-                  style:
-                      const TextStyle(fontSize: 20, color: AppColor.darkPurple),
+                  style: const TextStyle(fontSize: 20, color: AppColor.darkPurple),
                 ),
                 Expanded(
                   child: Obx(() => AutoSizeText(
                         Helper().formatMoney(
-                            homeController.totalMonthExpense.value +
-                                homeController.totalMonthIncome.value),
+                            homeController.totalMonthExpense.value + homeController.totalMonthIncome.value),
                         maxLines: 1,
                         textAlign: TextAlign.right,
-                        style: const TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.darkPurple),
+                        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: AppColor.darkPurple),
                       )),
                 ),
               ],
@@ -158,9 +145,7 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                 margin: const EdgeInsets.fromLTRB(10, 20, 5, 20),
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: AppColor.purple,
-                    borderRadius: BorderRadius.circular(10)),
+                decoration: BoxDecoration(color: AppColor.purple, borderRadius: BorderRadius.circular(10)),
                 height: 60,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -173,13 +158,9 @@ class _HomePageState extends State<HomePage> {
                       height: 5,
                     ),
                     AutoSizeText(
-                      Helper()
-                          .formatMoney(homeController.totalMonthIncome.value),
+                      Helper().formatMoney(homeController.totalMonthIncome.value),
                       maxLines: 1,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.mustHave),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.mustHave),
                     )
                   ],
                 ),
@@ -188,9 +169,7 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                 margin: const EdgeInsets.fromLTRB(5, 20, 10, 20),
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: AppColor.purple,
-                    borderRadius: BorderRadius.circular(10)),
+                decoration: BoxDecoration(color: AppColor.purple, borderRadius: BorderRadius.circular(10)),
                 height: 60,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -203,13 +182,9 @@ class _HomePageState extends State<HomePage> {
                       height: 5,
                     ),
                     AutoSizeText(
-                      Helper()
-                          .formatMoney(homeController.totalMonthExpense.value),
+                      Helper().formatMoney(homeController.totalMonthExpense.value),
                       maxLines: 1,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.wasted),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.wasted),
                     )
                   ],
                 ),
@@ -252,10 +227,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Text(
                                 item.date,
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    color: AppColor.gold,
-                                    fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontSize: 14, color: AppColor.gold, fontWeight: FontWeight.bold),
                               ),
                               const Expanded(
                                   child: Divider(
@@ -266,17 +238,12 @@ class _HomePageState extends State<HomePage> {
                                 width: 10,
                               ),
                               Text(
-                                Helper().formatMoney(item.listRecord
-                                    .sumBy<int>((e) => e.money!)),
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    color: AppColor.gold,
-                                    fontWeight: FontWeight.bold),
+                                Helper().formatMoney(item.listRecord.sumBy<int>((e) => e.money!)),
+                                style: const TextStyle(fontSize: 14, color: AppColor.gold, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
-                          for (var record in item.listRecord)
-                            buildRecord(record: record, context: context)
+                          for (var record in item.listRecord) buildRecordTile(record: record)
                         ],
                       ),
                     const SizedBox(
@@ -284,84 +251,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ))),
-      ),
-    );
-  }
-
-  Widget buildRecord({required Record record, required BuildContext context}) {
-    return InkWell(
-      onTap: () => Get.to(DetailRecordPage(
-        currentRecord: record,
-      )),
-      child: Container(
-        height: 52,
-        margin: const EdgeInsets.fromLTRB(10, 5, 0, 5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: AppColor.darkPurple,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Text(
-                      DateTime.fromMillisecondsSinceEpoch(record.datetime ?? 0)
-                          .toString()
-                          .substring(11, 19),
-                      style: const TextStyle(color: Colors.white),
-                    )),
-                const Expanded(child: SizedBox()),
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(10)),
-                      color: record.money! < 0
-                          ? Helper().getItemTypeColor(
-                              record.genre!, appController.listGenre)
-                          : Helper().getItemTypeColor(
-                              record.type!, appController.listType)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      record.money! < 0
-                          ? (record.genre ?? "").tr
-                          : (record.type ?? "").tr,
-                      style: const TextStyle(
-                          color: AppColor.darkPurple,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(record.content.toString(),
-                      style: const TextStyle(color: Colors.white)),
-                  const Expanded(child: SizedBox()),
-                  Text(
-                    Helper().formatMoney(record.money!),
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: record.money! > 0
-                            ? AppColor.mustHave
-                            : AppColor.wasted),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

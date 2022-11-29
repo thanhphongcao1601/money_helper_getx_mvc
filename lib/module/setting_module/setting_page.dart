@@ -7,6 +7,7 @@ import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/api/google_drive_app_data.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:money_helper_getx_mvc/ultis/widgets/app_dialog.dart';
 
 // ignore: must_be_immutable
 class SettingPage extends StatefulWidget {
@@ -59,27 +60,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             ListTile(
               onTap: () {
-                Get.defaultDialog(
-                    backgroundColor: AppColor.darkPurple,
-                    titleStyle: const TextStyle(color: AppColor.gold),
-                    title: 'setting.language'.tr,
-                    content: Column(
-                      children: [
-                        for (var item in appController.listMapLanguageAndCode.entries)
-                          InkWell(
-                            onTap: () {
-                              appController.changeLanguage(item.value);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 10, top: 10),
-                              child: Text(
-                                item.key,
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          )
-                      ],
-                    ));
+                showLanguageDialog();
               },
               title: Text('setting.language'.tr, style: const TextStyle(color: AppColor.gold)),
               trailing: const Icon(Icons.arrow_right, color: AppColor.gold),
@@ -153,7 +134,8 @@ class _SettingPageState extends State<SettingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(appController.userDisplayName.value, style: const TextStyle(fontSize: 20, color: AppColor.gold)),
+                          Text(appController.userDisplayName.value,
+                              style: const TextStyle(fontSize: 20, color: AppColor.gold)),
                           const SizedBox(
                             height: 5,
                           ),
@@ -260,7 +242,8 @@ class _SettingPageState extends State<SettingPage> {
             ),
             Container(
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 2, color: AppColor.gold)),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10), border: Border.all(width: 2, color: AppColor.gold)),
               child: Column(children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -329,36 +312,7 @@ class _SettingPageState extends State<SettingPage> {
       width: Get.width / 2 - 20,
       child: OutlinedButton(
         onPressed: () {
-          Get.defaultDialog(
-              backgroundColor: AppColor.darkPurple,
-              titleStyle: const TextStyle(color: AppColor.gold),
-              title: 'setting.backUp.bottomSheet.dialog.chooseFile'.tr,
-              content: appController.listBackUpFile.isNotEmpty
-                  ? SizedBox(
-                      width: Get.width,
-                      height: Get.height / 3,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            for (var file in appController.listBackUpFile)
-                              ListTile(
-                                leading: const Icon(
-                                  Icons.file_copy,
-                                  color: Colors.white,
-                                ),
-                                onTap: () {
-                                  appController.handleRestore(file.name!);
-                                },
-                                title: Text(
-                                  file!.name!.substring(0, file.name!.length - 11),
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              )
-                          ],
-                        ),
-                      ),
-                    )
-                  : Lottie.asset('assets/lotties/empty.json', width: 100));
+          showRestoreDialog();
         },
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: AppColor.gold),
@@ -366,5 +320,56 @@ class _SettingPageState extends State<SettingPage> {
         child: Text('setting.backUp.bottomSheet.restore'.tr, style: const TextStyle(color: AppColor.gold)),
       ),
     );
+  }
+
+  showRestoreDialog() {
+    Widget content = appController.listBackUpFile.isNotEmpty
+        ? SizedBox(
+            width: Get.width,
+            height: Get.height / 3,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  for (var file in appController.listBackUpFile)
+                    ListTile(
+                      leading: const Icon(
+                        Icons.file_copy,
+                        color: Colors.white,
+                      ),
+                      onTap: () {
+                        appController.handleRestore(file.name!);
+                      },
+                      title: Text(
+                        file!.name!.substring(0, file.name!.length - 11),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    )
+                ],
+              ),
+            ),
+          )
+        : Lottie.asset('assets/lotties/empty.json', width: 100);
+    showAppDialog(title: 'setting.backUp.bottomSheet.dialog.chooseFile'.tr, content: content);
+  }
+
+  showLanguageDialog() {
+    Widget content = Column(
+      children: [
+        for (var item in appController.listMapLanguageAndCode.entries)
+          InkWell(
+            onTap: () {
+              appController.changeLanguage(item.value);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10, top: 10),
+              child: Text(
+                item.key,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          )
+      ],
+    );
+    showAppDialog(title: 'setting.language'.tr, content: content);
   }
 }

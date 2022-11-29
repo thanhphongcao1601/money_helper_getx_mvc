@@ -1,42 +1,32 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
-import 'package:money_helper_getx_mvc/module/home_module/home_controller.dart';
 import 'package:money_helper_getx_mvc/models/record.dart';
-import 'package:money_helper_getx_mvc/module/statistic_module/statistic_controller.dart';
+import 'package:money_helper_getx_mvc/module/loan_module/loan_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
-import 'package:money_helper_getx_mvc/ultis/widgets/app_dialog.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:uuid/uuid.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 
-class AddRecordPage extends StatefulWidget {
-  const AddRecordPage({Key? key}) : super(key: key);
+class AddLoanPage extends StatefulWidget {
+  const AddLoanPage({Key? key}) : super(key: key);
 
   @override
-  State<AddRecordPage> createState() => _AddRecordPageState();
+  State<AddLoanPage> createState() => _AddLoanPageState();
 }
 
-class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateMixin {
+class _AddLoanPageState extends State<AddLoanPage> with TickerProviderStateMixin {
   AppController appController = Get.put(AppController());
-  HomeController homeController = Get.put(HomeController());
-  StatisticController statisticController = Get.put(StatisticController());
+  LoanController loanController = Get.put(LoanController());
 
-  final formKeyExpense = GlobalKey<FormState>();
-  final formKeyIncome = GlobalKey<FormState>();
-
-  late bool isExpense;
-  late String currentItemSelected;
+  late bool isBorrow;
 
   late TextEditingController datetimeC;
-  late TextEditingController expenseTypeC;
-  late TextEditingController genreC;
+  late TextEditingController personNameC;
   late TextEditingController contentC;
   late TextEditingController moneyC;
-  late TextEditingController addNewItemSelectedC;
 
   late DateTime dateTime;
   late String errorMessage;
@@ -44,15 +34,13 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
   @override
   void initState() {
     super.initState();
-    isExpense = true;
-    currentItemSelected = '';
+    isBorrow = true;
     errorMessage = '';
 
     datetimeC = TextEditingController();
-    genreC = TextEditingController();
+    personNameC = TextEditingController();
     contentC = TextEditingController();
     moneyC = TextEditingController();
-    addNewItemSelectedC = TextEditingController();
 
     dateTime = DateTime.now();
     datetimeC.text = dateTime.millisecondsSinceEpoch.toString();
@@ -76,7 +64,7 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [buildDateTimeField(), buildGenreOrTypeField(), buildMoneyField(), buildContentField()],
+                  children: [buildDateTimeField(), buildMoneyField(), buildPersonNameField(), buildContentField()],
                 ),
               ),
               buildErrorMessage(),
@@ -92,21 +80,21 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
   Widget buildToggleButton() {
     return ToggleSwitch(
       minWidth: Get.width,
-      initialLabelIndex: isExpense ? 0 : 1,
+      initialLabelIndex: isBorrow ? 0 : 1,
       cornerRadius: 20.0,
       activeFgColor: AppColor.darkPurple,
       inactiveBgColor: Colors.grey,
       inactiveFgColor: Colors.white,
       totalSwitches: 2,
-      labels: ['tab.expense'.tr, 'tab.income'.tr],
-      icons: const [FontAwesomeIcons.minus, FontAwesomeIcons.plus],
+      labels: ['loan.borrow'.tr, 'loan.lend'.tr],
+      // icons: const [FontAwesomeIcons.minus, FontAwesomeIcons.plus],
       activeBgColors: const [
         [AppColor.gold],
         [AppColor.gold],
       ],
       onToggle: (index) {
         setState(() {
-          isExpense = (index == 0);
+          isBorrow = (index == 0);
         });
       },
     );
@@ -188,85 +176,6 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
     );
   }
 
-  Widget buildGenreOrTypeField() {
-    if (!isExpense) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'form.type'.tr,
-            style: const TextStyle(color: AppColor.gold),
-          ),
-          Container(
-              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: TextField(
-                  controller: genreC,
-                  style: const TextStyle(color: Colors.black),
-                  readOnly: true,
-                  decoration: InputDecoration(
-                      hintText: 'form.typeHint'.tr,
-                      border: InputBorder.none,
-                      hintStyle: const TextStyle(color: Colors.grey)),
-                ),
-              )),
-          Obx(() => GridView.count(
-                padding: const EdgeInsets.all(5),
-                crossAxisCount: 3,
-                shrinkWrap: true,
-                mainAxisSpacing: 5,
-                crossAxisSpacing: 5,
-                childAspectRatio: 3 / 1,
-                children: [
-                  for (var item in appController.listType) buildItemSelected(item, currentItemSelected == item),
-                  buildAddItem()
-                ],
-              )),
-        ],
-      );
-    }
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'form.type'.tr,
-          style: const TextStyle(color: AppColor.gold),
-        ),
-        Container(
-            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextField(
-                controller: genreC,
-                style: const TextStyle(color: Colors.black),
-                readOnly: true,
-                decoration: InputDecoration(
-                    hintText: 'form.typeHint'.tr,
-                    border: InputBorder.none,
-                    hintStyle: const TextStyle(color: Colors.grey)),
-              ),
-            )),
-        Obx(() => GridView.count(
-              padding: const EdgeInsets.all(5),
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              mainAxisSpacing: 5,
-              crossAxisSpacing: 5,
-              childAspectRatio: 3 / 1,
-              children: [
-                for (var item in appController.listGenre) buildItemSelected(item, currentItemSelected == item),
-                buildAddItem()
-              ],
-            )),
-      ],
-    );
-  }
-
   Widget buildMoneyField() {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -288,6 +197,33 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     hintText: 'form.moneyHint'.tr,
+                    border: InputBorder.none,
+                    hintStyle: const TextStyle(color: Colors.grey)),
+              ),
+            )),
+      ],
+    );
+  }
+
+  Widget buildPersonNameField() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'form.personName'.tr,
+          style: const TextStyle(color: AppColor.gold),
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: TextField(
+                controller: personNameC,
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                    hintText: 'form.personNameHint'.tr,
                     border: InputBorder.none,
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
@@ -367,43 +303,6 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
     );
   }
 
-  Widget buildItemSelected(String item, bool isSelected) {
-    return InkWell(
-      onLongPress: () => showDialogConfirmDelete(item),
-      onTap: () => chooseItem(item),
-      child: Container(
-        alignment: Alignment.center,
-        decoration:
-            BoxDecoration(color: isSelected ? AppColor.gold : Colors.grey, borderRadius: BorderRadius.circular(10)),
-        child: Text(
-          item.tr,
-          style: TextStyle(color: isSelected ? AppColor.darkPurple : Colors.white),
-        ),
-      ),
-    );
-  }
-
-  Widget buildAddItem() {
-    return InkWell(
-      onTap: () => showDialogAddNewItemSelected(),
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(10)),
-        child: const Text(
-          '+',
-          style: TextStyle(color: Colors.white, fontSize: 24),
-        ),
-      ),
-    );
-  }
-
-  void chooseItem(String item) {
-    setState(() {
-      currentItemSelected = item;
-      genreC.text = item.tr;
-    });
-  }
-
   Future<void> handleAddRecord() async {
     setState(() {
       errorMessage = '';
@@ -412,14 +311,11 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
     if (datetimeC.text.isEmpty) {
       errorMessage += '${'form.dateAndTime.validate'.tr}\n';
     }
-    if (genreC.text.isEmpty) {
-      errorMessage += '${'form.genre.validate'.tr}\n';
+    if (personNameC.text.isEmpty) {
+      errorMessage += '${'form.personName.validate'.tr}\n';
     }
     if (moneyC.text.isEmpty) {
       errorMessage += '${'form.money.validate'.tr}\n';
-    }
-    if (contentC.text.isEmpty) {
-      errorMessage += '${'form.content.validate'.tr}\n';
     }
 
     if (errorMessage != '') {
@@ -429,95 +325,25 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
     }
 
     if (errorMessage == '') {
-      Record recordExpense = Record(
+      Record record = Record(
           id: const Uuid().v4(),
+          isLoan: true,
           datetime: dateTime.millisecondsSinceEpoch,
-          genre: isExpense ? currentItemSelected : null,
-          type: !isExpense ? currentItemSelected : null,
-          content: contentC.text,
-          money: isExpense ? -int.parse(moneyC.text.replaceAll(',', '')) : int.parse(moneyC.text.replaceAll(',', '')));
+          loanType: isBorrow ? 'borrow' : 'lend',
+          loanContent: contentC.text,
+          loanPersonName: personNameC.text,
+          money: int.parse(moneyC.text.replaceAll(',', '')));
 
-      appController.addRecord(recordExpense);
-      homeController.loadAllData();
-      statisticController.loadAllData();
+      appController.addRecord(record);
+      loanController.loadAllData();
 
       Get.back(closeOverlays: true);
-      Get.snackbar(
-          duration: const Duration(seconds: 1),
-          "snackbar.add.success.title".tr,
-          "snackbar.add.success.message".tr,
-          colorText: AppColor.darkPurple,
-          backgroundColor: AppColor.gold);
+      // Get.snackbar(
+      //     duration: const Duration(seconds: 1),
+      //     "snackbar.add.success.title".tr,
+      //     "snackbar.add.success.message".tr,
+      //     colorText: AppColor.darkPurple,
+      //     backgroundColor: AppColor.gold);
     }
-  }
-
-  showDialogAddNewItemSelected() {
-    Widget content = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextField(
-                controller: addNewItemSelectedC,
-                style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                    hintText: 'form.addNewItemSelectedHint'.tr,
-                    border: InputBorder.none,
-                    hintStyle: const TextStyle(color: Colors.grey)),
-              ),
-            )),
-      ],
-    );
-    showAppDialog(
-        title: "form.dialog.addNewItemSelected.title".tr,
-        content: content,
-        confirm: () {
-          addNewItemSelected(isExpense, addNewItemSelectedC.text);
-        });
-  }
-
-  addNewItemSelected(bool isExpense, String newItemSelected) async {
-    if (isExpense) {
-      var oldList = appController.prefs?.getStringList('customListExpenseGenre') ?? [];
-      await appController.prefs?.setStringList('customListExpenseGenre', [...oldList, newItemSelected]);
-      appController.loadItemSelectedList();
-      setState(() {
-        currentItemSelected = newItemSelected;
-        contentC.text = newItemSelected;
-      });
-    } else {
-      var oldList = appController.prefs?.getStringList('customListIncomeType') ?? [];
-      await appController.prefs?.setStringList('customListIncomeType', [...oldList, newItemSelected]);
-      appController.loadItemSelectedList();
-      setState(() {
-        currentItemSelected = newItemSelected;
-        contentC.text = newItemSelected;
-      });
-    }
-  }
-
-  showDialogConfirmDelete(String item) {
-    Widget content = Text(
-      "form.dialog.deleteItemSelected.content".tr,
-      style: const TextStyle(color: Colors.white),
-    );
-    deleteItem() {
-      if (isExpense) {
-        var list = appController.listGenre;
-        list.remove(item);
-        appController.listGenre.value = [...list];
-        appController.prefs?.setStringList('customListExpenseGenre', [...list]);
-      } else {
-        var list = appController.listType;
-        list.remove(item);
-        appController.listType.value = [...list];
-        appController.prefs?.setStringList('customListIncomeType', [...list]);
-      }
-    }
-    showAppDialog(title: "form.dialog.deleteItemSelected.title".tr, content: content, confirm: deleteItem);
   }
 }

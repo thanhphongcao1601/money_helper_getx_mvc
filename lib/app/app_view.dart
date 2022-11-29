@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:lottie/lottie.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
+import 'package:money_helper_getx_mvc/module/add_loan_module/add_loan_page.dart';
 import 'package:money_helper_getx_mvc/module/add_record_module/add_record_page.dart';
 import 'package:money_helper_getx_mvc/module/home_module/home_page.dart';
 import 'package:money_helper_getx_mvc/module/loan_module/loan_page.dart';
@@ -27,7 +28,11 @@ class _AppPageState extends State<AppPage> {
         backgroundColor: AppColor.purple,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Get.to(() => const AddRecordPage());
+            if (appController.currentPageIndex.value != 2) {
+              Get.to(() => const AddRecordPage());
+            } else {
+              Get.to(() => const AddLoanPage());
+            }
           },
           backgroundColor: AppColor.gold,
           child: const Icon(

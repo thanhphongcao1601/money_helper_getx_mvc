@@ -15,7 +15,7 @@ class HomeController extends GetxController {
 
   final listRecordGroupByDate = RxList<DailyRecord>([]).obs;
 
-  init(){
+  init() {
     currentDate.value = DateTime.now();
     loadAllData();
   }
@@ -44,11 +44,11 @@ class HomeController extends GetxController {
   getListRecordByMonth(DateTime selectedMonthYear) {
     RxList<Record> listRecordByMonth = RxList<Record>([]);
     for (var record in appController.listRecord.value) {
-      if (DateTime.fromMillisecondsSinceEpoch(record.datetime!).month ==
-              selectedMonthYear.month &&
-          DateTime.fromMillisecondsSinceEpoch(record.datetime!).year ==
-              selectedMonthYear.year) {
-        listRecordByMonth.add(record);
+      if (!(record.isLoan == true)) {
+        if (DateTime.fromMillisecondsSinceEpoch(record.datetime!).month == selectedMonthYear.month &&
+            DateTime.fromMillisecondsSinceEpoch(record.datetime!).year == selectedMonthYear.year) {
+          listRecordByMonth.add(record);
+        }
       }
     }
     listRecordByMonth.sortReversed();
@@ -64,8 +64,7 @@ class HomeController extends GetxController {
     });
 
     for (var item in groups.entries) {
-      DailyRecord dailyRecord =
-          DailyRecord(date: item.key, listRecord: item.value);
+      DailyRecord dailyRecord = DailyRecord(date: item.key, listRecord: item.value);
       listRecordGroupByDate.value.add(dailyRecord);
     }
   }

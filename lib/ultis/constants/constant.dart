@@ -12,6 +12,7 @@ class AppColor {
   static const Color mustHave = Colors.green;
   static const Color niceToHave = Colors.orange;
   static const Color wasted = Colors.redAccent;
+  static const Color blue = Colors.blue;
 }
 
 class AppConstantList {
@@ -21,17 +22,17 @@ class AppConstantList {
     "form.type.eWallet",
   ];
   static const List<String> listExpenseGenre = [
-          'form.genre.eating',
-          'form.genre.entertainment',
-          'form.genre.development',
-          'form.genre.transportation',
-          'form.genre.hobby',
-          'form.genre.living',
-          'form.genre.clothes',
-          'form.genre.beautify',
-          'form.genre.health',
-          'form.genre.education',
-          'form.genre.event',
-          'form.genre.other',
+    'form.genre.eating',
+    'form.genre.entertainment',
+    'form.genre.development',
+    'form.genre.transportation',
+    'form.genre.hobby',
+    'form.genre.living',
+    'form.genre.clothes',
+    'form.genre.beautify',
+    'form.genre.health',
+    'form.genre.education',
+    'form.genre.event',
+    'form.genre.other',
   ];
 }

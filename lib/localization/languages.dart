@@ -55,6 +55,8 @@ class Languages extends Translations {
           'form.content': 'Content',
           'form.contentHint': 'Enter your content',
           'form.content.validate': 'Content can not be empty',
+          'form.personName': 'Person name',
+          'form.personNameHint': 'Enter person name',
 
           'form.button.save': 'Save',
           'form.button.cancel': 'Cancel',
@@ -67,8 +69,8 @@ class Languages extends Translations {
           'form.dialog.deleteItemSelected.content': 'Delete selected item',
           'form.addNewItemSelectedHint': 'Enter new item',
           //loan
-          'loan.loan': 'Loan',
-          'loan.inDebt': 'In debt',
+          'loan.lend': 'Lend',
+          'loan.borrow': 'Borrow',
 
           //setting
           'setting.lockAppBiometrics': 'Biometrics',
@@ -165,6 +167,9 @@ class Languages extends Translations {
           'form.content': 'Nội dung',
           'form.contentHint': 'Nhập nội dung',
           'form.content.validate': 'Thiếu nội dung',
+          'form.personName': 'Họ và tên',
+          'form.personNameHint': 'Nhập họ và tên',
+          'form.personName.validate': 'Phải nhập họ và tên',
           'form.button.save': 'Lưu',
           'form.button.cancel': 'Hủy',
           'form.button.delete': 'Xóa',
@@ -173,8 +178,8 @@ class Languages extends Translations {
           'form.dialog.deleteItemSelected.title': 'Xác nhận xóa?',
           'form.dialog.deleteItemSelected.content': 'Xóa mục được chọn',
           //loan
-          'loan.loan': 'Đang cho vay',
-          'loan.inDebt': 'Đang nợ',
+          'loan.lend': 'Đang cho vay',
+          'loan.borrow': 'Đang nợ',
           //setting
           'setting.lockAppBiometrics': 'Xác thực bằng vân tay',
           'setting.darkMode': 'Chủ đề tối',

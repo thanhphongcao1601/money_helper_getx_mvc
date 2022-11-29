@@ -5,6 +5,11 @@ class Record extends Comparable {
   String? content;
   int? money;
   String? type;
+  bool? isLoan;
+  String? loanPersonName;
+  String? loanType;
+  String? loanContent;
+  bool? isFinishedLoan;
 
   Record(
       {this.id,
@@ -12,7 +17,12 @@ class Record extends Comparable {
       this.genre,
       this.content,
       this.money,
-      this.type});
+      this.type,
+      this.isLoan,
+      this.loanPersonName,
+      this.loanType,
+      this.loanContent,
+      this.isFinishedLoan});
 
   Record.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -21,6 +31,11 @@ class Record extends Comparable {
     content = json['content'];
     money = json['money'];
     type = json['type'];
+    isLoan = json['isLoan'];
+    loanPersonName = json['loanPersonName'];
+    loanType = json['loanType'];
+    loanContent = json['loanContent'];
+    isFinishedLoan = json['isFinishedLoan'];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,11 +46,33 @@ class Record extends Comparable {
     data['content'] = content;
     data['money'] = money;
     data['type'] = type;
+    data['isLoan'] = isLoan;
+    data['loanPersonName'] = loanPersonName;
+    data['loanType'] = loanType;
+    data['loanContent'] = loanContent;
+    data['isFinishedLoan'] = isFinishedLoan;
     return data;
   }
 
   @override
   int compareTo(other) {
     return datetime!.compareTo(other.datetime);
+  }
+
+  @override
+  String toString() {
+    return 'Record('
+        'id=$id,'
+        'datetime=$datetime,'
+        'content=$content,'
+        'genre=$genre,'
+        'content=$content,'
+        'money=$money,'
+        'type=$type,'
+        'isLoan=$isLoan,'
+        'loanPersonName=$loanPersonName,'
+        'loanType=$loanType,'
+        'loanContent=$loanContent,'
+        'isFinishedLoan=$isFinishedLoan';
   }
 }

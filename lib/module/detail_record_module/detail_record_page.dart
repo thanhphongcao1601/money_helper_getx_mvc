@@ -7,6 +7,7 @@ import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/home_module/home_controller.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
+import 'package:money_helper_getx_mvc/ultis/widgets/app_dialog.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../../models/record.dart';
@@ -419,56 +420,32 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
   }
 
   showDialogAddNewItemSelected() {
-    Get.defaultDialog(
-      backgroundColor: AppColor.purple,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-      title: "form.dialog.addNewItemSelected.title".tr,
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: TextField(
-                  controller: addNewItemSelectedC,
-                  style: const TextStyle(color: Colors.black),
-                  decoration: InputDecoration(
-                      hintText: 'form.addNewItemSelectedHint'.tr,
-                      border: InputBorder.none,
-                      hintStyle: const TextStyle(color: Colors.grey)),
-                ),
-              )),
-        ],
-      ),
-      titleStyle: const TextStyle(color: AppColor.gold),
-      confirm: ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
-          onPressed: () {
-            addNewItemSelected(isExpense, addNewItemSelectedC.text);
-            Get.back();
-          },
-          child: Text(
-            "form.button.save".tr,
-            style: const TextStyle(color: AppColor.darkPurple),
-          )),
-      cancel: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: AppColor.gold),
-            ),
-            onPressed: () {
-              Get.back();
-            },
-            child: Text(
-              "form.button.cancel".tr,
-              style: const TextStyle(color: AppColor.gold),
+    Widget content = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: TextField(
+                controller: addNewItemSelectedC,
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                    hintText: 'form.addNewItemSelectedHint'.tr,
+                    border: InputBorder.none,
+                    hintStyle: const TextStyle(color: Colors.grey)),
+              ),
             )),
-      ),
+      ],
     );
+    showAppDialog(
+        title: "form.dialog.addNewItemSelected.title".tr,
+        content: content,
+        confirm: () {
+          addNewItemSelected(isExpense, addNewItemSelectedC.text);
+        });
   }
 
   addNewItemSelected(bool isExpense, String newItemSelected) async {
@@ -492,51 +469,28 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
   }
 
   showDialogConfirmDelete(String item) {
-    Get.defaultDialog(
-      backgroundColor: AppColor.purple,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-      content: Text(
-        "form.dialog.deleteItemSelected.content".tr,
-        style: const TextStyle(color: Colors.white),
-      ),
-      title: "form.dialog.deleteItemSelected.title".tr,
-      titleStyle: const TextStyle(color: AppColor.gold),
-      confirm: ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
-          onPressed: () {
-            if (isExpense) {
-              var list = appController.listGenre;
-              list.remove(item);
-              appController.listGenre.value = [...list];
-              appController.prefs?.setStringList('customListExpenseGenre', [...list]);
-              Get.back();
-            } else {
-              var list = appController.listType;
-              list.remove(item);
-              appController.listType.value = [...list];
-              appController.prefs?.setStringList('customListIncomeType', [...list]);
-              Get.back();
-            }
-          },
-          child: Text(
-            "form.button.delete".tr,
-            style: const TextStyle(color: AppColor.darkPurple),
-          )),
-      cancel: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: AppColor.gold),
-            ),
-            onPressed: () {
-              Get.back(closeOverlays: true);
-            },
-            child: Text(
-              "form.button.cancel".tr,
-              style: const TextStyle(color: AppColor.gold),
-            )),
-      ),
+    Widget content = Text(
+      "form.dialog.deleteItemSelected.content".tr,
+      style: const TextStyle(color: Colors.white),
     );
+
+    deleteItem() {
+      if (isExpense) {
+        var list = appController.listGenre;
+        list.remove(item);
+        appController.listGenre.value = [...list];
+        appController.prefs?.setStringList('customListExpenseGenre', [...list]);
+        Get.back();
+      } else {
+        var list = appController.listType;
+        list.remove(item);
+        appController.listType.value = [...list];
+        appController.prefs?.setStringList('customListIncomeType', [...list]);
+        Get.back();
+      }
+    }
+
+    showAppDialog(title: "form.dialog.deleteItemSelected.title".tr, content: content, confirm: deleteItem);
   }
 
   void chooseItem(String item) {
@@ -547,49 +501,24 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
   }
 
   void handleDeleteRecord() {
-    Get.defaultDialog(
-      backgroundColor: AppColor.purple,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-      content: Text(
-        "form.dialog.delete.content".tr,
-        style: const TextStyle(color: Colors.white),
-      ),
-      title: "form.dialog.delete.title".tr,
-      titleStyle: const TextStyle(color: AppColor.gold),
-      confirm: ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
-          onPressed: () {
-            appController.deleteRecord(currentRecord);
-            homeController.loadAllData();
-            statisticController.loadAllData();
-
-            Get.back(closeOverlays: true);
-            Get.snackbar(
-                "snackbar.delete.success.title".tr,
-                duration: const Duration(seconds: 1),
-                "snackbar.delete.success.message".tr,
-                colorText: AppColor.darkPurple,
-                backgroundColor: AppColor.gold);
-          },
-          child: Text(
-            "form.button.delete".tr,
-            style: const TextStyle(color: AppColor.darkPurple),
-          )),
-      cancel: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: AppColor.gold),
-            ),
-            onPressed: () {
-              Get.back(closeOverlays: true);
-            },
-            child: Text(
-              "form.button.cancel".tr,
-              style: const TextStyle(color: AppColor.gold),
-            )),
-      ),
+    Widget content = Text(
+      "form.dialog.delete.content".tr,
+      style: const TextStyle(color: Colors.white),
     );
+    deleteRecord() {
+      appController.deleteRecord(currentRecord);
+      homeController.loadAllData();
+      statisticController.loadAllData();
+
+      Get.back(closeOverlays: true);
+      Get.snackbar(
+          "snackbar.delete.success.title".tr,
+          duration: const Duration(seconds: 1),
+          "snackbar.delete.success.message".tr,
+          colorText: AppColor.darkPurple,
+          backgroundColor: AppColor.gold);
+    }
+    showAppDialog(title: "form.dialog.delete.title".tr, content: content, confirm: deleteRecord);
   }
 
   void handleUpdateRecord() {
