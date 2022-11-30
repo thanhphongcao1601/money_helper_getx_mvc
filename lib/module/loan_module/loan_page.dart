@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
-import 'package:money_helper_getx_mvc/module/add_loan_module/add_loan_page.dart';
 import 'package:money_helper_getx_mvc/module/loan_module/loan_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/widgets/loan_tile.dart';

@@ -32,7 +32,6 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
   late String currentItemSelected;
 
   late TextEditingController datetimeC;
-  late TextEditingController expenseTypeC;
   late TextEditingController genreC;
   late TextEditingController contentC;
   late TextEditingController moneyC;
@@ -455,7 +454,7 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
       appController.loadItemSelectedList();
       setState(() {
         currentItemSelected = newItemSelected;
-        contentC.text = newItemSelected;
+        genreC.text = newItemSelected;
       });
     } else {
       var oldList = appController.prefs?.getStringList('customListIncomeType') ?? [];
@@ -463,7 +462,7 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
       appController.loadItemSelectedList();
       setState(() {
         currentItemSelected = newItemSelected;
-        contentC.text = newItemSelected;
+        genreC.text = newItemSelected;
       });
     }
   }

@@ -2,7 +2,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/models/record.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoanController extends GetxController {
   AppController appController = Get.find();

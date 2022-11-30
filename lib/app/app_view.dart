@@ -70,7 +70,7 @@ class _AppPageState extends State<AppPage> {
           ],
         ));
       case 2:
-        return LoanPage();
+        return const LoanPage();
       case 3:
         return const SettingPage();
       default:

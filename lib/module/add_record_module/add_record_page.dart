@@ -487,7 +487,7 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
       appController.loadItemSelectedList();
       setState(() {
         currentItemSelected = newItemSelected;
-        contentC.text = newItemSelected;
+        genreC.text = newItemSelected;
       });
     } else {
       var oldList = appController.prefs?.getStringList('customListIncomeType') ?? [];
@@ -495,7 +495,7 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
       appController.loadItemSelectedList();
       setState(() {
         currentItemSelected = newItemSelected;
-        contentC.text = newItemSelected;
+        genreC.text = newItemSelected;
       });
     }
   }
@@ -511,13 +511,16 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
         list.remove(item);
         appController.listGenre.value = [...list];
         appController.prefs?.setStringList('customListExpenseGenre', [...list]);
+        statisticController.loadAllData();
       } else {
         var list = appController.listType;
         list.remove(item);
         appController.listType.value = [...list];
         appController.prefs?.setStringList('customListIncomeType', [...list]);
+        statisticController.loadAllData();
       }
     }
+
     showAppDialog(title: "form.dialog.deleteItemSelected.title".tr, content: content, confirm: deleteItem);
   }
 }

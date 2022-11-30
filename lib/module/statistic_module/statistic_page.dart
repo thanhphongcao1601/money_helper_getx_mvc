@@ -216,7 +216,7 @@ class _StatisticPageState extends State<StatisticPage> with TickerProviderStateM
                 ? Padding(
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     child: AspectRatio(
-                      aspectRatio: 2 / 1,
+                      aspectRatio: 5 / 3,
                       child: DChartBar(
                         data: [
                           {
