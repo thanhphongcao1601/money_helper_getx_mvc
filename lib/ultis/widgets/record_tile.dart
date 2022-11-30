@@ -28,12 +28,15 @@ Widget buildRecordTile({required Record record}) {
                 Padding(
                     padding: const EdgeInsets.all(5),
                     child: Text(
-                      DateTime.fromMillisecondsSinceEpoch(record.datetime ?? 0).toString().substring(11, 19),
+                      DateTime.fromMillisecondsSinceEpoch(record.datetime ?? 0)
+                          .toString()
+                          .substring(11, 16),
                       style: const TextStyle(color: Colors.white),
                     )),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(5, 0, 0, 5),
-                  child: Text(record.content.toString(), style: const TextStyle(color: Colors.white)),
+                  child: Text(record.content.toString(),
+                      style: const TextStyle(color: Colors.white)),
                 ),
               ],
             ),
@@ -44,16 +47,23 @@ Widget buildRecordTile({required Record record}) {
             children: [
               Container(
                 decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10)),
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(10)),
                     color: record.money! < 0
-                        ? Helper().getItemTypeColor(record.genre!, appController.listGenre)
-                        : Helper().getItemTypeColor(record.type!, appController.listType)),
+                        ? Helper().getItemTypeColor(
+                            record.genre!, appController.listGenre)
+                        : Helper().getItemTypeColor(
+                            record.type!, appController.listType)),
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: Text(
-                    record.money! < 0 ? (record.genre ?? "").tr : (record.type ?? "").tr,
-                    style: const TextStyle(color: AppColor.darkPurple, fontWeight: FontWeight.bold),
+                    record.money! < 0
+                        ? (record.genre ?? "").tr
+                        : (record.type ?? "").tr,
+                    style: const TextStyle(
+                        color: AppColor.darkPurple,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -64,7 +74,9 @@ Widget buildRecordTile({required Record record}) {
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: record.money! > 0 ? AppColor.mustHave : AppColor.wasted),
+                      color: record.money! > 0
+                          ? AppColor.mustHave
+                          : AppColor.wasted),
                 ),
               )
             ],

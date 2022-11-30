@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/module/loan_module/loan_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
+import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
 import 'package:money_helper_getx_mvc/ultis/widgets/loan_tile.dart';
 
 class LoanPage extends StatefulWidget {
@@ -34,11 +35,17 @@ class _LoanPageState extends State<LoanPage> {
             children: [
               Text(
                 '${'loan.lend'.tr} : ',
-                style: const TextStyle(color: AppColor.gold, fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: AppColor.gold,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
               Obx(() => Text(
-                    loanController.totalLend.value.toString(),
-                    style: const TextStyle(color: AppColor.blue, fontSize: 18, fontWeight: FontWeight.bold),
+                    Helper().formatMoney(loanController.totalLend.value),
+                    style: const TextStyle(
+                        color: AppColor.blue,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
                   )),
             ],
           ),
@@ -50,11 +57,17 @@ class _LoanPageState extends State<LoanPage> {
             children: [
               Text(
                 '${'loan.borrow'.tr} : ',
-                style: const TextStyle(color: AppColor.gold, fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: AppColor.gold,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
               Obx(() => Text(
-                    loanController.totalBorrow.value.toString(),
-                    style: const TextStyle(color: AppColor.wasted, fontSize: 18, fontWeight: FontWeight.bold),
+                    Helper().formatMoney(loanController.totalBorrow.value),
+                    style: const TextStyle(
+                        color: AppColor.wasted,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
                   )),
             ],
           ),
@@ -63,8 +76,10 @@ class _LoanPageState extends State<LoanPage> {
           ),
           Expanded(
               child: SingleChildScrollView(
-            child: Obx(() =>
-                Column(children: [for (var record in loanController.listLoan.value) buildLoanTile(record: record)])),
+            child: Obx(() => Column(children: [
+                  for (var record in loanController.listLoan.value)
+                    buildLoanTile(record: record)
+                ])),
           )),
         ],
       ),

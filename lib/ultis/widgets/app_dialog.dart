@@ -12,8 +12,8 @@ showAppDialog({required String title, required Widget content, Function? confirm
     confirm: confirm!=null ? ElevatedButton(
         style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
         onPressed: () {
-          confirm();
           Get.back();
+          confirm();
         },
         child: Text(
           "form.button.save".tr,

@@ -338,12 +338,12 @@ class _AddLoanPageState extends State<AddLoanPage> with TickerProviderStateMixin
       loanController.loadAllData();
 
       Get.back(closeOverlays: true);
-      // Get.snackbar(
-      //     duration: const Duration(seconds: 1),
-      //     "snackbar.add.success.title".tr,
-      //     "snackbar.add.success.message".tr,
-      //     colorText: AppColor.darkPurple,
-      //     backgroundColor: AppColor.gold);
+      Get.snackbar(
+          duration: const Duration(seconds: 1),
+          "snackbar.add.success.title".tr,
+          "snackbar.add.success.message".tr,
+          colorText: AppColor.darkPurple,
+          backgroundColor: AppColor.gold);
     }
   }
 }

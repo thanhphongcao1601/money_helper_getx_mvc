@@ -8,6 +8,8 @@ import 'package:money_helper_getx_mvc/ultis/helper/helper.dart';
 
 class StatisticController extends GetxController {
   AppController appController = Get.find();
+  final currentTab = 0.obs;
+
   final tileSelected = ''.obs;
   final currentDate = DateTime.now().obs;
 
@@ -55,8 +57,10 @@ class StatisticController extends GetxController {
     RxList<Record> listByMonth = RxList<Record>([]);
     for (var record in appController.listRecord.value) {
       if (!(record.isLoan == true)) {
-        if (DateTime.fromMillisecondsSinceEpoch(record.datetime!).month == selectedMonthYear.month &&
-            DateTime.fromMillisecondsSinceEpoch(record.datetime!).year == selectedMonthYear.year) {
+        if (DateTime.fromMillisecondsSinceEpoch(record.datetime!).month ==
+                selectedMonthYear.month &&
+            DateTime.fromMillisecondsSinceEpoch(record.datetime!).year ==
+                selectedMonthYear.year) {
           listByMonth.add(record);
         }
       }
@@ -79,10 +83,14 @@ class StatisticController extends GetxController {
           Map<String, dynamic> obj = {
             'domain': item.key.toString().tr,
             'measure': Helper().roundDouble(
-                (item.value.sumBy<int>((e) => e.money! < 0 ? e.money! : 0) / totalMonthExpense.value * 100), 2),
+                (item.value.sumBy<int>((e) => e.money! < 0 ? e.money! : 0) /
+                    totalMonthExpense.value *
+                    100),
+                2),
             'money': (item.value.sumBy<int>((e) => e.money! < 0 ? e.money! : 0))
           };
-          if (!dataExpenseToChart.value.any((element) => element['domain'] == obj['domain'])) {
+          if (!dataExpenseToChart.value
+              .any((element) => element['domain'] == obj['domain'])) {
             dataExpenseToChart.value.add(obj);
           }
         }
@@ -97,10 +105,14 @@ class StatisticController extends GetxController {
           Map<String, dynamic> obj = {
             'domain': item.key.toString().tr,
             'measure': Helper().roundDouble(
-                (item.value.sumBy<int>((e) => e.money! > 0 ? e.money! : 0) / totalMonthIncome.value * 100), 2),
+                (item.value.sumBy<int>((e) => e.money! > 0 ? e.money! : 0) /
+                    totalMonthIncome.value *
+                    100),
+                2),
             'money': item.value.sumBy<int>((e) => e.money! > 0 ? e.money! : 0)
           };
-          if (!dataIncomeToChart.value.any((element) => element['domain'] == obj['domain'])) {
+          if (!dataIncomeToChart.value
+              .any((element) => element['domain'] == obj['domain'])) {
             dataIncomeToChart.value.add(obj);
           }
         }
@@ -118,7 +130,8 @@ class StatisticController extends GetxController {
     });
 
     for (var item in groups.entries) {
-      DailyRecord dailyRecord = DailyRecord(date: item.key, listRecord: item.value);
+      DailyRecord dailyRecord =
+          DailyRecord(date: item.key, listRecord: item.value);
       listRecordGroupByDate.value.add(dailyRecord);
     }
     listRecordGroupByDate.refresh();

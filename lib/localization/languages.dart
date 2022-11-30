@@ -48,7 +48,6 @@ class Languages extends Translations {
           'form.genre.education': 'Education',
           'form.genre.event': 'Event',
           'form.genre.other': 'Other',
-
           'form.money': 'Money',
           'form.moneyHint': 'Enter your money',
           'form.money.validate': 'Money can not be empty',
@@ -57,21 +56,22 @@ class Languages extends Translations {
           'form.content.validate': 'Content can not be empty',
           'form.personName': 'Person name',
           'form.personNameHint': 'Enter person name',
-
+          //
           'form.button.save': 'Save',
           'form.button.cancel': 'Cancel',
           'form.button.delete': 'Delete',
+          //
           'form.dialog.delete.title': 'Delete record?',
-          'form.dialog.delete.content': 'After delete record, you can not restore the record!',
-
+          'form.dialog.delete.content': 'Do you want to delete record?',
           'form.dialog.addNewItemSelected.title': 'Add new item',
           'form.dialog.deleteItemSelected.title': 'Delete item?',
           'form.dialog.deleteItemSelected.content': 'Delete selected item',
           'form.addNewItemSelectedHint': 'Enter new item',
           //loan
+          'lend': 'Lend',
+          'borrow': 'Borrow',
           'loan.lend': 'Lend',
           'loan.borrow': 'Borrow',
-
           //setting
           'setting.lockAppBiometrics': 'Biometrics',
           'setting.darkMode': 'Dark mode',
@@ -80,6 +80,7 @@ class Languages extends Translations {
           'setting.signOut': 'Sign out',
           'setting.signIn': 'Sign in',
           'setting.backUp': 'Back up',
+          //
           'setting.backUp.bottomSheet.chooseBackUpTime': 'Google Drive Back up',
           'setting.backUp.bottomSheet.autoBackUp': 'Auto back up every day',
           'setting.backUp.bottomSheet.daily': 'Daily',
@@ -89,32 +90,34 @@ class Languages extends Translations {
           'setting.backUp.bottomSheet.time': 'Time',
           'setting.backUp.bottomSheet.url': 'URL',
           'setting.backUp.bottomSheet.email': 'Email',
-          'setting.backUp.bottomSheet.dialog.chooseFile': 'Choose file to restore',
+          'setting.backUp.bottomSheet.dialog.chooseFile':
+              'Choose file to restore',
           //snackbar
           'snackbar.add.success.title': 'Success',
           'snackbar.add.success.message': 'You add a record completely',
           'snackbar.add.fail.title': 'Fail',
           'snackbar.add.fail.message': 'Fail to add a record',
-
+          //
           'snackbar.update.success.title': 'Success',
           'snackbar.update.success.message': 'You update record completely',
           'snackbar.update.fail.title': 'Fail',
           'snackbar.update.fail.message': 'Fail to update record',
-
+          //
           'snackbar.delete.success.title': 'Success',
           'snackbar.delete.success.message': 'You delete a record completely',
           'snackbar.delete.fail.title': 'Fail',
           'snackbar.delete.fail.message': 'Fail to delete record',
-
+          //
           'snackbar.backup.success.title': 'Success',
           'snackbar.backup.success.message': 'Back up completely',
           'snackbar.backup.fail.title': 'Fail',
           'snackbar.backup.fail.message': 'Back up fail',
-
+          //
           'snackbar.restore.success.title': 'Success',
           'snackbar.restore.success.message': 'Restore completely',
           'snackbar.restore.fail.title': 'Fail',
-          'snackbar.restore.fail.message': 'Restore fail, please check and try again',
+          'snackbar.restore.fail.message':
+              'Restore fail, please check and try again',
         },
         'vi_VN': {
           //app
@@ -134,7 +137,8 @@ class Languages extends Translations {
           'tab.income': 'Thu',
           //form
           'form.dateAndTime': 'Ngày và giờ',
-          'form.dateAndTime.validate': 'Phải chọn ngày và giờ', 'form.dateAndTimeHint': 'Nhập ngày và giờ',
+          'form.dateAndTime.validate': 'Phải chọn ngày và giờ',
+          'form.dateAndTimeHint': 'Nhập ngày và giờ',
           'form.type': 'Thể loại',
           //form-type-value
           'form.typeHint': 'Chọn thể loại',
@@ -160,7 +164,6 @@ class Languages extends Translations {
           'form.genre.education': 'Giáo dục',
           'form.genre.event': 'Sự kiện',
           'form.genre.other': 'Khác',
-
           'form.money': 'Số tiền',
           'form.moneyHint': 'Nhập số tiền',
           'form.money.validate': 'Số tiền không được để trống',
@@ -170,16 +173,20 @@ class Languages extends Translations {
           'form.personName': 'Họ và tên',
           'form.personNameHint': 'Nhập họ và tên',
           'form.personName.validate': 'Phải nhập họ và tên',
+          //
           'form.button.save': 'Lưu',
           'form.button.cancel': 'Hủy',
+          //
           'form.button.delete': 'Xóa',
           'form.dialog.delete.title': 'Xóa bản ghi?',
-          'form.dialog.delete.content': 'Sau khi xóa, dữ liệu sẽ không thể khôi phục!',
+          'form.dialog.delete.content': 'Xác nhận xóa bản ghi!',
           'form.dialog.deleteItemSelected.title': 'Xác nhận xóa?',
           'form.dialog.deleteItemSelected.content': 'Xóa mục được chọn',
           //loan
-          'loan.lend': 'Đang cho vay',
-          'loan.borrow': 'Đang nợ',
+          'lend': 'Cho vay',
+          'borrow': 'Nợ',
+          'loan.lend': 'Cho vay',
+          'loan.borrow': 'Nợ',
           //setting
           'setting.lockAppBiometrics': 'Xác thực bằng vân tay',
           'setting.darkMode': 'Chủ đề tối',
@@ -188,6 +195,7 @@ class Languages extends Translations {
           'setting.updateProfile': 'Chỉnh sửa tài khoản',
           'setting.signOut': 'Đăng xuất',
           'setting.signIn': 'Đăng nhập',
+          //
           'setting.backUp.bottomSheet.chooseBackUpTime': 'Google Drive Sao lưu',
           'setting.backUp.bottomSheet.autoBackUp': 'Sao lưu tự động mỗi ngày',
           'setting.backUp.bottomSheet.daily': 'Hằng ngày',
@@ -197,28 +205,30 @@ class Languages extends Translations {
           'setting.backUp.bottomSheet.time': 'Thời gian',
           'setting.backUp.bottomSheet.url': 'URL',
           'setting.backUp.bottomSheet.email': 'Email',
-          'setting.backUp.bottomSheet.dialog.chooseFile': 'Chọn file muốn khôi phục',
+          'setting.backUp.bottomSheet.dialog.chooseFile':
+              'Chọn file muốn khôi phục',
           //snackbar
           'snackbar.add.success.title': 'Thành công',
           'snackbar.add.success.message': 'Bạn đã thêm thành công',
           'snackbar.add.fail.title': 'Thất bại',
           'snackbar.add.fail.message': 'Không thể thực hiện thêm bản ghi',
-
+          //
           'snackbar.update.success.title': 'Thành công',
           'snackbar.update.success.message': 'Cập nhật bản ghi thành công',
           'snackbar.update.fail.title': 'Thất bại',
           'snackbar.update.fail.message': 'Cập nhật bản ghi thất bại',
-
+          //
           'snackbar.delete.success.title': 'Thành công',
           'snackbar.delete.success.message': 'Xóa bản ghi thành công',
           'snackbar.delete.fail.title': 'Thất bại',
           'snackbar.delete.fail.message': 'Hello Xóa bản ghi thất bại',
-
+          //
           'snackbar.backup.success.title': 'Thành công',
-          'snackbar.backup.success.message': 'Dữ liệu đã được sao lưu thành công',
+          'snackbar.backup.success.message':
+              'Dữ liệu đã được sao lưu thành công',
           'snackbar.backup.fail.title': 'Thất bại',
           'snackbar.backup.fail.message': 'Sao lưu thất bại',
-
+          //
           'snackbar.restore.success.title': 'Thành công',
           'snackbar.restore.success.message': 'Khôi phục dữ liệu hoàn tất',
           'snackbar.restore.fail.title': 'Thất bại',
