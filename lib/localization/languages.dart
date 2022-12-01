@@ -33,9 +33,9 @@ class Languages extends Translations {
           'form.genre.validate': 'Genre can not be empty',
           'form.genreHint': 'Choose your genre',
           //form-genre-value
-          // 'form.genre.mustHave': 'Must have',
-          // 'form.genre.niceToHave': 'Nice to have',
-          // 'form.genre.wasted': 'Wasted',
+          'form.genre.mustHave': 'Must have',
+          'form.genre.niceToHave': 'Nice to have',
+          'form.genre.wasted': 'Wasted',
           'form.genre.eating': 'Eating',
           'form.genre.entertainment': 'Entertainment',
           'form.genre.development': 'Development',
@@ -64,9 +64,9 @@ class Languages extends Translations {
           'form.dialog.delete.title': 'Delete record?',
           'form.dialog.delete.content': 'Do you want to delete record?',
           'form.dialog.addNewItemSelected.title': 'Add new item',
+          'form.addNewItemSelectedHint': 'Enter new item',
           'form.dialog.deleteItemSelected.title': 'Delete item?',
           'form.dialog.deleteItemSelected.content': 'Delete selected item',
-          'form.addNewItemSelectedHint': 'Enter new item',
           //loan
           'lend': 'Lend',
           'borrow': 'Borrow',
@@ -90,8 +90,12 @@ class Languages extends Translations {
           'setting.backUp.bottomSheet.time': 'Time',
           'setting.backUp.bottomSheet.url': 'URL',
           'setting.backUp.bottomSheet.email': 'Email',
-          'setting.backUp.bottomSheet.dialog.chooseFile':
-              'Choose file to restore',
+          'setting.backUp.bottomSheet.dialog.chooseFile': 'Choose file to restore',
+          //
+          'setting.signOut.dialog.title': 'Sign out',
+          'setting.signOut.dialog.title.content': 'Back up and sign out',
+          'setting.signOut.dialog.confirmText': 'Yes',
+          'setting.signOut.dialog.cancelText': 'No',
           //snackbar
           'snackbar.add.success.title': 'Success',
           'snackbar.add.success.message': 'You add a record completely',
@@ -116,8 +120,7 @@ class Languages extends Translations {
           'snackbar.restore.success.title': 'Success',
           'snackbar.restore.success.message': 'Restore completely',
           'snackbar.restore.fail.title': 'Fail',
-          'snackbar.restore.fail.message':
-              'Restore fail, please check and try again',
+          'snackbar.restore.fail.message': 'Restore fail, please check and try again',
         },
         'vi_VN': {
           //app
@@ -149,9 +152,9 @@ class Languages extends Translations {
           'form.genre.validate': 'Phải chọn thể loại',
           'form.genreHint': 'Chọn thể loại',
           //form-genre-value
-          // 'form.genre.mustHave': 'Cần thiết',
-          // 'form.genre.niceToHave': 'Nên',
-          // 'form.genre.wasted': 'Lãng phí',
+          'form.genre.mustHave': 'Cần thiết',
+          'form.genre.niceToHave': 'Nên',
+          'form.genre.wasted': 'Lãng phí',
           'form.genre.eating': 'Ăn uống',
           'form.genre.entertainment': 'Giải trí',
           'form.genre.development': 'Tự phát triển',
@@ -170,15 +173,17 @@ class Languages extends Translations {
           'form.content': 'Nội dung',
           'form.contentHint': 'Nhập nội dung',
           'form.content.validate': 'Thiếu nội dung',
-          'form.personName': 'Họ và tên',
-          'form.personNameHint': 'Nhập họ và tên',
-          'form.personName.validate': 'Phải nhập họ và tên',
+          'form.personName': 'Tên',
+          'form.personNameHint': 'Nhập tên',
+          'form.personName.validate': 'Phải nhập tên',
           //
           'form.button.save': 'Lưu',
           'form.button.cancel': 'Hủy',
           //
           'form.button.delete': 'Xóa',
           'form.dialog.delete.title': 'Xóa bản ghi?',
+          'form.dialog.addNewItemSelected.title': 'Thêm thể loại',
+          'form.addNewItemSelectedHint': 'Nhập thể loại',
           'form.dialog.delete.content': 'Xác nhận xóa bản ghi!',
           'form.dialog.deleteItemSelected.title': 'Xác nhận xóa?',
           'form.dialog.deleteItemSelected.content': 'Xóa mục được chọn',
@@ -205,8 +210,12 @@ class Languages extends Translations {
           'setting.backUp.bottomSheet.time': 'Thời gian',
           'setting.backUp.bottomSheet.url': 'URL',
           'setting.backUp.bottomSheet.email': 'Email',
-          'setting.backUp.bottomSheet.dialog.chooseFile':
-              'Chọn file muốn khôi phục',
+          'setting.backUp.bottomSheet.dialog.chooseFile': 'Chọn file muốn khôi phục',
+          //
+          'setting.signOut.dialog.title': 'Đăng xuất',
+          'setting.signOut.dialog.title.content': 'Sao lưu và đăng xuất?',
+          'setting.signOut.dialog.confirmText': 'Sao lưu',
+          'setting.signOut.dialog.cancelText': 'Đăng xuất',
           //snackbar
           'snackbar.add.success.title': 'Thành công',
           'snackbar.add.success.message': 'Bạn đã thêm thành công',
@@ -224,8 +233,7 @@ class Languages extends Translations {
           'snackbar.delete.fail.message': 'Hello Xóa bản ghi thất bại',
           //
           'snackbar.backup.success.title': 'Thành công',
-          'snackbar.backup.success.message':
-              'Dữ liệu đã được sao lưu thành công',
+          'snackbar.backup.success.message': 'Dữ liệu đã được sao lưu thành công',
           'snackbar.backup.fail.title': 'Thất bại',
           'snackbar.backup.fail.message': 'Sao lưu thất bại',
           //

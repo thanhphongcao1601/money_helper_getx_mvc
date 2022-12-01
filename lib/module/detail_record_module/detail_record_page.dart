@@ -13,16 +13,14 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../models/record.dart';
 
 class DetailRecordPage extends StatefulWidget {
-  const DetailRecordPage({Key? key, required this.currentRecord})
-      : super(key: key);
+  const DetailRecordPage({Key? key, required this.currentRecord}) : super(key: key);
   final Record currentRecord;
 
   @override
   State<DetailRecordPage> createState() => _DetailRecordPageState();
 }
 
-class _DetailRecordPageState extends State<DetailRecordPage>
-    with TickerProviderStateMixin {
+class _DetailRecordPageState extends State<DetailRecordPage> with TickerProviderStateMixin {
   AppController appController = Get.put(AppController());
   HomeController homeController = Get.put(HomeController());
   StatisticController statisticController = Get.put(StatisticController());
@@ -57,9 +55,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
 
     dateTime = DateTime.fromMillisecondsSinceEpoch(currentRecord.datetime!);
     datetimeC.text = dateTime.millisecondsSinceEpoch.toString();
-    currentItemSelected = currentRecord.money! < 0
-        ? currentRecord.genre.toString()
-        : currentRecord.type.toString();
+    currentItemSelected = currentRecord.money! < 0 ? currentRecord.genre.toString() : currentRecord.type.toString();
     genreC.text = currentItemSelected.tr;
     errorMessage = '';
     moneyC.text = currentRecord.money!.abs().toString();
@@ -84,12 +80,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buildDateTimeField(),
-                    buildGenreField(),
-                    buildMoneyField(),
-                    buildContentField()
-                  ],
+                  children: [buildDateTimeField(), buildGenreField(), buildMoneyField(), buildContentField()],
                 ),
               ),
               buildErrorMessage(),
@@ -138,8 +129,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: DateTimeField(
@@ -147,8 +137,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 style: const TextStyle(color: Colors.black),
                 initialValue: dateTime,
                 decoration: InputDecoration(
-                    hintText: 'form.dateAndTimeHint'.tr,
-                    hintStyle: const TextStyle(color: Colors.grey)),
+                    hintText: 'form.dateAndTimeHint'.tr, hintStyle: const TextStyle(color: Colors.grey)),
                 format: DateFormat("yyyy-MM-dd  HH:mm"),
                 onShowPicker: (context, currentValue) async {
                   final date = await showDatePicker(
@@ -156,16 +145,13 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                             data: Theme.of(context).copyWith(
                               colorScheme: const ColorScheme.light(
                                 primaryContainer: AppColor.purple,
-                                primary: AppColor
-                                    .darkPurple, // header background color
+                                primary: AppColor.darkPurple, // header background color
                                 onPrimary: AppColor.gold, // header text color
-                                onSurface:
-                                    AppColor.darkPurple, // body text color
+                                onSurface: AppColor.darkPurple, // body text color
                               ),
                               textButtonTheme: TextButtonThemeData(
                                 style: TextButton.styleFrom(
-                                  foregroundColor:
-                                      AppColor.darkPurple, // button text color
+                                  foregroundColor: AppColor.darkPurple, // button text color
                                 ),
                               ),
                             ),
@@ -181,23 +167,20 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                         data: Theme.of(context).copyWith(
                           colorScheme: const ColorScheme.light(
                             primaryContainer: AppColor.purple,
-                            primary:
-                                AppColor.darkPurple, // header background color
+                            primary: AppColor.darkPurple, // header background color
                             onPrimary: AppColor.gold, // header text color
                             onSurface: AppColor.darkPurple, // body text color
                           ),
                           textButtonTheme: TextButtonThemeData(
                             style: TextButton.styleFrom(
-                              foregroundColor:
-                                  AppColor.darkPurple, // button text color
+                              foregroundColor: AppColor.darkPurple, // button text color
                             ),
                           ),
                         ),
                         child: child!,
                       ),
                       context: context,
-                      initialTime: TimeOfDay.fromDateTime(
-                          currentValue ?? DateTime.now()),
+                      initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                     );
                     dateTime = DateTimeField.combine(date, time);
                     return dateTime;
@@ -223,8 +206,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           ),
           Container(
               margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: TextField(
@@ -245,8 +227,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
                 crossAxisSpacing: 5,
                 childAspectRatio: 3 / 1,
                 children: [
-                  for (var item in appController.listType)
-                    buildItemSelected(item, currentItemSelected == item),
+                  for (var item in appController.listType) buildItemSelected(item, currentItemSelected == item),
                   buildAddItem()
                 ],
               )),
@@ -263,8 +244,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
@@ -285,8 +265,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
               crossAxisSpacing: 5,
               childAspectRatio: 3 / 1,
               children: [
-                for (var item in appController.listGenre)
-                  buildItemSelected(item, currentItemSelected == item),
+                for (var item in appController.listGenre) buildItemSelected(item, currentItemSelected == item),
                 buildAddItem()
               ],
             )),
@@ -305,8 +284,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
@@ -335,8 +313,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
@@ -391,8 +368,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: Colors.red),
         ),
-        child: Text('form.button.delete'.tr,
-            style: const TextStyle(color: Colors.red)),
+        child: Text('form.button.delete'.tr, style: const TextStyle(color: Colors.red)),
       ),
     );
   }
@@ -407,8 +383,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: AppColor.gold),
         ),
-        child: Text('form.button.cancel'.tr,
-            style: const TextStyle(color: AppColor.gold)),
+        child: Text('form.button.cancel'.tr, style: const TextStyle(color: AppColor.gold)),
       ),
     );
   }
@@ -419,13 +394,11 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       onTap: () => chooseItem(item),
       child: Container(
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: isSelected ? AppColor.gold : Colors.grey,
-            borderRadius: BorderRadius.circular(10)),
+        decoration:
+            BoxDecoration(color: isSelected ? AppColor.gold : Colors.grey, borderRadius: BorderRadius.circular(10)),
         child: Text(
           item.tr,
-          style:
-              TextStyle(color: isSelected ? AppColor.darkPurple : Colors.white),
+          style: TextStyle(color: isSelected ? AppColor.darkPurple : Colors.white),
         ),
       ),
     );
@@ -436,8 +409,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       onTap: () => showDialogAddNewItemSelected(),
       child: Container(
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: Colors.grey, borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(10)),
         child: const Text(
           '+',
           style: TextStyle(color: Colors.white, fontSize: 24),
@@ -453,8 +425,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       children: [
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
@@ -471,27 +442,25 @@ class _DetailRecordPageState extends State<DetailRecordPage>
     showAppDialog(
         title: "form.dialog.addNewItemSelected.title".tr,
         content: content,
-        confirm: () {
+        onConfirm: () {
           addNewItemSelected(isExpense, addNewItemSelectedC.text);
         });
   }
 
   addNewItemSelected(bool isExpense, String newItemSelected) async {
     if (isExpense) {
-      List<String> list = appController.listGenre;
+      List<String> list = [...appController.listGenre];
       appController.listGenre.value = [...list, newItemSelected];
-      await appController.prefs
-          ?.setStringList('customListExpenseGenre', [...list, newItemSelected]);
+      await appController.prefs?.setStringList('customListExpenseGenre', [...list, newItemSelected]);
       setState(() {
         currentItemSelected = newItemSelected;
         genreC.text = newItemSelected;
         addNewItemSelectedC.text = '';
       });
     } else {
-      List<String> list = appController.listType;
+      List<String> list = [...appController.listType];
       appController.listType.value = [...list, newItemSelected];
-      await appController.prefs
-          ?.setStringList('customListIncomeType', [...list, newItemSelected]);
+      await appController.prefs?.setStringList('customListIncomeType', [...list, newItemSelected]);
       setState(() {
         currentItemSelected = newItemSelected;
         genreC.text = newItemSelected;
@@ -508,13 +477,13 @@ class _DetailRecordPageState extends State<DetailRecordPage>
 
     deleteItem() {
       if (isExpense) {
-        var list = appController.listGenre;
+        List<String> list = [...appController.listGenre];
         list.remove(item);
         appController.listGenre.value = [...list];
         appController.prefs?.setStringList('customListExpenseGenre', [...list]);
         Get.back();
       } else {
-        var list = appController.listType;
+        List<String> list = [...appController.listType];
         list.remove(item);
         appController.listType.value = [...list];
         appController.prefs?.setStringList('customListIncomeType', [...list]);
@@ -522,10 +491,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
       }
     }
 
-    showAppDialog(
-        title: "form.dialog.deleteItemSelected.title".tr,
-        content: content,
-        confirm: deleteItem);
+    showAppDialog(title: "form.dialog.deleteItemSelected.title".tr, content: content, onConfirm: deleteItem);
   }
 
   void chooseItem(String item) {
@@ -554,10 +520,7 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           backgroundColor: AppColor.gold);
     }
 
-    showAppDialog(
-        title: "form.dialog.delete.title".tr,
-        content: content,
-        confirm: () => deleteRecord());
+    showAppDialog(title: "form.dialog.delete.title".tr, content: content, onConfirm: () => deleteRecord());
   }
 
   void handleUpdateRecord() {
@@ -589,20 +552,15 @@ class _DetailRecordPageState extends State<DetailRecordPage>
           genre: isExpense ? currentItemSelected : null,
           type: !isExpense ? currentItemSelected : null,
           content: contentC.text,
-          money: isExpense
-              ? -int.parse(moneyC.text.replaceAll(',', ''))
-              : int.parse(moneyC.text.replaceAll(',', '')));
+          money: isExpense ? -int.parse(moneyC.text.replaceAll(',', '')) : int.parse(moneyC.text.replaceAll(',', '')));
 
       appController.updateRecord(recordExpense);
       homeController.loadAllData();
       statisticController.loadAllData();
 
       Get.back(closeOverlays: true);
-      Get.snackbar("snackbar.update.success.title".tr,
-          "snackbar.update.success.message".tr,
-          duration: const Duration(seconds: 1),
-          colorText: AppColor.darkPurple,
-          backgroundColor: AppColor.gold);
+      Get.snackbar("snackbar.update.success.title".tr, "snackbar.update.success.message".tr,
+          duration: const Duration(seconds: 1), colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
     }
   }
 }

@@ -18,8 +18,7 @@ class DetailLoanPage extends StatefulWidget {
   State<DetailLoanPage> createState() => _DetailLoanPageState();
 }
 
-class _DetailLoanPageState extends State<DetailLoanPage>
-    with TickerProviderStateMixin {
+class _DetailLoanPageState extends State<DetailLoanPage> with TickerProviderStateMixin {
   AppController appController = Get.put(AppController());
   LoanController loanController = Get.put(LoanController());
 
@@ -74,12 +73,7 @@ class _DetailLoanPageState extends State<DetailLoanPage>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buildDateTimeField(),
-                    buildMoneyField(),
-                    buildPersonNameField(),
-                    buildContentField()
-                  ],
+                  children: [buildDateTimeField(), buildMoneyField(), buildPersonNameField(), buildContentField()],
                 ),
               ),
               buildErrorMessage(),
@@ -127,8 +121,7 @@ class _DetailLoanPageState extends State<DetailLoanPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: DateTimeField(
@@ -136,8 +129,7 @@ class _DetailLoanPageState extends State<DetailLoanPage>
                 initialValue: dateTime,
                 style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
-                    hintText: 'form.dateAndTimeHint'.tr,
-                    hintStyle: const TextStyle(color: Colors.grey)),
+                    hintText: 'form.dateAndTimeHint'.tr, hintStyle: const TextStyle(color: Colors.grey)),
                 format: DateFormat("yyyy-MM-dd  HH:mm"),
                 onShowPicker: (context, currentValue) async {
                   final date = await showDatePicker(
@@ -145,16 +137,13 @@ class _DetailLoanPageState extends State<DetailLoanPage>
                             data: Theme.of(context).copyWith(
                               colorScheme: const ColorScheme.light(
                                 primaryContainer: AppColor.purple,
-                                primary: AppColor
-                                    .darkPurple, // header background color
+                                primary: AppColor.darkPurple, // header background color
                                 onPrimary: AppColor.gold, // header text color
-                                onSurface:
-                                    AppColor.darkPurple, // body text color
+                                onSurface: AppColor.darkPurple, // body text color
                               ),
                               textButtonTheme: TextButtonThemeData(
                                 style: TextButton.styleFrom(
-                                  foregroundColor:
-                                      AppColor.darkPurple, // button text color
+                                  foregroundColor: AppColor.darkPurple, // button text color
                                 ),
                               ),
                             ),
@@ -170,23 +159,20 @@ class _DetailLoanPageState extends State<DetailLoanPage>
                         data: Theme.of(context).copyWith(
                           colorScheme: const ColorScheme.light(
                             primaryContainer: AppColor.purple,
-                            primary:
-                                AppColor.darkPurple, // header background color
+                            primary: AppColor.darkPurple, // header background color
                             onPrimary: AppColor.gold, // header text color
                             onSurface: AppColor.darkPurple, // body text color
                           ),
                           textButtonTheme: TextButtonThemeData(
                             style: TextButton.styleFrom(
-                              foregroundColor:
-                                  AppColor.darkPurple, // button text color
+                              foregroundColor: AppColor.darkPurple, // button text color
                             ),
                           ),
                         ),
                         child: child!,
                       ),
                       context: context,
-                      initialTime: TimeOfDay.fromDateTime(
-                          currentValue ?? DateTime.now()),
+                      initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                     );
                     dateTime = DateTimeField.combine(date, time);
                     return dateTime;
@@ -211,8 +197,7 @@ class _DetailLoanPageState extends State<DetailLoanPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
@@ -241,8 +226,7 @@ class _DetailLoanPageState extends State<DetailLoanPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
@@ -269,8 +253,7 @@ class _DetailLoanPageState extends State<DetailLoanPage>
         ),
         Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
@@ -325,8 +308,7 @@ class _DetailLoanPageState extends State<DetailLoanPage>
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: AppColor.gold),
         ),
-        child: Text('form.button.cancel'.tr,
-            style: const TextStyle(color: AppColor.gold)),
+        child: Text('form.button.cancel'.tr, style: const TextStyle(color: AppColor.gold)),
       ),
     );
   }
@@ -341,8 +323,7 @@ class _DetailLoanPageState extends State<DetailLoanPage>
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: Colors.red),
         ),
-        child: Text('form.button.delete'.tr,
-            style: const TextStyle(color: Colors.red)),
+        child: Text('form.button.delete'.tr, style: const TextStyle(color: Colors.red)),
       ),
     );
   }
@@ -386,11 +367,8 @@ class _DetailLoanPageState extends State<DetailLoanPage>
       loanController.loadAllData();
 
       Get.back(closeOverlays: true);
-      Get.snackbar("snackbar.update.success.title".tr,
-          "snackbar.update.success.message".tr,
-          duration: const Duration(seconds: 1),
-          colorText: AppColor.darkPurple,
-          backgroundColor: AppColor.gold);
+      Get.snackbar("snackbar.update.success.title".tr, "snackbar.update.success.message".tr,
+          duration: const Duration(seconds: 1), colorText: AppColor.darkPurple, backgroundColor: AppColor.gold);
     }
   }
 
@@ -400,10 +378,7 @@ class _DetailLoanPageState extends State<DetailLoanPage>
       style: const TextStyle(color: Colors.white),
     );
 
-    showAppDialog(
-        title: "form.dialog.delete.title".tr,
-        content: content,
-        confirm: deleteRecord);
+    showAppDialog(title: "form.dialog.delete.title".tr, content: content, onConfirm: deleteRecord);
   }
 
   deleteRecord() {

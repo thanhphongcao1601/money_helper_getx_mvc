@@ -63,8 +63,7 @@ class _SettingPageState extends State<SettingPage> {
               onTap: () {
                 showLanguageDialog();
               },
-              title: Text('setting.language'.tr,
-                  style: const TextStyle(color: AppColor.gold)),
+              title: Text('setting.language'.tr, style: const TextStyle(color: AppColor.gold)),
               trailing: const Icon(Icons.arrow_right, color: AppColor.gold),
             ),
             const Divider(
@@ -77,8 +76,7 @@ class _SettingPageState extends State<SettingPage> {
                     // isDismissible: false,
                     );
               },
-              title: Text('setting.backUp'.tr,
-                  style: const TextStyle(color: AppColor.gold)),
+              title: Text('setting.backUp'.tr, style: const TextStyle(color: AppColor.gold)),
               trailing: const Icon(
                 Icons.arrow_right,
                 color: AppColor.gold,
@@ -97,19 +95,16 @@ class _SettingPageState extends State<SettingPage> {
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppColor.gold),
                       ),
-                      child: Text('setting.signIn'.tr,
-                          style: const TextStyle(color: AppColor.gold)),
+                      child: Text('setting.signIn'.tr, style: const TextStyle(color: AppColor.gold)),
                     ))
                 : Column(
                     children: [
                       ListTile(
-                        onTap: () async {
-                          appController.signOut();
+                        onTap: () {
+                          handleSignOut();
                         },
-                        title: Text('setting.signOut'.tr,
-                            style: const TextStyle(color: AppColor.gold)),
-                        trailing:
-                            const Icon(Icons.arrow_right, color: AppColor.gold),
+                        title: Text('setting.signOut'.tr, style: const TextStyle(color: AppColor.gold)),
+                        trailing: const Icon(Icons.arrow_right, color: AppColor.gold),
                       ),
                       const Divider(
                         thickness: 1,
@@ -120,6 +115,29 @@ class _SettingPageState extends State<SettingPage> {
         ),
       )),
     );
+  }
+
+  void handleSignOut() {
+    Widget content = Text(
+      "setting.signOut.dialog.title.content".tr,
+      style: const TextStyle(color: Colors.white),
+    );
+    backUpBeforeSignOut() async {
+      await appController.handleBackUp(isRestore: false);
+      await appController.signOut();
+    }
+
+    showAppDialog(
+        title: 'setting.signOut.dialog.title'.tr,
+        content: content,
+        onConfirm: () {
+          backUpBeforeSignOut();
+        },
+        onCancel: () {
+          appController.signOut();
+        },
+        confirmText: 'setting.signOut.dialog.confirmText'.tr,
+        cancelText: 'setting.signOut.dialog.cancelText'.tr);
   }
 
   Widget buildHeader() {
@@ -142,14 +160,11 @@ class _SettingPageState extends State<SettingPage> {
                           height: 50,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
+                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                           ),
                         ),
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                        placeholder: (context, url) => const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
                       const SizedBox(
                         width: 10,
@@ -160,15 +175,13 @@ class _SettingPageState extends State<SettingPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(appController.userDisplayName.value,
-                              style: const TextStyle(
-                                  fontSize: 20, color: AppColor.gold)),
+                              style: const TextStyle(fontSize: 20, color: AppColor.gold)),
                           const SizedBox(
                             height: 5,
                           ),
                           Text(
                             appController.userEmail.value,
-                            style: const TextStyle(
-                                fontSize: 16, color: AppColor.gold),
+                            style: const TextStyle(fontSize: 16, color: AppColor.gold),
                           ),
                         ],
                       ),
@@ -206,8 +219,7 @@ class _SettingPageState extends State<SettingPage> {
                 children: [
                   Obx(() => Checkbox(
                         checkColor: AppColor.darkPurple,
-                        fillColor: MaterialStateColor.resolveWith(
-                            (states) => AppColor.gold),
+                        fillColor: MaterialStateColor.resolveWith((states) => AppColor.gold),
                         value: settingController.isAutoBackUpCheckBox.value,
                         onChanged: (bool? value) {
                           settingController.changeIsAutoBackUpCheckBox(value!);
@@ -262,8 +274,7 @@ class _SettingPageState extends State<SettingPage> {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(width: 2, color: AppColor.gold)),
+                  borderRadius: BorderRadius.circular(10), border: Border.all(width: 2, color: AppColor.gold)),
               child: Column(children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,8 +283,7 @@ class _SettingPageState extends State<SettingPage> {
                       'setting.backUp.bottomSheet.time'.tr,
                       style: const TextStyle(color: AppColor.gold),
                     ),
-                    Text(DateTime.now().toString().substring(0, 19),
-                        style: const TextStyle(color: AppColor.white))
+                    Text(DateTime.now().toString().substring(0, 19), style: const TextStyle(color: AppColor.white))
                   ],
                 ),
                 const SizedBox(
@@ -282,10 +292,8 @@ class _SettingPageState extends State<SettingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('setting.backUp.bottomSheet.url'.tr,
-                        style: const TextStyle(color: AppColor.gold)),
-                    const Text('https://drive.google.com',
-                        style: TextStyle(color: AppColor.white))
+                    Text('setting.backUp.bottomSheet.url'.tr, style: const TextStyle(color: AppColor.gold)),
+                    const Text('https://drive.google.com', style: TextStyle(color: AppColor.white))
                   ],
                 ),
                 const SizedBox(
@@ -294,10 +302,8 @@ class _SettingPageState extends State<SettingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('setting.backUp.bottomSheet.email'.tr,
-                        style: const TextStyle(color: AppColor.gold)),
-                    Text(appController.userEmail.value,
-                        style: const TextStyle(color: AppColor.gold))
+                    Text('setting.backUp.bottomSheet.email'.tr, style: const TextStyle(color: AppColor.gold)),
+                    Text(appController.userEmail.value, style: const TextStyle(color: AppColor.gold))
                   ],
                 )
               ]),
@@ -321,7 +327,7 @@ class _SettingPageState extends State<SettingPage> {
       width: Get.width / 2 - 20,
       child: ElevatedButton(
         onPressed: () {
-          appController.handleBackUp();
+          appController.handleBackUp(isRestore: true);
         },
         style: ElevatedButton.styleFrom(backgroundColor: AppColor.gold),
         child: Text(
@@ -342,8 +348,7 @@ class _SettingPageState extends State<SettingPage> {
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: AppColor.gold),
         ),
-        child: Text('setting.backUp.bottomSheet.restore'.tr,
-            style: const TextStyle(color: AppColor.gold)),
+        child: Text('setting.backUp.bottomSheet.restore'.tr, style: const TextStyle(color: AppColor.gold)),
       ),
     );
   }
@@ -375,9 +380,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
           )
         : Lottie.asset('assets/lotties/empty.json', width: 100);
-    showAppDialog(
-        title: 'setting.backUp.bottomSheet.dialog.chooseFile'.tr,
-        content: content);
+    showAppDialog(title: 'setting.backUp.bottomSheet.dialog.chooseFile'.tr, content: content);
   }
 
   showLanguageDialog() {
