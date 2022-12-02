@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
+import 'package:money_helper_getx_mvc/module/add_record_module/add_record_page.dart';
 import 'package:money_helper_getx_mvc/module/home_module/home_controller.dart';
 import 'package:money_helper_getx_mvc/module/statistic_module/statistic_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
@@ -36,8 +37,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Obx(() => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-            children: [buildHeader(), buildDashboard(), buildListRecord()])));
+        child: Column(children: [buildHeader(), buildDashboard(), buildListRecord()])));
   }
 
   Widget buildHeader() {
@@ -59,14 +59,11 @@ class _HomePageState extends State<HomePage> {
                         height: 50,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.cover),
+                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                         ),
                       ),
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+                      placeholder: (context, url) => const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                     ),
                     const SizedBox(
                       width: 10,
@@ -79,13 +76,10 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Text(
                             '${'welcomeBack'.tr},',
-                            style: const TextStyle(
-                                fontSize: 16, color: AppColor.gold),
+                            style: const TextStyle(fontSize: 16, color: AppColor.gold),
                           ),
-                          Text(
-                              appController.userDisplayName.value.split(' ')[0],
-                              style: const TextStyle(
-                                  fontSize: 24, color: AppColor.gold)),
+                          Text(appController.userDisplayName.value.split(' ')[0],
+                              style: const TextStyle(fontSize: 24, color: AppColor.gold)),
                         ],
                       ),
                     ),
@@ -108,8 +102,7 @@ class _HomePageState extends State<HomePage> {
           isCollapsed: true,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide:
-                const BorderSide(width: 2, color: AppColor.gold), //<-- SEE HERE
+            borderSide: const BorderSide(width: 2, color: AppColor.gold), //<-- SEE HERE
           ),
         ),
         format: DateFormat("MM/yyyy"),
@@ -132,8 +125,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildDashboard() {
     return Container(
-      decoration: BoxDecoration(
-          color: AppColor.gold, borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(color: AppColor.gold, borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
           Padding(
@@ -144,20 +136,15 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Text(
                   '${'total'.tr}:',
-                  style:
-                      const TextStyle(fontSize: 20, color: AppColor.darkPurple),
+                  style: const TextStyle(fontSize: 20, color: AppColor.darkPurple),
                 ),
                 Expanded(
                   child: Obx(() => AutoSizeText(
                         Helper().formatMoney(
-                            homeController.totalMonthExpense.value +
-                                homeController.totalMonthIncome.value),
+                            homeController.totalMonthExpense.value + homeController.totalMonthIncome.value),
                         maxLines: 1,
                         textAlign: TextAlign.right,
-                        style: const TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.darkPurple),
+                        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: AppColor.darkPurple),
                       )),
                 ),
               ],
@@ -174,9 +161,7 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(5, 20, 10, 20),
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: AppColor.purple,
-                      borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(color: AppColor.purple, borderRadius: BorderRadius.circular(10)),
                   height: 60,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -189,13 +174,9 @@ class _HomePageState extends State<HomePage> {
                         height: 5,
                       ),
                       AutoSizeText(
-                        Helper().formatMoney(
-                            homeController.totalMonthExpense.value),
+                        Helper().formatMoney(homeController.totalMonthExpense.value),
                         maxLines: 1,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.wasted),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.wasted),
                       )
                     ],
                   ),
@@ -210,9 +191,7 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(10, 20, 5, 20),
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: AppColor.purple,
-                      borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(color: AppColor.purple, borderRadius: BorderRadius.circular(10)),
                   height: 60,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -225,13 +204,9 @@ class _HomePageState extends State<HomePage> {
                         height: 5,
                       ),
                       AutoSizeText(
-                        Helper()
-                            .formatMoney(homeController.totalMonthIncome.value),
+                        Helper().formatMoney(homeController.totalMonthIncome.value),
                         maxLines: 1,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.mustHave),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.mustHave),
                       )
                     ],
                   ),
@@ -271,35 +246,39 @@ class _HomePageState extends State<HomePage> {
                     for (var item in homeController.listRecordGroupByDate.value)
                       Column(
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                item.date,
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    color: AppColor.gold,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const Expanded(
-                                  child: Divider(
-                                color: AppColor.gold,
-                                thickness: 1,
-                              )),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                Helper().formatMoney(item.listRecord
-                                    .sumBy<int>((e) => e.money!)),
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    color: AppColor.gold,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                          SizedBox(
+                            height: 5,
                           ),
-                          for (var record in item.listRecord)
-                            buildRecordTile(record: record)
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => AddRecordPage(
+                                    dateTime: DateTime.parse(item.date),
+                                  ));
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  item.date,
+                                  style:
+                                      const TextStyle(fontSize: 14, color: AppColor.gold, fontWeight: FontWeight.bold),
+                                ),
+                                const Expanded(
+                                    child: Divider(
+                                  color: AppColor.gold,
+                                  thickness: 1,
+                                )),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  Helper().formatMoney(item.listRecord.sumBy<int>((e) => e.money!)),
+                                  style:
+                                      const TextStyle(fontSize: 14, color: AppColor.gold, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                          for (var record in item.listRecord) buildRecordTile(record: record)
                         ],
                       ),
                     const SizedBox(

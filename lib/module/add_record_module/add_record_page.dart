@@ -14,7 +14,8 @@ import 'package:uuid/uuid.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 
 class AddRecordPage extends StatefulWidget {
-  const AddRecordPage({Key? key}) : super(key: key);
+  const AddRecordPage({Key? key, this.dateTime}) : super(key: key);
+  final DateTime? dateTime;
 
   @override
   State<AddRecordPage> createState() => _AddRecordPageState();
@@ -54,7 +55,7 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
     moneyC = TextEditingController();
     addNewItemSelectedC = TextEditingController();
 
-    dateTime = DateTime.now();
+    dateTime = widget.dateTime ?? DateTime.now();
     datetimeC.text = dateTime.millisecondsSinceEpoch.toString();
   }
 
@@ -526,6 +527,10 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
       }
     }
 
-    showAppDialog(title: "form.dialog.deleteItemSelected.title".tr, content: content, onConfirm: deleteItem);
+    showAppDialog(
+        title: "form.dialog.deleteItemSelected.title".tr,
+        content: content,
+        onConfirm: deleteItem,
+        confirmText: 'form.button.delete'.tr);
   }
 }

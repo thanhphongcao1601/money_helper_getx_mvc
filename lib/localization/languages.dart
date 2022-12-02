@@ -179,7 +179,6 @@ class Languages extends Translations {
           //
           'form.button.save': 'Lưu',
           'form.button.cancel': 'Hủy',
-          //
           'form.button.delete': 'Xóa',
           'form.dialog.delete.title': 'Xóa bản ghi?',
           'form.dialog.addNewItemSelected.title': 'Thêm thể loại',

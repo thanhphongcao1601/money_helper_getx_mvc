@@ -378,7 +378,11 @@ class _DetailLoanPageState extends State<DetailLoanPage> with TickerProviderStat
       style: const TextStyle(color: Colors.white),
     );
 
-    showAppDialog(title: "form.dialog.delete.title".tr, content: content, onConfirm: deleteRecord);
+    showAppDialog(
+        title: "form.dialog.delete.title".tr,
+        content: content,
+        onConfirm: deleteRecord,
+        confirmText: 'form.button.delete'.tr);
   }
 
   deleteRecord() {

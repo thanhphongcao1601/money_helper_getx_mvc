@@ -59,7 +59,7 @@ class HomeController extends GetxController {
     listRecordGroupByDate.value.clear();
     var groups = groupBy(record, (Record e) {
       DateTime tsDate = DateTime.fromMillisecondsSinceEpoch(e.datetime!);
-      String datetime = "${tsDate.year}/${tsDate.month}/${tsDate.day}";
+      String datetime = tsDate.toString().substring(0,10);
       return datetime;
     });
 

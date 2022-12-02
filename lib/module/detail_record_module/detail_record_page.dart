@@ -491,7 +491,11 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
       }
     }
 
-    showAppDialog(title: "form.dialog.deleteItemSelected.title".tr, content: content, onConfirm: deleteItem);
+    showAppDialog(
+        title: "form.dialog.deleteItemSelected.title".tr,
+        content: content,
+        onConfirm: deleteItem,
+        confirmText: 'form.button.delete'.tr);
   }
 
   void chooseItem(String item) {
@@ -520,7 +524,11 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
           backgroundColor: AppColor.gold);
     }
 
-    showAppDialog(title: "form.dialog.delete.title".tr, content: content, onConfirm: () => deleteRecord());
+    showAppDialog(
+        title: "form.dialog.delete.title".tr,
+        content: content,
+        onConfirm: () => deleteRecord(),
+        confirmText: 'form.button.delete'.tr);
   }
 
   void handleUpdateRecord() {
