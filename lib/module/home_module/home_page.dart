@@ -246,7 +246,7 @@ class _HomePageState extends State<HomePage> {
                     for (var item in homeController.listRecordGroupByDate.value)
                       Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           InkWell(
