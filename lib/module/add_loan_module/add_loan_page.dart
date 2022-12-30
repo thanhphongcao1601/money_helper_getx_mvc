@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/models/record.dart';
+import 'package:money_helper_getx_mvc/models/record_history.dart';
 import 'package:money_helper_getx_mvc/module/loan_module/loan_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -325,7 +328,7 @@ class _AddLoanPageState extends State<AddLoanPage> with TickerProviderStateMixin
     }
 
     if (errorMessage == '') {
-      Record record = Record(
+      RecordHistory historyRecord = RecordHistory(
           id: const Uuid().v4(),
           isLoan: true,
           datetime: dateTime.millisecondsSinceEpoch,
@@ -333,6 +336,20 @@ class _AddLoanPageState extends State<AddLoanPage> with TickerProviderStateMixin
           loanContent: contentC.text,
           loanPersonName: personNameC.text,
           money: int.parse(moneyC.text.replaceAll(',', '')));
+
+      List<RecordHistory> listRecordHistory = [historyRecord];
+
+      Record record = Record(
+          id: historyRecord.id,
+          isLoan: true,
+          datetime: historyRecord.datetime,
+          loanType: historyRecord.loanType,
+          loanContent: historyRecord.loanContent,
+          loanPersonName: historyRecord.loanPersonName,
+          money: historyRecord.money,
+          recordHistoryList: listRecordHistory);
+
+      debugPrint(jsonEncode(record.toJson()));
 
       appController.addRecord(record);
       loanController.loadAllData();

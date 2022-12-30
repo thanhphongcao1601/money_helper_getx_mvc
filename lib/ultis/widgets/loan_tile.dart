@@ -14,9 +14,7 @@ Widget buildLoanTile({required Record record}) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          DateTime.fromMillisecondsSinceEpoch(record.datetime!)
-              .toString()
-              .substring(0, 16),
+          DateTime.fromMillisecondsSinceEpoch(record.datetime!).toString().substring(0, 16),
           textAlign: TextAlign.start,
           style: const TextStyle(color: AppColor.gold, fontSize: 16),
         ),
@@ -37,14 +35,11 @@ Widget buildLoanTile({required Record record}) {
                         padding: const EdgeInsets.all(5),
                         child: Text(
                           record.loanPersonName ?? '',
-                          style: const TextStyle(
-                              color: AppColor.gold,
-                              fontWeight: FontWeight.bold),
+                          style: const TextStyle(color: AppColor.gold, fontWeight: FontWeight.bold),
                         )),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(5, 0, 0, 5),
-                      child: Text(record.loanContent.toString(),
-                          style: const TextStyle(color: Colors.white)),
+                      child: Text(record.loanContent.toString(), style: const TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -55,19 +50,14 @@ Widget buildLoanTile({required Record record}) {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(10)),
-                        color: record.loanType == 'lend'
-                            ? AppColor.blue
-                            : Colors.red),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10)),
+                        color: record.loanType == 'lend' ? AppColor.blue : Colors.red),
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
                       child: Text(
                         record.loanType!.tr,
-                        style: const TextStyle(
-                            color: AppColor.white, fontWeight: FontWeight.bold),
+                        style: const TextStyle(color: AppColor.white, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -75,10 +65,7 @@ Widget buildLoanTile({required Record record}) {
                     padding: const EdgeInsets.all(5),
                     child: Text(
                       Helper().formatMoney(record.money!),
-                      style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.gold),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.gold),
                     ),
                   )
                 ],

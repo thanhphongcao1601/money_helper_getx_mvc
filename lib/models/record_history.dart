@@ -1,8 +1,4 @@
-// ignore_for_file: unnecessary_this
-
-import 'package:money_helper_getx_mvc/models/record_history.dart';
-
-class Record extends Comparable {
+class RecordHistory {
   String? id;
   int? datetime;
   String? genre;
@@ -14,9 +10,8 @@ class Record extends Comparable {
   String? loanType;
   String? loanContent;
   bool? isFinishedLoan;
-  List<RecordHistory>? recordHistoryList;
 
-  Record(
+  RecordHistory(
       {this.id,
       this.datetime,
       this.genre,
@@ -27,10 +22,9 @@ class Record extends Comparable {
       this.loanPersonName,
       this.loanType,
       this.loanContent,
-      this.isFinishedLoan,
-      this.recordHistoryList});
+      this.isFinishedLoan});
 
-  Record.fromJson(Map<String, dynamic> json) {
+  RecordHistory.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     datetime = json['datetime'];
     genre = json['genre'];
@@ -42,12 +36,6 @@ class Record extends Comparable {
     loanType = json['loanType'];
     loanContent = json['loanContent'];
     isFinishedLoan = json['isFinishedLoan'];
-    if (json['recordHistoryList'] != null) {
-      recordHistoryList = <RecordHistory>[];
-      json['recordHistoryList'].forEach((v) {
-        recordHistoryList!.add(RecordHistory.fromJson(v));
-      });
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -63,32 +51,6 @@ class Record extends Comparable {
     data['loanType'] = loanType;
     data['loanContent'] = loanContent;
     data['isFinishedLoan'] = isFinishedLoan;
-    if (this.recordHistoryList != null) {
-      data['recordHistoryList'] = this.recordHistoryList!.map((v) => v.toJson()).toList();
-    }
     return data;
-  }
-
-  @override
-  int compareTo(other) {
-    return datetime!.compareTo(other.datetime);
-  }
-
-  @override
-  String toString() {
-    return 'Record('
-        'id=$id,'
-        'datetime=$datetime,'
-        'content=$content,'
-        'genre=$genre,'
-        'content=$content,'
-        'money=$money,'
-        'type=$type,'
-        'isLoan=$isLoan,'
-        'loanPersonName=$loanPersonName,'
-        'loanType=$loanType,'
-        'loanContent=$loanContent,'
-        'isFinishedLoan=$isFinishedLoan'
-        'recordHistoryListLength=${recordHistoryList?.length ?? 0}';
   }
 }

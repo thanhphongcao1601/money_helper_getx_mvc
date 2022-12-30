@@ -72,6 +72,8 @@ class Languages extends Translations {
           'borrow': 'Borrow',
           'loan.lend': 'Lend',
           'loan.borrow': 'Borrow',
+          'loan.showHistory': 'Show all history',
+          'loan.goBack': 'Go back',
           //setting
           'setting.lockAppBiometrics': 'Biometrics',
           'setting.darkMode': 'Dark mode',
@@ -90,8 +92,7 @@ class Languages extends Translations {
           'setting.backUp.bottomSheet.time': 'Time',
           'setting.backUp.bottomSheet.url': 'URL',
           'setting.backUp.bottomSheet.email': 'Email',
-          'setting.backUp.bottomSheet.dialog.chooseFile':
-              'Choose file to restore',
+          'setting.backUp.bottomSheet.dialog.chooseFile': 'Choose file to restore',
           //
           'setting.signOut.dialog.title': 'Sign out',
           'setting.signOut.dialog.title.content': 'Back up and sign out',
@@ -121,12 +122,10 @@ class Languages extends Translations {
           'snackbar.restore.success.title': 'Success',
           'snackbar.restore.success.message': 'Restore completely',
           'snackbar.restore.fail.title': 'Fail',
-          'snackbar.restore.fail.message':
-              'Restore fail, please check and try again',
+          'snackbar.restore.fail.message': 'Restore fail, please check and try again',
           //
           'snackbar.signIn.fail.title': 'Login fail',
-          'snackbar.signIn.fail.message':
-              'Sign in fail, please check and try again'
+          'snackbar.signIn.fail.message': 'Sign in fail, please check and try again'
         },
         'vi_VN': {
           //app
@@ -197,6 +196,8 @@ class Languages extends Translations {
           'borrow': 'Nợ',
           'loan.lend': 'Cho vay',
           'loan.borrow': 'Nợ',
+          'loan.showHistory': 'Xem lịch sử',
+          'loan.goBack': 'Quay lại',
           //setting
           'setting.lockAppBiometrics': 'Xác thực bằng vân tay',
           'setting.darkMode': 'Chủ đề tối',
@@ -215,8 +216,7 @@ class Languages extends Translations {
           'setting.backUp.bottomSheet.time': 'Thời gian',
           'setting.backUp.bottomSheet.url': 'URL',
           'setting.backUp.bottomSheet.email': 'Email',
-          'setting.backUp.bottomSheet.dialog.chooseFile':
-              'Chọn file muốn khôi phục',
+          'setting.backUp.bottomSheet.dialog.chooseFile': 'Chọn file muốn khôi phục',
           //
           'setting.signOut.dialog.title': 'Đăng xuất',
           'setting.signOut.dialog.title.content': 'Sao lưu và đăng xuất?',
@@ -239,8 +239,7 @@ class Languages extends Translations {
           'snackbar.delete.fail.message': 'Hello Xóa bản ghi thất bại',
           //
           'snackbar.backup.success.title': 'Thành công',
-          'snackbar.backup.success.message':
-              'Dữ liệu đã được sao lưu thành công',
+          'snackbar.backup.success.message': 'Dữ liệu đã được sao lưu thành công',
           'snackbar.backup.fail.title': 'Thất bại',
           'snackbar.backup.fail.message': 'Sao lưu thất bại',
           //
@@ -250,8 +249,7 @@ class Languages extends Translations {
           'snackbar.restore.fail.message': 'Khôi phục dữ liệu thất bại',
           //
           'snackbar.signIn.fail.title': 'Thất bại',
-          'snackbar.signIn.fail.message':
-              'Đăng nhập thất bại, kiểm tra và hãy thử lại'
+          'snackbar.signIn.fail.message': 'Đăng nhập thất bại, kiểm tra và hãy thử lại'
         },
       };
 }

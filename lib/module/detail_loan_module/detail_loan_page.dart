@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:money_helper_getx_mvc/app/app_controller.dart';
 import 'package:money_helper_getx_mvc/models/record.dart';
+import 'package:money_helper_getx_mvc/models/record_history.dart';
 import 'package:money_helper_getx_mvc/module/loan_module/loan_controller.dart';
 import 'package:money_helper_getx_mvc/ultis/constants/constant.dart';
 import 'package:money_helper_getx_mvc/ultis/widgets/app_dialog.dart';
+import 'package:money_helper_getx_mvc/ultis/widgets/loan_history_tile.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 
@@ -33,9 +38,12 @@ class _DetailLoanPageState extends State<DetailLoanPage> with TickerProviderStat
   late String errorMessage;
   late Record currentLoan;
 
+  late bool showHistory;
+
   @override
   void initState() {
     super.initState();
+    showHistory = false;
     isBorrow = true;
     errorMessage = '';
 
@@ -51,7 +59,8 @@ class _DetailLoanPageState extends State<DetailLoanPage> with TickerProviderStat
     contentC.text = currentLoan.loanContent ?? '';
     moneyC.text = currentLoan.money.toString();
 
-    dateTime = DateTime.fromMillisecondsSinceEpoch(currentLoan.datetime!);
+    // dateTime = DateTime.fromMillisecondsSinceEpoch(currentLoan.datetime!);
+    dateTime = DateTime.now();
     datetimeC.text = dateTime.millisecondsSinceEpoch.toString();
   }
 
@@ -60,6 +69,7 @@ class _DetailLoanPageState extends State<DetailLoanPage> with TickerProviderStat
     return Scaffold(
       body: Container(
         height: Get.height,
+        width: Get.width,
         color: AppColor.purple,
         child: SingleChildScrollView(
           child: Column(
@@ -68,21 +78,82 @@ class _DetailLoanPageState extends State<DetailLoanPage> with TickerProviderStat
                 height: 50,
               ),
               buildToggleButton(),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [buildDateTimeField(), buildMoneyField(), buildPersonNameField(), buildContentField()],
-                ),
+              const SizedBox(
+                height: 20,
               ),
-              buildErrorMessage(),
-              buildSaveButton(),
-              buildDeleteButton(),
-              buildCancelButton()
+              InkWell(
+                  onTap: () {
+                    setState(() {
+                      showHistory = !showHistory;
+                    });
+                  },
+                  child: Container(
+                    width: Get.width / 2,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: AppColor.gold), borderRadius: BorderRadius.circular(50)),
+                    padding: const EdgeInsets.all(5),
+                    child: !showHistory
+                        ? Text(
+                            'loan.showHistory'.tr,
+                            style: const TextStyle(color: AppColor.gold, fontSize: 16),
+                          )
+                        : Text(
+                            'loan.goBack'.tr,
+                            style: const TextStyle(color: AppColor.gold, fontSize: 16),
+                          ),
+                  )),
+              !showHistory
+                  ? Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              buildDateTimeField(),
+                              buildMoneyField(),
+                              buildPersonNameField(),
+                              buildContentField()
+                            ],
+                          ),
+                        ),
+                        buildErrorMessage(),
+                        buildSaveButton(),
+                        buildDeleteButton(),
+                        buildCancelButton(),
+                      ],
+                    )
+                  : buildHistory()
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildHistory() {
+    List<RecordHistory> listHistory = currentLoan.recordHistoryList ?? [];
+    if (listHistory.isEmpty) {
+      return Column(
+        children: [
+          const SizedBox(
+            height: 30,
+          ),
+          Lottie.asset('assets/lotties/empty.json', width: 100),
+        ],
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          for (var history in listHistory) buildLoanHistoryTile(record: history)
+        ],
       ),
     );
   }
@@ -354,6 +425,19 @@ class _DetailLoanPageState extends State<DetailLoanPage> with TickerProviderStat
         errorMessage;
       });
     } else {
+      RecordHistory oldLoan = RecordHistory(
+        id: currentLoan.id,
+        isLoan: true,
+        datetime: currentLoan.datetime,
+        loanType: currentLoan.loanType,
+        loanContent: currentLoan.content,
+        loanPersonName: currentLoan.loanPersonName,
+        money: currentLoan.money,
+      );
+
+      List<RecordHistory> listRecordHistory = currentLoan.recordHistoryList ?? [];
+      listRecordHistory.add(oldLoan);
+
       Record record = Record(
           id: currentLoan.id,
           isLoan: true,
@@ -361,7 +445,10 @@ class _DetailLoanPageState extends State<DetailLoanPage> with TickerProviderStat
           loanType: isBorrow ? 'borrow' : 'lend',
           loanContent: contentC.text,
           loanPersonName: personNameC.text,
-          money: int.parse(moneyC.text.replaceAll(',', '')));
+          money: int.parse(moneyC.text.replaceAll(',', '')),
+          recordHistoryList: listRecordHistory);
+
+      debugPrint(jsonEncode(record.toJson()));
 
       appController.updateRecord(record);
       loanController.loadAllData();
