@@ -23,14 +23,15 @@ class Languages extends Translations {
           'form.dateAndTime': 'Date and Time',
           'form.dateAndTime.validate': 'Date and time can not be empty',
           'form.dateAndTimeHint': 'Enter your date',
-          'form.type': 'Type',
           'form.typeHint': 'Choose money type',
           //form-type-value
           'form.type.cash': 'Cash',
           'form.type.bank': 'Bank',
           'form.type.eWallet': 'E-wallet',
           'form.genre': 'Genre',
+          'form.type': 'Money type',
           'form.genre.validate': 'Genre can not be empty',
+          'form.type.validate': 'Type can not be empty',
           'form.genreHint': 'Choose your genre',
           //form-genre-value
           'form.genre.mustHave': 'Must have',
@@ -147,14 +148,14 @@ class Languages extends Translations {
           'form.dateAndTime': 'Ngày và giờ',
           'form.dateAndTime.validate': 'Phải chọn ngày và giờ',
           'form.dateAndTimeHint': 'Nhập ngày và giờ',
-          'form.type': 'Thể loại',
           //form-type-value
           'form.typeHint': 'Chọn thể loại',
           'form.type.cash': 'Tiền mặt',
           'form.type.bank': 'Ngân hàng',
           'form.type.eWallet': 'Ví điện tử',
           'form.genre': 'Thể loại',
-          'form.genre.validate': 'Phải chọn thể loại',
+          'form.type': 'Nguồn tiền',
+          'form.genre.validate': 'Phải chọn thể loại', 'form.type.validate': 'Phải chọn nguồn tiền',
           'form.genreHint': 'Chọn thể loại',
           //form-genre-value
           'form.genre.mustHave': 'Cần thiết',

@@ -29,10 +29,12 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
   final formKeyIncome = GlobalKey<FormState>();
 
   late bool isExpense;
-  late String currentItemSelected;
+  late String currentItemTypeSelected;
+  late String currentItemGenreSelected;
 
   late TextEditingController datetimeC;
   late TextEditingController genreC;
+  late TextEditingController typeC;
   late TextEditingController contentC;
   late TextEditingController moneyC;
   late TextEditingController addNewItemSelectedC;
@@ -46,6 +48,7 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
     super.initState();
     datetimeC = TextEditingController();
     genreC = TextEditingController();
+    typeC = TextEditingController();
     contentC = TextEditingController();
     moneyC = TextEditingController();
     addNewItemSelectedC = TextEditingController();
@@ -55,8 +58,10 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
 
     dateTime = DateTime.fromMillisecondsSinceEpoch(currentRecord.datetime!);
     datetimeC.text = dateTime.millisecondsSinceEpoch.toString();
-    currentItemSelected = currentRecord.money! < 0 ? currentRecord.genre.toString() : currentRecord.type.toString();
-    genreC.text = currentItemSelected.tr;
+    currentItemTypeSelected = currentRecord.type ?? '';
+    currentItemGenreSelected = currentRecord.genre ?? '';
+    genreC.text = currentItemGenreSelected.tr;
+    typeC.text = currentItemTypeSelected.tr;
     errorMessage = '';
     moneyC.text = currentRecord.money!.abs().toString();
     contentC.text = currentRecord.content.toString();
@@ -80,7 +85,7 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [buildDateTimeField(), buildGenreField(), buildMoneyField(), buildContentField()],
+                  children: [buildDateTimeField(), buildGenreTypeField(), buildMoneyField(), buildContentField()],
                 ),
               ),
               buildErrorMessage(),
@@ -194,7 +199,7 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
     );
   }
 
-  Widget buildGenreField() {
+  Widget buildGenreTypeField() {
     if (!isExpense) {
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -211,7 +216,7 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: TextField(
                   style: const TextStyle(color: Colors.black),
-                  controller: genreC,
+                  controller: typeC,
                   readOnly: true,
                   decoration: InputDecoration(
                       hintText: 'form.typeHint'.tr,
@@ -227,8 +232,8 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
                 crossAxisSpacing: 5,
                 childAspectRatio: 3 / 1,
                 children: [
-                  for (var item in appController.listType) buildItemSelected(item, currentItemSelected == item),
-                  buildAddItem()
+                  for (var item in appController.listType)
+                    buildItemTypeSelected(item, currentItemTypeSelected == item, false),
                 ],
               )),
         ],
@@ -240,6 +245,37 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
       children: [
         Text(
           'form.type'.tr,
+          style: const TextStyle(color: AppColor.gold),
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                controller: typeC,
+                readOnly: true,
+                decoration: InputDecoration(
+                    hintText: 'form.typeHint'.tr,
+                    border: InputBorder.none,
+                    hintStyle: const TextStyle(color: Colors.grey)),
+              ),
+            )),
+        Obx(() => GridView.count(
+              padding: const EdgeInsets.all(5),
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              mainAxisSpacing: 5,
+              crossAxisSpacing: 5,
+              childAspectRatio: 3 / 1,
+              children: [
+                for (var item in appController.listType)
+                  buildItemTypeSelected(item, currentItemTypeSelected == item, false),
+              ],
+            )),
+        Text(
+          'form.genre'.tr,
           style: const TextStyle(color: AppColor.gold),
         ),
         Container(
@@ -265,7 +301,8 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
               crossAxisSpacing: 5,
               childAspectRatio: 3 / 1,
               children: [
-                for (var item in appController.listGenre) buildItemSelected(item, currentItemSelected == item),
+                for (var item in appController.listGenre)
+                  buildItemGenreSelected(item, currentItemGenreSelected == item, true),
                 buildAddItem()
               ],
             )),
@@ -388,10 +425,25 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
     );
   }
 
-  Widget buildItemSelected(String item, bool isSelected) {
+  Widget buildItemGenreSelected(String item, bool isSelected, bool isExpense) {
     return InkWell(
       onLongPress: () => showDialogConfirmDelete(item),
-      onTap: () => chooseItem(item),
+      onTap: () => chooseGenreItem(item),
+      child: Container(
+        alignment: Alignment.center,
+        decoration:
+            BoxDecoration(color: isSelected ? AppColor.gold : Colors.grey, borderRadius: BorderRadius.circular(10)),
+        child: Text(
+          item.tr,
+          style: TextStyle(color: isSelected ? AppColor.darkPurple : Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget buildItemTypeSelected(String item, bool isSelected, bool isExpense) {
+    return InkWell(
+      onTap: () => chooseTypeItem(item),
       child: Container(
         alignment: Alignment.center,
         decoration:
@@ -443,26 +495,17 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
         title: "form.dialog.addNewItemSelected.title".tr,
         content: content,
         onConfirm: () {
-          addNewItemSelected(isExpense, addNewItemSelectedC.text);
+          addNewItemSelected(addNewItemSelectedC.text);
         });
   }
 
-  addNewItemSelected(bool isExpense, String newItemSelected) async {
+  addNewItemSelected(String newItemSelected) async {
     if (isExpense) {
       List<String> list = [...appController.listGenre];
       appController.listGenre.value = [...list, newItemSelected];
       await appController.prefs?.setStringList('customListExpenseGenre', [...list, newItemSelected]);
       setState(() {
-        currentItemSelected = newItemSelected;
-        genreC.text = newItemSelected;
-        addNewItemSelectedC.text = '';
-      });
-    } else {
-      List<String> list = [...appController.listType];
-      appController.listType.value = [...list, newItemSelected];
-      await appController.prefs?.setStringList('customListIncomeType', [...list, newItemSelected]);
-      setState(() {
-        currentItemSelected = newItemSelected;
+        currentItemGenreSelected = newItemSelected;
         genreC.text = newItemSelected;
         addNewItemSelectedC.text = '';
       });
@@ -498,9 +541,16 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
         confirmText: 'form.button.delete'.tr);
   }
 
-  void chooseItem(String item) {
+  void chooseTypeItem(String item) {
     setState(() {
-      currentItemSelected = item;
+      currentItemTypeSelected = item;
+      typeC.text = item.tr;
+    });
+  }
+
+  void chooseGenreItem(String item) {
+    setState(() {
+      currentItemGenreSelected = item;
       genreC.text = item.tr;
     });
   }
@@ -539,7 +589,10 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
     if (datetimeC.text.isEmpty) {
       errorMessage += '${'form.dateAndTime.validate'.tr}\n';
     }
-    if (genreC.text.isEmpty) {
+    if (typeC.text.isEmpty && isExpense) {
+      errorMessage += '${'form.type.validate'.tr}\n';
+    }
+    if (genreC.text.isEmpty && isExpense) {
       errorMessage += '${'form.type.validate'.tr}\n';
     }
     if (moneyC.text.isEmpty) {
@@ -557,8 +610,8 @@ class _DetailRecordPageState extends State<DetailRecordPage> with TickerProvider
       final recordExpense = Record(
           id: currentRecord.id,
           datetime: dateTime.millisecondsSinceEpoch,
-          genre: isExpense ? currentItemSelected : null,
-          type: !isExpense ? currentItemSelected : null,
+          genre: currentItemGenreSelected,
+          type: currentItemTypeSelected,
           content: contentC.text,
           money: isExpense ? -int.parse(moneyC.text.replaceAll(',', '')) : int.parse(moneyC.text.replaceAll(',', '')));
 
