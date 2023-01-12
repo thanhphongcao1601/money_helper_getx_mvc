@@ -205,21 +205,21 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
             'form.type'.tr,
             style: const TextStyle(color: AppColor.gold),
           ),
-          Container(
-              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: TextField(
-                  controller: genreC,
-                  style: const TextStyle(color: Colors.black),
-                  readOnly: true,
-                  decoration: InputDecoration(
-                      hintText: 'form.typeHint'.tr,
-                      border: InputBorder.none,
-                      hintStyle: const TextStyle(color: Colors.grey)),
-                ),
-              )),
+          // Container(
+          //     margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          //     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          //     child: Padding(
+          //       padding: const EdgeInsets.symmetric(horizontal: 10),
+          //       child: TextField(
+          //         controller: genreC,
+          //         style: const TextStyle(color: Colors.black),
+          //         readOnly: true,
+          //         decoration: InputDecoration(
+          //             hintText: 'form.typeHint'.tr,
+          //             border: InputBorder.none,
+          //             hintStyle: const TextStyle(color: Colors.grey)),
+          //       ),
+          //     )),
           Obx(() => GridView.count(
                 padding: const EdgeInsets.all(5),
                 crossAxisCount: 3,
@@ -230,6 +230,7 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
                 children: [
                   for (var item in appController.listType)
                     buildItemTypeSelected(item, currentItemTypeSelected == item, false),
+                  buildAddItem(isType: true)
                 ],
               )),
         ],
@@ -243,21 +244,21 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
           'form.type'.tr,
           style: const TextStyle(color: AppColor.gold),
         ),
-        Container(
-            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextField(
-                controller: typeC,
-                style: const TextStyle(color: Colors.black),
-                readOnly: true,
-                decoration: InputDecoration(
-                    hintText: 'form.typeHint'.tr,
-                    border: InputBorder.none,
-                    hintStyle: const TextStyle(color: Colors.grey)),
-              ),
-            )),
+        // Container(
+        //     margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        //     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        //     child: Padding(
+        //       padding: const EdgeInsets.symmetric(horizontal: 10),
+        //       child: TextField(
+        //         controller: typeC,
+        //         style: const TextStyle(color: Colors.black),
+        //         readOnly: true,
+        //         decoration: InputDecoration(
+        //             hintText: 'form.typeHint'.tr,
+        //             border: InputBorder.none,
+        //             hintStyle: const TextStyle(color: Colors.grey)),
+        //       ),
+        //     )),
         Obx(() => GridView.count(
               padding: const EdgeInsets.all(5),
               crossAxisCount: 3,
@@ -268,27 +269,28 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
               children: [
                 for (var item in appController.listType)
                   buildItemTypeSelected(item, currentItemTypeSelected == item, false),
+                buildAddItem(isType: true)
               ],
             )),
         Text(
           'form.genre'.tr,
           style: const TextStyle(color: AppColor.gold),
         ),
-        Container(
-            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextField(
-                controller: genreC,
-                style: const TextStyle(color: Colors.black),
-                readOnly: true,
-                decoration: InputDecoration(
-                    hintText: 'form.typeHint'.tr,
-                    border: InputBorder.none,
-                    hintStyle: const TextStyle(color: Colors.grey)),
-              ),
-            )),
+        // Container(
+        //     margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        //     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        //     child: Padding(
+        //       padding: const EdgeInsets.symmetric(horizontal: 10),
+        //       child: TextField(
+        //         controller: genreC,
+        //         style: const TextStyle(color: Colors.black),
+        //         readOnly: true,
+        //         decoration: InputDecoration(
+        //             hintText: 'form.typeHint'.tr,
+        //             border: InputBorder.none,
+        //             hintStyle: const TextStyle(color: Colors.grey)),
+        //       ),
+        //     )),
         Obx(() => GridView.count(
               padding: const EdgeInsets.all(5),
               crossAxisCount: 3,
@@ -299,7 +301,7 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
               children: [
                 for (var item in appController.listGenre)
                   buildItemGenreSelected(item, currentItemGenreSelected == item, true),
-                buildAddItem()
+                buildAddItem(isType: false)
               ],
             )),
       ],
@@ -437,9 +439,9 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
     );
   }
 
-  Widget buildAddItem() {
+  Widget buildAddItem({required bool isType}) {
     return InkWell(
-      onTap: () => showDialogAddNewItemSelected(),
+      onTap: () => showDialogAddNewItemSelected(isType),
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(10)),
@@ -462,6 +464,7 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
     setState(() {
       currentItemGenreSelected = item;
       genreC.text = item.tr;
+      print(item);
     });
   }
 
@@ -501,7 +504,7 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
           content: contentC.text,
           money: isExpense ? -int.parse(moneyC.text.replaceAll(',', '')) : int.parse(moneyC.text.replaceAll(',', '')));
 
-      print(recordAdded.toString());
+      debugPrint(recordAdded.toString());
 
       appController.addRecord(recordAdded);
       homeController.loadAllData();
@@ -517,7 +520,7 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
     }
   }
 
-  showDialogAddNewItemSelected() {
+  showDialogAddNewItemSelected(bool isType) {
     Widget content = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -528,6 +531,7 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
+                autofocus: true,
                 controller: addNewItemSelectedC,
                 style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
@@ -542,20 +546,31 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
         title: "form.dialog.addNewItemSelected.title".tr,
         content: content,
         onConfirm: () {
-          addNewItemSelected(addNewItemSelectedC.text);
+          addNewItemSelected(addNewItemSelectedC.text, isType);
         });
   }
 
-  addNewItemSelected(String newItemSelected) async {
-    if (isExpense) {
-      List<String> list = [...appController.listGenre];
-      appController.listGenre.value = [...list, newItemSelected];
-      await appController.prefs?.setStringList('customListExpenseGenre', [...list, newItemSelected]);
-      setState(() {
-        currentItemGenreSelected = newItemSelected;
-        genreC.text = newItemSelected;
-        addNewItemSelectedC.text = '';
-      });
+  addNewItemSelected(String newItemSelected, bool isType) async {
+    if (newItemSelected != '') {
+      if (!isType) {
+        List<String> list = [...appController.listGenre];
+        appController.listGenre.value = [...list, newItemSelected];
+        await appController.prefs?.setStringList('customListExpenseGenre', [...list, newItemSelected]);
+        setState(() {
+          currentItemGenreSelected = newItemSelected;
+          genreC.text = newItemSelected;
+          addNewItemSelectedC.text = '';
+        });
+      } else {
+        List<String> list = [...appController.listType];
+        appController.listType.value = [...list, newItemSelected];
+        await appController.prefs!.setStringList('customListIncomeType', [...list, newItemSelected]);
+        setState(() {
+          currentItemTypeSelected = newItemSelected;
+          typeC.text = newItemSelected;
+          addNewItemSelectedC.text = '';
+        });
+      }
     }
   }
 
@@ -564,11 +579,11 @@ class _AddRecordPageState extends State<AddRecordPage> with TickerProviderStateM
       "form.dialog.deleteItemSelected.content".tr,
       style: const TextStyle(color: Colors.white),
     );
-    deleteGenreItem() {
+    deleteGenreItem() async {
       List<String> list = [...appController.listGenre];
       list.remove(item);
       appController.listGenre.value = [...list];
-      appController.prefs?.setStringList('customListExpenseGenre', [...list]);
+      await appController.prefs!.setStringList('customListExpenseGenre', [...list]);
       statisticController.loadAllData();
     }
 

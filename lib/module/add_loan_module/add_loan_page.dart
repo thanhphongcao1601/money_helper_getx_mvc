@@ -328,26 +328,15 @@ class _AddLoanPageState extends State<AddLoanPage> with TickerProviderStateMixin
     }
 
     if (errorMessage == '') {
-      RecordHistory historyRecord = RecordHistory(
+      Record record = Record(
           id: const Uuid().v4(),
           isLoan: true,
           datetime: dateTime.millisecondsSinceEpoch,
           loanType: isBorrow ? 'borrow' : 'lend',
           loanContent: contentC.text,
           loanPersonName: personNameC.text,
-          money: int.parse(moneyC.text.replaceAll(',', '')));
-
-      List<RecordHistory> listRecordHistory = [historyRecord];
-
-      Record record = Record(
-          id: historyRecord.id,
-          isLoan: true,
-          datetime: historyRecord.datetime,
-          loanType: historyRecord.loanType,
-          loanContent: historyRecord.loanContent,
-          loanPersonName: historyRecord.loanPersonName,
-          money: historyRecord.money,
-          recordHistoryList: listRecordHistory);
+          money: int.parse(moneyC.text.replaceAll(',', '')),
+          recordHistoryList: []);
 
       debugPrint(jsonEncode(record.toJson()));
 

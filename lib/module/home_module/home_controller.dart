@@ -14,6 +14,7 @@ class HomeController extends GetxController {
   final listRecordByMonth = RxList<Record>([]).obs;
 
   final listRecordGroupByDate = RxList<DailyRecord>([]).obs;
+  final listMapMoneyByType = RxList<Map<String, int>>([]).obs;
 
   init() {
     currentDate.value = DateTime.now();
@@ -34,6 +35,7 @@ class HomeController extends GetxController {
       }
     }
     groupRecordByDate(listRecordByMonth.value);
+    groupRecordByType(listRecordByMonth.value);
   }
 
   void handleHomeChangeMonthYear(DateTime selectedMonthYear) {
@@ -55,17 +57,29 @@ class HomeController extends GetxController {
     return listRecordByMonth;
   }
 
-  groupRecordByDate(List<Record> record) {
+  groupRecordByDate(List<Record> recordList) {
     listRecordGroupByDate.value.clear();
-    var groups = groupBy(record, (Record e) {
+    var groups = groupBy(recordList, (Record e) {
       DateTime tsDate = DateTime.fromMillisecondsSinceEpoch(e.datetime!);
-      String datetime = tsDate.toString().substring(0,10);
+      String datetime = tsDate.toString().substring(0, 10);
       return datetime;
     });
 
     for (var item in groups.entries) {
       DailyRecord dailyRecord = DailyRecord(date: item.key, listRecord: item.value);
       listRecordGroupByDate.value.add(dailyRecord);
+    }
+  }
+
+  groupRecordByType(List<Record> recordList) {
+    listMapMoneyByType.value.clear();
+    var groups = groupBy(recordList, (Record e) => e.type!);
+
+    for (var item in groups.entries) {
+      String key = item.key;
+      int value = item.value.sumBy((element) => element.money ?? 0);
+      listMapMoneyByType.value.add({key: value});
+      print({key: value});
     }
   }
 }

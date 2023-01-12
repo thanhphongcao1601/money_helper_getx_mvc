@@ -128,28 +128,31 @@ class _HomePageState extends State<HomePage> {
       decoration: BoxDecoration(color: AppColor.gold, borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${'total'.tr}:',
-                  style: const TextStyle(fontSize: 20, color: AppColor.darkPurple),
-                ),
-                Expanded(
-                  child: Obx(() => AutoSizeText(
-                        Helper().formatMoney(
-                            homeController.totalMonthExpense.value + homeController.totalMonthIncome.value),
-                        maxLines: 1,
-                        textAlign: TextAlign.right,
-                        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: AppColor.darkPurple),
-                      )),
-                ),
-              ],
-            ),
+          SizedBox(
+            height: 10,
           ),
+          for (var item in homeController.listMapMoneyByType.value)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${item.keys.first.tr}:',
+                    style: const TextStyle(fontSize: 16, color: AppColor.darkPurple),
+                  ),
+                  Expanded(
+                    child: AutoSizeText(
+                      Helper().formatMoney(item.values.first),
+                      maxLines: 1,
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColor.darkPurple),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           Row(
             children: [
               Expanded(
@@ -159,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                   appController.changePage(1);
                 },
                 child: Container(
-                  margin: const EdgeInsets.fromLTRB(5, 20, 10, 20),
+                  margin: const EdgeInsets.fromLTRB(5, 10, 10, 10),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(color: AppColor.purple, borderRadius: BorderRadius.circular(10)),
                   height: 60,
@@ -189,7 +192,7 @@ class _HomePageState extends State<HomePage> {
                   appController.changePage(1);
                 },
                 child: Container(
-                  margin: const EdgeInsets.fromLTRB(10, 20, 5, 20),
+                  margin: const EdgeInsets.fromLTRB(10, 10, 5, 10),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(color: AppColor.purple, borderRadius: BorderRadius.circular(10)),
                   height: 60,

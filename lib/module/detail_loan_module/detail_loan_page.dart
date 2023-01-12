@@ -430,13 +430,13 @@ class _DetailLoanPageState extends State<DetailLoanPage> with TickerProviderStat
         isLoan: true,
         datetime: currentLoan.datetime,
         loanType: currentLoan.loanType,
-        loanContent: currentLoan.content,
+        loanContent: currentLoan.loanContent,
         loanPersonName: currentLoan.loanPersonName,
         money: currentLoan.money,
       );
 
       List<RecordHistory> listRecordHistory = currentLoan.recordHistoryList ?? [];
-      listRecordHistory.add(oldLoan);
+      listRecordHistory.insert(0, oldLoan);
 
       Record record = Record(
           id: currentLoan.id,
